@@ -34,14 +34,18 @@ Session note: created 2026-08-12. Keep this current — overwrite stale sections
 - `screenshot.mjs` — desktop (1280x800) puppeteer screenshot → `temporary screenshots/screenshot-N[-label].png`.
 - `CLAUDE.md` — frontend rules (invoke `frontend-design` skill first; never `file://` screenshots; deploy workflow).
 
-## Page 1 elevation decisions (2026-08-13)
-- User approved "full design privileges" after feedback that the first build was "basic/weak/generic". Wants modern, high-converting, premium.
-- **Type:** Bricolage Grotesque display + Archivo body + IBM Plex Mono labels + **Instrument Serif (italic only)** accent for pull-quotes and signature sublines (e.g. "Because confusion is expensive.", "The choice is yours.", the story pull-quote, the guarantee commitment line). Hero `clamp(3rem,7vw,6rem)`; H2 `clamp(2.5rem,4.5vw,4rem)`.
-- **Hero is center-aligned.** Marquee band (ink) below hero: "Sell Out Challenge · 7 Days · ₦50k–₦200k System · Live Classes · Assignments · Feedback · Telegram Community" (seamless CSS loop, pauses on hover, disabled under reduced motion).
-- **New building blocks:** `.sec-marker` editorial section numbers (01–14 with flex hairline; light variants on dark sections), `.watermark` outlined numerals behind H2s (Reframe 02, Curriculum 05, Bonuses 07, Testimonials 10, Story 11, FAQ 13), `.serif-i` Instrument Serif italic, count-up counters (`data-count`/`data-prefix`/`data-suffix` on ₦60,000+, ₦80,000+, ₦5,000).
-- **New sections (all content user-approved):** Testimonials (7 proof cards: King David, TBS, Malik Esther, Ajet, Morayo, Solomon, Tife from `assets/proofs/`, mobile snap-scroll carousel), Guarantee (commitment guarantee, NO refunds after joining; work-review promise), FAQ (8 `<details>/<summary>` items; replays exist; 60–90 min/day; no refunds), Countdown (dummy, 7 days from page load; replace with real early-bird deadline before launch).
-- Section order now: Hero → Marquee → Agitation → Reframe → Vision → Intro → Curriculum → Value → Bonuses → Price → Who For/Not → Testimonials → Story → Guarantee → FAQ → Closing CTA → Footer.
-- All em dashes purged from index.html + copy map. En dashes in ranges kept.
+## Page 1 full conversion elevation (Option A - 2026-08-19)
+- **Aesthetic & Visual Status:** Luxury dark ink + pearl editorial backdrop, radial ambient mesh glows, glassmorphic micro-borders, and layered spring cards.
+- **Hero Command Center:** Added floating interactive "Challenge Implementation Hub" preview card showcasing Live Room, Daily Action Sheets, and Feedback Hotseats.
+- **Visceral Agitation ("The Hustle Trap"):** Upgraded problem section with 3 realistic visual DM/analytics scenario cards (The "Seen" Zone DM ghosting, The Algorithm Treadmill, and Random Unpredictable Sales) plus internal whisper quote boxes.
+- **The Proprietary Mechanism ("The 3-Pillar Sell Out System"):**
+  1. *Pillar 01: Irresistible Offer Architecture* (Day 3 Deliverable: 1-Page Offer Blueprint)
+  2. *Pillar 02: Frictionless Positioning* (Day 4 Deliverable: High-Ticket Positioning Matrix)
+  3. *Pillar 03: Conversational Inbound Closing* (Day 5 Deliverable: Inbound DM Script)
+- **Curriculum Sprint Roadmap:** Converted 7 daily rows into actionable Sprint Cards with tactical deliverable tags.
+- **Value Stack & Bonuses:** Financial ledger card with animated count-up counters + 3 standalone mockup bonus cards (The AI Sales Copy Vault, The Sell Out Messaging Playbook PDF, Live Offer Hotseat Pass) totaling over ₦80,000+ in value.
+- **Proof & Guarantee:** Verified student review cards with 3D tilt + Official Zero-Risk Commitment Certificate.
+- **Enforced Rules:** Strictly 0 em dashes (`—`), 0 `transition-all`, 7/7 CTAs pointing to `step-2.html`. Server running on port 3000.
 
 ## Design system (inherited from TDB visual identity)
 - Palette: royal blue `#2654B6`, pearl `#FBFCF8`, ink `#0B1526`, royal deep `#16357F`, royal light `#3A6FE0`, accent orange `#FF6B35` (from registration build CSS vars).
