@@ -635,36 +635,38 @@
     /* Enhanced Guarantee Certificate */
     .guarantee-cert {
       position: relative;
-      background: radial-gradient(120% 100% at 50% 0%, rgba(38, 84, 182, 0.22) 0%, rgba(11, 21, 38, 0.98) 65%, #0B1526 100%);
-      border: 1px solid rgba(255, 107, 53, 0.35);
-      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 24px 64px -16px rgba(0, 0, 0, 0.7);
+      background: #050A14;
+      background: linear-gradient(180deg, #070F1D 0%, #03060C 100%);
+      border: 1.5px solid rgba(255, 107, 53, 0.45);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 32px 72px -16px rgba(0, 0, 0, 0.9);
       border-radius: 1.75rem;
     }
     .guarantee-cert::before {
       content: "";
       position: absolute;
       inset: 8px;
-      border: 1px dashed rgba(255, 163, 125, 0.22);
+      border: 1px dashed rgba(255, 163, 125, 0.3);
       border-radius: 1.25rem;
       pointer-events: none;
     }
     .cert-corner {
       position: absolute;
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       color: #FFA37D;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 700;
       line-height: 1;
       display: grid;
       place-items: center;
-      opacity: 0.7;
+      opacity: 0.9;
       pointer-events: none;
     }
-    .cert-corner--tl { top: 16px; left: 16px; }
-    .cert-corner--tr { top: 16px; right: 16px; }
-    .cert-corner--bl { bottom: 16px; left: 16px; }
-    .cert-corner--br { bottom: 16px; right: 16px; }
+    .cert-corner--tl { top: 14px; left: 14px; }
+    .cert-corner--tr { top: 14px; right: 14px; }
+    .cert-corner--bl { bottom: 14px; left: 14px; }
+    .cert-corner--br { bottom: 14px; right: 14px; }
 
     /* Enhanced Card-Based FAQ */
     .faq-card-item {
@@ -2103,56 +2105,58 @@
         <span class="cert-corner cert-corner--br">+</span>
 
         <div class="relative z-10">
-          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(251,252,248,0.12)] pb-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-6">
             <div class="flex items-center gap-3.5">
-              <span class="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[#3A6FE0] to-[#16357F] text-white shadow-lg border border-white/20">
+              <span class="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[#3A6FE0] to-[#16357F] text-white shadow-lg border border-white/25">
                 <svg class="h-6 w-6 text-[#FFA37D]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
               </span>
               <div>
                 <p class="font-display text-base sm:text-lg font-bold text-white tracking-tight">The Official Sell Out Commitment Bond</p>
-                <p class="mono text-[.62rem] uppercase tracking-[.18em] text-[#FFA37D] font-bold">100% Execution Guarantee</p>
+                <p class="mono text-[.65rem] uppercase tracking-[.18em] text-[#FFA37D] font-bold">100% Execution Guarantee</p>
               </div>
             </div>
-            <span class="mono rounded-full border border-white/15 bg-white/5 px-3.5 py-1 text-xs text-[#7FA3F0] font-semibold">
+            <span class="mono rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs text-white font-semibold shadow-sm">
               Certified by Divine Bakare
             </span>
           </div>
 
           <div class="mt-8 space-y-6">
-            <p class="text-base sm:text-lg leading-[1.8] text-[#B7C2D6]">
+            <p class="text-base sm:text-lg leading-[1.8] text-[#E2E8F0] font-normal">
               This challenge has no refunds after you join, because it is not a passive video course you watch in bed. It is an active implementation sprint where you build alongside me.
             </p>
 
-            <!-- Inner Gold Plaque Statement -->
-            <div class="rounded-2xl border border-[#FF6B35]/35 bg-[rgba(255,107,53,0.06)] p-6 sm:p-8 backdrop-blur-sm">
-              <p class="mono text-[.65rem] uppercase tracking-[.18em] text-[#FFA37D] font-bold">The Core Promise</p>
-              <p class="serif-i mt-3 text-2xl sm:text-3xl leading-[1.35] text-white">
+            <!-- Inner Gold Plaque Statement (Solid Dark with High Contrast) -->
+            <div class="rounded-2xl border-2 border-[#FF6B35]/50 bg-[#02050A] p-6 sm:p-8 shadow-[0_10px_32px_rgba(0,0,0,0.8)]">
+              <p class="mono text-[.68rem] uppercase tracking-[.2em] text-[#FFA37D] font-bold flex items-center gap-2">
+                <span>✦</span> The Core Promise <span>✦</span>
+              </p>
+              <p class="serif-i mt-3 text-2xl sm:text-3xl leading-[1.38] text-white font-normal">
                 "Complete all seven daily assignments, and if the system still does not work for you, I will personally continue reviewing and refining your work until it does."
               </p>
             </div>
 
-            <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[rgba(251,252,248,0.1)] text-xs text-[rgba(251,252,248,0.65)]">
+            <div class="flex flex-wrap items-center justify-between gap-4 pt-5 border-t border-white/15 text-xs text-white/80">
               <div class="flex items-center gap-2">
-                <span class="h-2 w-2 rounded-full bg-[#22c55e]"></span>
-                <span class="mono uppercase tracking-[.14em] text-white">Direct Work-Review Promise</span>
+                <span class="h-2.5 w-2.5 rounded-full bg-[#22c55e] shadow-[0_0_8px_#22c55e]"></span>
+                <span class="mono uppercase tracking-[.14em] text-white font-semibold">Direct Work-Review Promise</span>
               </div>
-              <span class="mono uppercase tracking-[.14em] text-[#FFA37D]">Zero Fine Print. That is the standard here.</span>
+              <span class="mono uppercase tracking-[.14em] text-[#FFA37D] font-bold">Zero Fine Print. That is the standard here.</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Guarantee Social Proof -->
-      <div class="mx-auto mt-10 max-w-3xl rounded-2xl bg-white p-6 border border-[rgba(11,21,38,0.08)] shadow-sm" data-reveal>
+      <div class="mx-auto mt-10 max-w-3xl rounded-2xl bg-white p-6 sm:p-7 border border-[rgba(11,21,38,0.12)] shadow-md" data-reveal>
         <div class="flex items-start gap-4">
-          <span class="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-[#FF6B35]/15 text-[#FF6B35]">
-            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 10.5l4 4 8-9"/></svg>
+          <span class="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#FF6B35]/15 text-[#FF6B35]">
+            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 10.5l4 4 8-9"/></svg>
           </span>
           <div>
-            <p class="text-base leading-[1.75] text-[#0B1526]">
+            <p class="text-base sm:text-lg leading-[1.75] font-medium text-[#0B1526]">
               "I completed all 7 assignments. Divine reviewed every single one. My system works now."
             </p>
-            <p class="mono mt-2 text-xs font-bold uppercase tracking-[.14em] text-[#5A6B85]">Malik Esther, Cohort 01</p>
+            <p class="mono mt-2 text-xs font-bold uppercase tracking-[.14em] text-[#2654B6]">Malik Esther, Cohort 01</p>
           </div>
         </div>
       </div>
