@@ -34,18 +34,18 @@ Session note: created 2026-08-12. Keep this current — overwrite stale sections
 - `screenshot.mjs` — desktop (1280x800) puppeteer screenshot → `temporary screenshots/screenshot-N[-label].png`.
 - `CLAUDE.md` — frontend rules (invoke `frontend-design` skill first; never `file://` screenshots; deploy workflow).
 
-## Page 1 full conversion elevation (Option A - 2026-08-19)
+## Page 1 full conversion & mobile elevation (2026-08-20)
 - **Aesthetic & Visual Status:** Luxury dark ink + pearl editorial backdrop, radial ambient mesh glows, glassmorphic micro-borders, and layered spring cards.
-- **Hero Command Center:** Added floating interactive "Challenge Implementation Hub" preview card showcasing Live Room, Daily Action Sheets, and Feedback Hotseats.
-- **Visceral Agitation ("The Hustle Trap"):** Upgraded problem section with 3 realistic visual DM/analytics scenario cards (The "Seen" Zone DM ghosting, The Algorithm Treadmill, and Random Unpredictable Sales) plus internal whisper quote boxes.
-- **The Proprietary Mechanism ("The 3-Pillar Sell Out System"):**
-  1. *Pillar 01: Irresistible Offer Architecture* (Day 3 Deliverable: 1-Page Offer Blueprint)
-  2. *Pillar 02: Frictionless Positioning* (Day 4 Deliverable: High-Ticket Positioning Matrix)
-  3. *Pillar 03: Conversational Inbound Closing* (Day 5 Deliverable: Inbound DM Script)
-- **Curriculum Sprint Roadmap:** Converted 7 daily rows into actionable Sprint Cards with tactical deliverable tags.
-- **Value Stack & Bonuses:** Financial ledger card with animated count-up counters + 3 standalone mockup bonus cards (The AI Sales Copy Vault, The Sell Out Messaging Playbook PDF, Live Offer Hotseat Pass) totaling over ₦80,000+ in value.
-- **Proof & Guarantee:** Verified student review cards with 3D tilt + Official Zero-Risk Commitment Certificate.
-- **Enforced Rules:** Strictly 0 em dashes (`—`), 0 `transition-all`, 7/7 CTAs pointing to `step-2.html`. Server running on port 3000.
+- **Hero Command Center:** Centered hero headline with fluid typography, floating interactive "Challenge Implementation Hub" preview card showcasing Live Room, Daily Action Sheets, and Feedback Hotseats.
+- **Preloader Intro:** Dynamic multi-stage kinetic entrance with ambient mesh glows, rotating orbital ring, TDB monogram crest, and animated progress readout.
+- **Floating Island Navigation & Mobile Menu:** Pill dock with separate floating glass dropdown card (`#mobile-menu`), animated hamburger-to-X toggle, backdrop dismiss, and touch-friendly navigation rows.
+- **Curriculum Sprint Roadmap (Section 05):** Mobile-first sprint card hierarchy with top metadata badge row (`DAY 01`, category tag), crisp headings, and integrated mission deliverable chips.
+- **Bonus Summary Banner (Section 07):** Responsive luxury glass banner card with count-up animation (`Over ₦80,000+`) formatted cleanly for mobile and PC.
+- **The Official Commitment Certificate (Section 13):** Luxury bond design with ornate double borders, corner registration marks, embossed shield emblem, certified quote plaque, and Divine Bakare verification signature.
+- **Interactive FAQ Hub (Section 14):** Card-based interactive accordion with numbered question chips (`Q01` - `Q08`), smooth spring rotation toggles, and community reassurance box.
+- **Closing Conversion Climax (Section 16):** Dramatic radiant mesh backdrop, live cohort status indicator, massive primary CTA with sheen, and 4-point trust indicators grid.
+- **Sticky Footer Command Bar:** Floating glassmorphic dock featuring synchronized live countdown timer (`07d 00h 00m 00s`), ₦5,000 early bird pricing pill, and instant CTA.
+- **Enforced Rules:** Strictly 0 em dashes (`—`), 0 `transition-all`, all 12 CTAs pointing to `step-2.html`. Server running on port 3000.
 
 ## Design system (inherited from TDB visual identity)
 - Palette: royal blue `#2654B6`, pearl `#FBFCF8`, ink `#0B1526`, royal deep `#16357F`, royal light `#3A6FE0`, accent orange `#FF6B35` (from registration build CSS vars).

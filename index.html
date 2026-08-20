@@ -620,54 +620,133 @@
       pointer-events: none;
     }
 
-    /* FAQ Details / Summary */
-    .faq-list { border-top: 1px solid rgba(11, 21, 38, 0.10); }
-    .faq-item { border-bottom: 1px solid rgba(11, 21, 38, 0.10); }
-    .faq-q {
+    /* Enhanced Guarantee Certificate */
+    .guarantee-cert {
+      position: relative;
+      background: radial-gradient(120% 100% at 50% 0%, rgba(38, 84, 182, 0.22) 0%, rgba(11, 21, 38, 0.98) 65%, #0B1526 100%);
+      border: 1px solid rgba(255, 107, 53, 0.35);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 24px 64px -16px rgba(0, 0, 0, 0.7);
+      border-radius: 1.75rem;
+    }
+    .guarantee-cert::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px dashed rgba(255, 163, 125, 0.22);
+      border-radius: 1.25rem;
+      pointer-events: none;
+    }
+    .cert-corner {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      color: #FFA37D;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    .cert-corner--tl { top: 16px; left: 16px; }
+    .cert-corner--tr { top: 16px; right: 16px; }
+    .cert-corner--bl { bottom: 16px; left: 16px; }
+    .cert-corner--br { bottom: 16px; right: 16px; }
+
+    /* Enhanced Card-Based FAQ */
+    .faq-card-item {
+      background: #FFFFFF;
+      border: 1px solid rgba(11, 21, 38, 0.08);
+      border-radius: 1.25rem;
+      margin-bottom: 0.85rem;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(11, 21, 38, 0.03);
+      transition: border-color .3s, box-shadow .3s, transform .3s cubic-bezier(.16, 1, .3, 1);
+    }
+    .faq-card-item:hover {
+      border-color: rgba(38, 84, 182, 0.35);
+      box-shadow: 0 8px 24px -8px rgba(22, 53, 127, 0.12);
+    }
+    .faq-card-item[open] {
+      border-color: rgba(38, 84, 182, 0.45);
+      background: linear-gradient(180deg, #FFFFFF 0%, rgba(237, 242, 251, 0.45) 100%);
+      box-shadow: 0 10px 28px -10px rgba(22, 53, 127, 0.16);
+    }
+    .faq-card-q {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1.25rem;
+      gap: 1rem;
       width: 100%;
       list-style: none;
       cursor: pointer;
-      padding: 1.5rem 0;
+      padding: 1.2rem 1.4rem;
       font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: -0.01em;
       color: var(--ink);
       text-align: left;
-      transition: color .3s;
     }
-    .faq-q::-webkit-details-marker { display: none; }
-    .faq-q:hover { color: var(--royal-deep); }
-    .faq-q .plus {
+    .faq-card-q::-webkit-details-marker { display: none; }
+    .faq-card-q:hover { color: var(--royal-deep); }
+    .faq-num-chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--royal);
+      background: var(--tint);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.45rem;
+      flex-shrink: 0;
+    }
+    .faq-toggle-pill {
       flex: none;
       display: grid;
       place-items: center;
-      width: 2.2rem;
-      height: 2.2rem;
+      width: 2rem;
+      height: 2rem;
       border-radius: 9999px;
       background: var(--tint);
       color: var(--royal);
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       line-height: 1;
       transition: transform .35s cubic-bezier(.16, 1, .3, 1), background-color .35s, color .35s;
     }
-    .faq-item[open] .faq-q .plus {
+    .faq-card-item[open] .faq-toggle-pill {
       transform: rotate(45deg);
       background: var(--ink);
       color: var(--pearl);
     }
-    .faq-a {
+    .faq-card-a {
       display: grid;
       grid-template-rows: 0fr;
-      transition: grid-template-rows .45s cubic-bezier(.16, 1, .3, 1);
+      transition: grid-template-rows .4s cubic-bezier(.16, 1, .3, 1);
     }
-    .faq-item[open] .faq-a { grid-template-rows: 1fr; }
-    .faq-a > div { overflow: hidden; }
-    .faq-a > div > p { padding-bottom: 1.6rem; max-width: 65ch; color: var(--muted); line-height: 1.75; font-size: 1.02rem; }
+    .faq-card-item[open] .faq-card-a { grid-template-rows: 1fr; }
+    .faq-card-a > div { overflow: hidden; }
+    .faq-card-a > div > p {
+      padding: 0 1.4rem 1.35rem 3.5rem;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 0.96rem;
+    }
+    @media (max-width: 639px) {
+      .faq-card-q { padding: 1.1rem 1.15rem; font-size: 0.98rem; }
+      .faq-card-a > div > p { padding: 0 1.15rem 1.15rem; }
+    }
+
+    /* Bonus Total Banner */
+    .bonus-total-card {
+      background: linear-gradient(135deg, rgba(237, 242, 251, 0.95), #FFFFFF 50%, rgba(237, 242, 251, 0.85));
+      border: 1.5px solid rgba(38, 84, 182, 0.25);
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 30px -10px rgba(22, 53, 127, 0.15);
+    }
+    @media (min-width: 640px) {
+      .bonus-total-card { border-radius: 9999px; }
+    }
 
     /* Sticky Bottom Bar */
     #sticky-bar {
@@ -675,13 +754,15 @@
       z-index: 60;
       transform: translateY(115%);
       transition: transform .55s cubic-bezier(.22, 1, .36, 1);
-      background: rgba(11, 21, 38, 0.94);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: 0 -14px 36px -18px rgba(4, 9, 20, 0.7);
-      border-top: 1px solid rgba(251, 252, 248, 0.1);
+      background: rgba(11, 21, 38, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 -14px 40px -15px rgba(0, 0, 0, 0.7);
+      border-top: 1px solid rgba(251, 252, 248, 0.12);
     }
-    @supports (padding: env(safe-area-inset-bottom)) { #sticky-bar { padding-bottom: env(safe-area-inset-bottom); } }
+    @supports (padding: env(safe-area-inset-bottom)) {
+      #sticky-bar { padding-bottom: max(0.25rem, env(safe-area-inset-bottom)); }
+    }
     #sticky-bar.sticky-show { transform: translateY(0); }
 
     /* Floating Back to Top Button */
@@ -1640,10 +1721,19 @@
         </div>
       </div>
 
-      <div class="mt-12 text-center" data-reveal>
-        <span class="mono rounded-full border border-[rgba(11,21,38,.12)] bg-[#EDF2FB] px-8 py-3.5 text-sm uppercase tracking-[.16em] text-[#16357F] font-bold shadow-sm">
-          Total Value of Core + Bonuses: Over <span data-count="80000" data-prefix="₦" data-suffix="+">₦80,000+</span>
-        </span>
+      <!-- Responsive Luxury Total Value Summary Banner -->
+      <div class="mt-12 max-w-xl mx-auto" data-reveal>
+        <div class="bonus-total-card px-6 py-4 sm:px-8 sm:py-3.5 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-center">
+          <span class="mono text-xs sm:text-sm uppercase tracking-[.14em] text-[#16357F] font-bold">
+            Total Value of Core + Bonuses:
+          </span>
+          <span class="font-display text-xl sm:text-2xl font-extrabold text-[#FF6B35]">
+            Over <span data-count="80000" data-prefix="₦" data-suffix="+">₦80,000+</span>
+          </span>
+        </div>
+        <p class="mono mt-3 text-center text-[.68rem] uppercase tracking-[.14em] text-[#5A6B85] font-semibold">
+          Included 100% Free With Your ₦5,000 Early Bird Pass
+        </p>
       </div>
     </div>
   </section>
@@ -1986,91 +2076,220 @@
   </section>
 
   <!-- SECTION 13: THE COMMITMENT GUARANTEE -->
-  <section id="guarantee" class="relative bg-[#FBFCF8] py-24 sm:py-32">
+  <section id="guarantee" class="relative bg-[#FBFCF8] py-20 sm:py-32">
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
       <div class="max-w-3xl" data-reveal>
         <p class="sec-marker"><b>12</b> The Standard</p>
-        <h2 class="font-display text-h2 mt-5 font-extrabold text-[#0B1526]">The only guarantee that matters.</h2>
+        <h2 class="font-display text-h2 mt-5 font-extrabold text-[#0B1526]">The only guarantee that actually matters.</h2>
       </div>
 
-      <div class="glass-card-dark mt-10 rounded-3xl p-8 text-[#FBFCF8] sm:p-12 shadow-2xl" data-reveal>
-        <div class="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-12">
-          <span class="grid h-20 w-20 flex-none place-items-center rounded-3xl bg-gradient-to-br from-[#3A6FE0] to-[#16357F] shadow-[0_4px_20px_rgba(38,84,182,0.5)]">
-            <svg class="h-10 w-10 text-[#FBFCF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-          </span>
-          <div>
-            <p class="text-base sm:text-lg leading-[1.75] text-[#B7C2D6]">
+      <!-- Luxury Official Commitment Certificate -->
+      <div class="guarantee-cert relative mt-10 p-7 sm:p-12 text-[#FBFCF8]" data-reveal>
+        <span class="cert-corner cert-corner--tl">+</span>
+        <span class="cert-corner cert-corner--tr">+</span>
+        <span class="cert-corner cert-corner--bl">+</span>
+        <span class="cert-corner cert-corner--br">+</span>
+
+        <div class="relative z-10">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-[rgba(251,252,248,0.12)] pb-6">
+            <div class="flex items-center gap-3.5">
+              <span class="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[#3A6FE0] to-[#16357F] text-white shadow-lg border border-white/20">
+                <svg class="h-6 w-6 text-[#FFA37D]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+              </span>
+              <div>
+                <p class="font-display text-base sm:text-lg font-bold text-white tracking-tight">The Official Sell Out Commitment Bond</p>
+                <p class="mono text-[.62rem] uppercase tracking-[.18em] text-[#FFA37D] font-bold">100% Execution Guarantee</p>
+              </div>
+            </div>
+            <span class="mono rounded-full border border-white/15 bg-white/5 px-3.5 py-1 text-xs text-[#7FA3F0] font-semibold">
+              Certified by Divine Bakare
+            </span>
+          </div>
+
+          <div class="mt-8 space-y-6">
+            <p class="text-base sm:text-lg leading-[1.8] text-[#B7C2D6]">
               This challenge has no refunds after you join, because it is not a passive video course you watch in bed. It is an active implementation sprint where you build alongside me.
             </p>
-            <p class="serif-i mt-6 text-2xl leading-[1.35] text-[#FFA37D] sm:text-3xl">
-              Complete all seven daily assignments, and if the system still does not work for you, I will personally continue reviewing and refining your work until it does.
-            </p>
-            <p class="mono mt-6 text-xs uppercase tracking-[.18em] text-[rgba(251,252,248,.5)]">
-              Zero fine print. That is the personal standard here.
-            </p>
+
+            <!-- Inner Gold Plaque Statement -->
+            <div class="rounded-2xl border border-[#FF6B35]/35 bg-[rgba(255,107,53,0.06)] p-6 sm:p-8 backdrop-blur-sm">
+              <p class="mono text-[.65rem] uppercase tracking-[.18em] text-[#FFA37D] font-bold">The Core Promise</p>
+              <p class="serif-i mt-3 text-2xl sm:text-3xl leading-[1.35] text-white">
+                "Complete all seven daily assignments, and if the system still does not work for you, I will personally continue reviewing and refining your work until it does."
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[rgba(251,252,248,0.1)] text-xs text-[rgba(251,252,248,0.65)]">
+              <div class="flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full bg-[#22c55e]"></span>
+                <span class="mono uppercase tracking-[.14em] text-white">Direct Work-Review Promise</span>
+              </div>
+              <span class="mono uppercase tracking-[.14em] text-[#FFA37D]">Zero Fine Print. That is the standard here.</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Guarantee Social Proof -->
-    <div class="mx-auto mt-10 max-w-3xl rounded-2xl bg-white p-6 border border-[rgba(11,21,38,0.08)] shadow-sm" data-reveal>
-      <div class="flex items-start gap-4">
-        <span class="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-[#FF6B35]/15 text-[#FF6B35]">
-          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 10.5l4 4 8-9"/></svg>
-        </span>
-        <div>
-          <p class="text-base leading-[1.75] text-[#0B1526]">
-            "I completed all 7 assignments. Divine reviewed every single one. My system works now."
-          </p>
-          <p class="mono mt-2 text-xs font-bold uppercase tracking-[.14em] text-[#5A6B85]">Malik Esther, Cohort 01</p>
+      <!-- Guarantee Social Proof -->
+      <div class="mx-auto mt-10 max-w-3xl rounded-2xl bg-white p-6 border border-[rgba(11,21,38,0.08)] shadow-sm" data-reveal>
+        <div class="flex items-start gap-4">
+          <span class="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-[#FF6B35]/15 text-[#FF6B35]">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 10.5l4 4 8-9"/></svg>
+          </span>
+          <div>
+            <p class="text-base leading-[1.75] text-[#0B1526]">
+              "I completed all 7 assignments. Divine reviewed every single one. My system works now."
+            </p>
+            <p class="mono mt-2 text-xs font-bold uppercase tracking-[.14em] text-[#5A6B85]">Malik Esther, Cohort 01</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- SECTION 14: FAQ ACCORDION -->
-  <section id="faq" class="relative overflow-hidden bg-white py-24 sm:py-32">
+  <section id="faq" class="relative overflow-hidden bg-white py-20 sm:py-32">
     <div class="watermark" aria-hidden="true">13</div>
     <div class="relative z-10 mx-auto max-w-6xl px-5 sm:px-8">
       <div class="max-w-3xl" data-reveal>
         <p class="sec-marker"><b>13</b> Clear Answers</p>
         <h2 class="font-display text-h2 mt-5 font-extrabold text-[#0B1526]">Frequently asked questions.</h2>
+        <p class="mt-4 text-base sm:text-lg text-[#5A6B85]">
+          Everything you need to know about how the 7-day implementation sprint works.
+        </p>
       </div>
 
-      <div class="faq-list mt-12 max-w-3xl" data-reveal>
-        <details class="faq-item">
-          <summary class="faq-q">Is this a recorded course or a live challenge?<span class="plus" aria-hidden="true">+</span></summary>
-          <div class="faq-a"><div><p>It is an active 7-day live implementation challenge. You build alongside Divine Bakare each day, submit your action worksheets, and get direct feedback.</p></div></div>
+      <div class="mt-12 max-w-3xl" data-reveal>
+        <details class="faq-card-item">
+          <summary class="faq-card-q">
+            <div class="flex items-center gap-3">
+              <span class="faq-num-chip">Q01</span>
+              <span>Is this a recorded course or a live challenge?</span>
+            </div>
+            <span class="faq-toggle-pill" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-card-a">
+            <div>
+              <p>It is an active 7-day live implementation challenge. You build alongside Divine Bakare each day, submit your action worksheets, and get direct feedback.</p>
+            </div>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary class="faq-q">How much time do I need to commit each day?<span class="plus" aria-hidden="true">+</span></summary>
-          <div class="faq-a"><div><p>Plan for about 60 to 90 minutes for the daily live session, plus a short time to complete your action sheet at your own convenience.</p></div></div>
+
+        <details class="faq-card-item">
+          <summary class="faq-card-q">
+            <div class="flex items-center gap-3">
+              <span class="faq-num-chip">Q02</span>
+              <span>How much time do I need to commit each day?</span>
+            </div>
+            <span class="faq-toggle-pill" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-card-a">
+            <div>
+              <p>Plan for about 60 to 90 minutes for the daily live session, plus a short time to complete your action sheet at your own convenience.</p>
+            </div>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary class="faq-q">What if I miss a live class due to work or power?<span class="plus" aria-hidden="true">+</span></summary>
-          <div class="faq-a"><div><p>Every single session is recorded in HD and posted promptly into the private Telegram community so you can catch up anytime.</p></div></div>
+
+        <details class="faq-card-item">
+          <summary class="faq-card-q">
+            <div class="flex items-center gap-3">
+              <span class="faq-num-chip">Q03</span>
+              <span>What if I miss a live class due to work or power?</span>
+            </div>
+            <span class="faq-toggle-pill" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-card-a">
+            <div>
+              <p>Every single session is recorded in HD and posted promptly into the private Telegram community so you can catch up anytime.</p>
+            </div>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary class="faq-q">Do I need prior marketing or selling experience?<span class="plus" aria-hidden="true">+</span></summary>
-          <div class="faq-a"><div><p>No. The sprint is specifically engineered from the ground up for beginners and experienced vendors alike who want a predictable sales system.</p></div></div>
+
+        <details class="faq-card-item">
+          <summary class="faq-card-q">
+            <div class="flex items-center gap-3">
+              <span class="faq-num-chip">Q04</span>
+              <span>Do I need prior marketing or selling experience?</span>
+            </div>
+            <span class="faq-toggle-pill" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-card-a">
+            <div>
+              <p>No. The sprint is specifically engineered from the ground up for beginners and experienced vendors alike who want a predictable sales system.</p>
+            </div>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary class="faq-q">What do I get for ₦5,000?<span class="plus" aria-hidden="true">+</span></summary>
-          <div class="faq-a"><div><p>You get the full 7-day live challenge, live assignment reviews, the private Telegram community, the workbook templates, and all 3 bonuses (total value over ₦80,000).</p></div></div>
+
+        <details class="faq-card-item">
+          <summary class="faq-card-q">
+            <div class="flex items-center gap-3">
+              <span class="faq-num-chip">Q05</span>
+              <span>What do I get for ₦5,000?</span>
+            </div>
+            <span class="faq-toggle-pill" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-card-a">
+            <div>
+              <p>You get the full 7-day live challenge, live assignment reviews, the private Telegram community, the workbook templates, and all 3 bonuses (total value over ₦80,000).</p>
+            </div>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary class="faq-q">When do classes start?<span class="plus" aria-hidden="true">+</span></summary>
-          <div class="faq-a"><div><p>Immediately upon registration. You receive the Telegram invite link right on your confirmation page and inside your email.</p></div></div>
+
+        <details class="faq-card-item">
+          <summary class="faq-card-q">
+            <div class="flex items-center gap-3">
+              <span class="faq-num-chip">Q06</span>
+              <span>When do classes start?</span>
+            </div>
+            <span class="faq-toggle-pill" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-card-a">
+            <div>
+              <p>Immediately upon registration. You receive the Telegram invite link right on your confirmation page and inside your email.</p>
+            </div>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary class="faq-q">Does this work for physical products or only digital services?<span class="plus" aria-hidden="true">+</span></summary>
-          <div class="faq-a"><div><p>It works for physical products (fashion, skincare, bakery), professional services (freelancing, design, consulting), and digital products alike.</p></div></div>
+
+        <details class="faq-card-item">
+          <summary class="faq-card-q">
+            <div class="flex items-center gap-3">
+              <span class="faq-num-chip">Q07</span>
+              <span>Does this work for physical products or only digital services?</span>
+            </div>
+            <span class="faq-toggle-pill" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-card-a">
+            <div>
+              <p>It works for physical products (fashion, skincare, bakery), professional services (freelancing, design, consulting), and digital products alike.</p>
+            </div>
+          </div>
         </details>
-        <details class="faq-item">
-          <summary class="faq-q">What is your guarantee and refund policy?<span class="plus" aria-hidden="true">+</span></summary>
-          <div class="faq-a"><div><p>We do not issue refunds after joining. Instead, we offer a personal commitment: finish all seven daily assignments, and Divine will continue reviewing your work until it works for you.</p></div></div>
+
+        <details class="faq-card-item">
+          <summary class="faq-card-q">
+            <div class="flex items-center gap-3">
+              <span class="faq-num-chip">Q08</span>
+              <span>What is your guarantee and refund policy?</span>
+            </div>
+            <span class="faq-toggle-pill" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-card-a">
+            <div>
+              <p>We do not issue refunds after joining. Instead, we offer a personal commitment: finish all seven daily assignments, and Divine will continue reviewing your work until it works for you.</p>
+            </div>
+          </div>
         </details>
+
+        <!-- Reassurance Support Box -->
+        <div class="mt-8 rounded-2xl border border-[#2654B6]/15 bg-[#EDF2FB]/70 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <div>
+            <p class="font-display text-base font-bold text-[#0B1526]">Still have questions about your specific business?</p>
+            <p class="text-xs text-[#5A6B85] mt-1">Get direct guidance inside the community as soon as you enroll.</p>
+          </div>
+          <a href="step-2.html" class="btn btn-primary btn-shine mag px-6 py-2.5 text-xs sm:text-sm font-bold flex-shrink-0">
+            Join the Challenge
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -2096,30 +2315,56 @@
   </section>
 
   <!-- SECTION 16: CLOSING DECISION & FINAL CTA -->
-  <section id="join" class="hero-vignette relative overflow-hidden py-28 text-center text-[#FBFCF8] sm:py-36">
-    <div class="pointer-events-none absolute right-[-4rem] top-[-4rem] h-80 w-80 rounded-full bg-[#3A6FE0]/[0.18] blur-[90px]" aria-hidden="true"></div>
-    <div class="pointer-events-none absolute bottom-[-4rem] left-[-4rem] h-80 w-80 rounded-full bg-[#FF6B35]/[0.12] blur-[90px]" aria-hidden="true"></div>
+  <section id="join" class="hero-vignette relative overflow-hidden py-24 text-center text-[#FBFCF8] sm:py-36">
+    <div class="pointer-events-none absolute right-[-4rem] top-[-4rem] h-96 w-96 rounded-full bg-[#3A6FE0]/[0.22] blur-[100px]" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute bottom-[-4rem] left-[-4rem] h-96 w-96 rounded-full bg-[#FF6B35]/[0.15] blur-[100px]" aria-hidden="true"></div>
 
     <div class="relative mx-auto max-w-4xl px-5 sm:px-8">
-      <p class="sec-marker sec-marker--center sec-marker--light" data-reveal><b>14</b> The Decision</p>
-      <h2 class="font-display mt-6 text-3xl sm:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.08] tracking-[-0.03em]" data-reveal>
+      <!-- Cohort Status Pill -->
+      <div class="inline-flex items-center gap-2.5 rounded-full border border-[rgba(251,252,248,0.18)] bg-[rgba(251,252,248,0.08)] px-4 py-1.5 backdrop-blur-md" data-reveal>
+        <span class="pulse-dot inline-block h-2 w-2 rounded-full bg-[#FF6B35]"></span>
+        <span class="mono text-[.7rem] font-bold uppercase tracking-[.18em] text-[#FFA37D]">Cohort 01 Enrollment Live</span>
+      </div>
+
+      <p class="sec-marker sec-marker--center sec-marker--light mt-6" data-reveal><b>14</b> The Decision</p>
+      
+      <h2 class="font-display mt-5 text-3xl sm:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.08] tracking-[-0.03em] text-white" data-reveal>
         The next 7 days will pass anyway.
       </h2>
-      <p class="mx-auto mt-6 max-w-2xl text-xl leading-[1.7] text-[#B7C2D6]" data-reveal>
+      
+      <p class="mx-auto mt-6 max-w-2xl text-base sm:text-xl leading-[1.75] text-[#B7C2D6]" data-reveal>
         The only question is: will you spend them wondering why sales are slow, or will you spend them building a proven sales engine that works for you?
       </p>
-      <p class="serif-i mt-8 text-2xl sm:text-4xl text-[#FFA37D]" data-reveal>
+      
+      <p class="serif-i mt-6 sm:mt-8 text-2xl sm:text-4xl text-[#FFA37D]" data-reveal>
         The choice is entirely yours.
       </p>
 
-      <div class="mt-12 flex flex-col items-center gap-5" data-reveal>
-        <a href="step-2.html" class="btn btn-accent btn-shine mag px-10 py-5 text-xl font-bold">
+      <div class="mt-10 sm:mt-12 flex flex-col items-center gap-6" data-reveal>
+        <a href="step-2.html" class="btn btn-accent btn-shine mag w-full sm:w-auto px-10 py-5 text-lg sm:text-xl font-bold shadow-[0_16px_40px_-10px_rgba(255,107,53,0.6)]">
           <span>Join the Sell Out Challenge (₦5,000)</span>
           <svg class="h-6 w-6" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
         </a>
-        <p class="mono text-xs uppercase tracking-[.18em] text-[rgba(251,252,248,.5)]">
-          Live Classes · Action Sheets · Live Reviews · Telegram Community
-        </p>
+        
+        <!-- Trust Indicators Grid -->
+        <div class="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center sm:gap-6 text-xs text-[rgba(251,252,248,0.7)] pt-2">
+          <div class="flex items-center gap-2">
+            <span class="text-[#FFA37D]">⚡</span>
+            <span>Instant Telegram Access</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-[#FFA37D]">🎯</span>
+            <span>7 Live Sprints</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-[#FFA37D]">🛡️</span>
+            <span>Work-Review Guarantee</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-[#FFA37D]">🔒</span>
+            <span>100% Secure Checkout</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -2145,18 +2390,28 @@
     </div>
   </footer>
 
-  <!-- STICKY BOTTOM BAR -->
+  <!-- STICKY BOTTOM BAR WITH LIVE TIMER -->
   <div id="sticky-bar" aria-hidden="true">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
-      <div class="hidden sm:block">
-        <p class="mono text-[.6rem] uppercase tracking-[.16em] text-[#FFA37D] font-bold">Early Bird Tier</p>
-        <p class="font-display text-xl font-bold text-[#FBFCF8]">₦5,000</p>
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-8 sm:py-3">
+      <!-- Desktop & Tablet Tier Info -->
+      <div class="hidden sm:flex items-center gap-3">
+        <div class="flex items-center gap-2 rounded-full bg-[#FF6B35]/15 border border-[#FF6B35]/30 px-3 py-1 text-xs text-[#FFA37D]">
+          <span class="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-[#FF6B35]"></span>
+          <span class="mono font-bold uppercase tracking-[.12em]">Early Bird Active</span>
+        </div>
+        <p class="font-display text-lg font-bold text-[#FBFCF8]">₦5,000</p>
       </div>
-      <p class="flex-1 text-sm text-[rgba(251,252,248,.85)] sm:text-center font-medium">
-        7 Days · Build Your ₦50k–₦200k Sales Machine
-      </p>
-      <a href="step-2.html" class="btn btn-accent btn-shine mag px-6 py-2.5 text-xs sm:text-sm font-bold">
-        Join the Challenge
+
+      <!-- Live Sync Timer Pill -->
+      <div class="flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs text-white/90 border border-white/15">
+        <span class="mono text-[.65rem] uppercase tracking-[.12em] text-[#FFA37D] font-semibold">Closes:</span>
+        <span id="sticky-timer" class="mono font-bold text-white tracking-wider">07d 00h 00m 00s</span>
+      </div>
+
+      <!-- CTA Button -->
+      <a href="step-2.html" class="btn btn-accent btn-shine mag px-5 py-2 sm:px-6 sm:py-2.5 text-xs sm:text-sm font-bold flex-shrink-0">
+        <span>Join Challenge</span>
+        <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
       </a>
     </div>
   </div>
@@ -2377,7 +2632,8 @@
 
       // Countdown Timer
       var countdown = document.getElementById('countdown');
-      if (countdown) {
+      var stickyTimer = document.getElementById('sticky-timer');
+      if (countdown || stickyTimer) {
         var target = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
         var cdDays = document.getElementById('cd-days');
         var cdHours = document.getElementById('cd-hours');
@@ -2387,13 +2643,21 @@
         function tick() {
           var diff = target - Date.now();
           if (diff <= 0) {
-            countdown.innerHTML = '<p class="mono text-xs uppercase tracking-[.18em] text-[#FFA37D]">The early-bird window has closed.</p>';
+            if (countdown) countdown.innerHTML = '<p class="mono text-xs uppercase tracking-[.18em] text-[#FFA37D]">The early-bird window has closed.</p>';
+            if (stickyTimer) stickyTimer.textContent = 'Closed';
             return;
           }
-          cdDays.textContent = Math.floor(diff / 86400000);
-          cdHours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
-          cdMins.textContent = pad(Math.floor((diff % 3600000) / 60000));
-          cdSecs.textContent = pad(Math.floor((diff % 60000) / 1000));
+          var days = Math.floor(diff / 86400000);
+          var hours = pad(Math.floor((diff % 86400000) / 3600000));
+          var mins = pad(Math.floor((diff % 3600000) / 60000));
+          var secs = pad(Math.floor((diff % 60000) / 1000));
+
+          if (cdDays) cdDays.textContent = pad(days);
+          if (cdHours) cdHours.textContent = hours;
+          if (cdMins) cdMins.textContent = mins;
+          if (cdSecs) cdSecs.textContent = secs;
+
+          if (stickyTimer) stickyTimer.textContent = pad(days) + 'd ' + hours + 'h ' + mins + 'm ' + secs + 's';
         }
         tick();
         if (!reduceMotion) setInterval(tick, 1000);
