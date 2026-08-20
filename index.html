@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>The Sell Out Challenge | Build Your ₦50k–₦200k Sales System in 7 Days</title>
   <meta name="description" content="A live 7-day implementation sprint with Divine Bakare. Build a repeatable sales system that positions you to make your first, or next, ₦50k–₦200k. Live classes, daily assignments, direct feedback, private Telegram community.">
   <meta name="theme-color" content="#0B1526">
@@ -60,14 +63,15 @@
       position: fixed; inset: 0; z-index: 1000;
       background: var(--ink);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transition: opacity .8s cubic-bezier(.16, 1, .3, 1), transform .8s cubic-bezier(.16, 1, .3, 1), filter .8s cubic-bezier(.16, 1, .3, 1);
+      transition: opacity .6s cubic-bezier(.16, 1, .3, 1), transform .6s cubic-bezier(.16, 1, .3, 1), filter .6s cubic-bezier(.16, 1, .3, 1), visibility .6s;
       pointer-events: all;
     }
     #preloader.preloader-done {
       opacity: 0;
-      transform: scale(1.06);
-      filter: blur(8px);
+      transform: scale(1.04);
+      filter: blur(6px);
       pointer-events: none;
+      visibility: hidden;
     }
     .preloader-mesh-1 {
       position: absolute; inset: 0; opacity: .6;
@@ -199,18 +203,24 @@
       transform: translateY(-5.1px) rotate(-45deg);
     }
 
-    /* Mobile Menu Expanded Styles */
+    /* Mobile Menu Floating Glass Card */
     #mobile-menu {
-      position: fixed; top: auto; left: 1rem; right: 1rem; z-index: 81;
-      border-radius: 1.25rem;
-      background: rgba(251, 252, 248, 0.97);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(11, 21, 38, 0.1);
-      box-shadow: 0 16px 40px -12px rgba(11, 21, 38, 0.25);
+      position: fixed;
+      top: 4.75rem;
+      left: 1rem;
+      right: 1rem;
+      margin: 0 auto;
+      max-width: 28rem;
+      z-index: 81;
+      border-radius: 1.5rem;
+      background: rgba(251, 252, 248, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(11, 21, 38, 0.12);
+      box-shadow: 0 20px 48px -12px rgba(11, 21, 38, 0.3);
       pointer-events: none;
       opacity: 0;
-      transform: translateY(-8px) scale(0.97);
+      transform: translateY(-10px) scale(0.96);
       transition: opacity .3s cubic-bezier(.16, 1, .3, 1), transform .3s cubic-bezier(.16, 1, .3, 1);
     }
     #mobile-menu.menu-open {
@@ -220,7 +230,7 @@
     }
     #mobile-menu.menu-closing {
       opacity: 0;
-      transform: translateY(-8px) scale(0.97);
+      transform: translateY(-10px) scale(0.96);
       pointer-events: none;
     }
     #mobile-menu .menu-link {
@@ -232,7 +242,9 @@
     }
     #menu-backdrop {
       position: fixed; inset: 0; z-index: 80;
-      background: rgba(11, 21, 38, 0.2);
+      background: rgba(11, 21, 38, 0.35);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
       opacity: 0; pointer-events: none;
       transition: opacity .3s cubic-bezier(.16, 1, .3, 1);
     }
@@ -2489,15 +2501,18 @@
         }
         clearInterval(preloaderInterval);
         setTimeout(function () {
-          if (preloader) preloader.classList.add('preloader-done');
-        }, 300);
+          if (preloader) {
+            preloader.classList.add('preloader-done');
+            setTimeout(function () { preloader.style.display = 'none'; }, 600);
+          }
+        }, 150);
       }
       window.addEventListener('load', function () {
-        setTimeout(dismissPreloader, 600);
+        setTimeout(dismissPreloader, 400);
       });
       setTimeout(function () {
         if (preloader && !preloader.classList.contains('preloader-done')) dismissPreloader();
-      }, 3500);
+      }, 2000);
 
       var navDock = document.querySelector('.nav-dock');
       var progress = document.getElementById('progress');
@@ -2527,20 +2542,7 @@
         var hamburgerIcon = menuBtn.querySelector('.hamburger-icon');
         var menuBackdrop = document.getElementById('menu-backdrop');
 
-        function positionMobileMenu() {
-          var dock = document.querySelector('.nav-dock');
-          if (!dock) return;
-          var rect = dock.getBoundingClientRect();
-          var topPos = rect.bottom + 8;
-          var dockLeft = rect.left + 16;
-          var dockRight = window.innerWidth - rect.right + 16;
-          mobileMenu.style.top = topPos + 'px';
-          mobileMenu.style.left = dockLeft + 'px';
-          mobileMenu.style.right = dockRight + 'px';
-        }
-
         function openMenu() {
-          positionMobileMenu();
           mobileMenu.classList.remove('menu-closing');
           mobileMenu.classList.add('menu-open');
           if (hamburgerIcon) hamburgerIcon.classList.add('expanded');
