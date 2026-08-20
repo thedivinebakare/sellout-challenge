@@ -40,8 +40,8 @@
     .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
     .serif-i { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
 
-    .text-hero { font-size: clamp(2rem, 6.8vw, 5.8rem); line-height: 1.02; letter-spacing: -0.038em; }
-    .text-h2 { font-size: clamp(2.35rem, 4.4vw, 3.8rem); line-height: 1.06; letter-spacing: -0.03em; }
+    .text-hero { font-size: clamp(1.85rem, 6.8vw, 5.8rem); line-height: 1.02; letter-spacing: -0.038em; }
+    .text-h2 { font-size: clamp(1.65rem, 4.4vw, 3.8rem); line-height: 1.06; letter-spacing: -0.03em; }
 
     section[id] { scroll-margin-top: 6rem; }
     h1, h2, h3 { text-wrap: balance; }
@@ -60,21 +60,97 @@
       position: fixed; inset: 0; z-index: 1000;
       background: var(--ink);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1);
+      transition: opacity .8s cubic-bezier(.16, 1, .3, 1), transform .8s cubic-bezier(.16, 1, .3, 1), filter .8s cubic-bezier(.16, 1, .3, 1);
       pointer-events: all;
     }
     #preloader.preloader-done {
       opacity: 0;
-      transform: scale(1.04);
+      transform: scale(1.06);
+      filter: blur(8px);
       pointer-events: none;
     }
-    .preloader-pulse {
-      animation: pulse-ring 2s cubic-bezier(.16, 1, .3, 1) infinite;
+    .preloader-mesh-1 {
+      position: absolute; inset: 0; opacity: .6;
+      background: radial-gradient(ellipse 60% 50% at 30% 40%, rgba(38,84,182,.35) 0%, transparent 70%),
+                  radial-gradient(ellipse 50% 45% at 70% 60%, rgba(255,107,53,.15) 0%, transparent 65%);
+      animation: mesh-drift 4s ease-in-out infinite alternate;
     }
-    @keyframes pulse-ring {
-      0% { transform: scale(.8); opacity: .7; }
-      50% { transform: scale(1.15); opacity: .3; }
-      100% { transform: scale(.8); opacity: .7; }
+    .preloader-mesh-2 {
+      position: absolute; inset: 0; opacity: .45;
+      background: radial-gradient(ellipse 40% 55% at 60% 30%, rgba(58,111,224,.28) 0%, transparent 60%),
+                  radial-gradient(ellipse 55% 40% at 25% 70%, rgba(38,84,182,.2) 0%, transparent 55%);
+      animation: mesh-drift 5s ease-in-out 1s infinite alternate-reverse;
+    }
+    @keyframes mesh-drift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(12px, -8px) scale(1.04); }
+    }
+    .preloader-ring {
+      position: relative; width: 120px; height: 120px; animation: ring-rotate 6s linear infinite;
+    }
+    .preloader-ring-track {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 2.5px solid rgba(251,252,248,.08);
+    }
+    .preloader-ring-glow {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 2.5px solid transparent;
+      border-top-color: var(--royal-light);
+      border-right-color: rgba(255,107,53,.5);
+      filter: drop-shadow(0 0 6px rgba(58,111,224,.4)) drop-shadow(0 0 12px rgba(255,107,53,.2));
+    }
+    .preloader-ring-accent {
+      position: absolute; top: -3px; left: 50%; width: 6px; height: 6px; margin-left: -3px;
+      border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 8px rgba(255,107,53,.6), 0 0 20px rgba(255,107,53,.3);
+    }
+    @keyframes ring-rotate { to { transform: rotate(360deg); } }
+    .preloader-crest {
+      position: absolute; inset: 0; display: grid; place-items: center;
+    }
+    .preloader-crest-inner {
+      position: relative; width: 72px; height: 72px; border-radius: 20px;
+      background: linear-gradient(135deg, var(--royal-light), var(--royal-deep));
+      display: grid; place-items: center;
+      box-shadow: 0 4px 24px rgba(38,84,182,.5), 0 0 0 1px rgba(255,255,255,.12) inset;
+      animation: crest-glow 2.5s ease-in-out infinite alternate;
+    }
+    .preloader-crest-inner::after {
+      content: ""; position: absolute; inset: 0; border-radius: 20px; overflow: hidden;
+      background: linear-gradient(135deg, rgba(255,255,255,.22) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    @keyframes crest-glow {
+      0% { box-shadow: 0 4px 24px rgba(38,84,182,.5), 0 0 0 1px rgba(255,255,255,.12) inset; }
+      100% { box-shadow: 0 4px 32px rgba(38,84,182,.7), 0 0 40px rgba(58,111,224,.15), 0 0 0 1px rgba(255,255,255,.15) inset; }
+    }
+    .preloader-title {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: .82rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--pearl); opacity: .92; animation: title-fade 1.2s ease .3s both;
+    }
+    .preloader-subtitle {
+      font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+      font-size: .6rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent); opacity: .7; margin-top: .5rem;
+      animation: title-fade 1.2s ease .5s both;
+    }
+    @keyframes title-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: .92; transform: none; } }
+    .preloader-bar-track {
+      width: 160px; height: 3px; border-radius: 999px;
+      background: rgba(251,252,248,.08); overflow: hidden; margin-top: 1.5rem;
+      animation: title-fade 1.2s ease .6s both;
+    }
+    .preloader-bar-fill {
+      height: 100%; width: 0%; border-radius: 999px;
+      background: linear-gradient(90deg, var(--royal-light), var(--accent));
+      box-shadow: 0 0 10px rgba(58,111,224,.4);
+      transition: width .3s cubic-bezier(.16, 1, .3, 1);
+    }
+    .preloader-percent {
+      font-family: 'IBM Plex Mono', monospace; font-weight: 700;
+      font-size: .62rem; letter-spacing: .16em; color: rgba(251,252,248,.5);
+      margin-top: .6rem; animation: title-fade 1.2s ease .7s both;
     }
 
     /* Scroll reveal transitions */
@@ -124,44 +200,44 @@
     }
 
     /* Mobile Menu Expanded Styles */
-    .mobile-menu-expanded {
-      display: block !important;
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      animation: menu-slide-down .35s cubic-bezier(.16, 1, .3, 1) forwards;
-      border-radius: 0 0 1.25rem 1.25rem;
-      margin: 0.75rem 0.5rem 0.5rem;
-      padding: 0 1rem;
+    #mobile-menu {
+      position: fixed; top: auto; left: 1rem; right: 1rem; z-index: 81;
+      border-radius: 1.25rem;
       background: rgba(251, 252, 248, 0.97);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(11, 21, 38, 0.08);
-      border-top: 1px solid rgba(11, 21, 38, 0.06);
-      box-shadow: 0 12px 32px -8px rgba(11, 21, 38, 0.18);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(11, 21, 38, 0.1);
+      box-shadow: 0 16px 40px -12px rgba(11, 21, 38, 0.25);
       pointer-events: none;
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
+      transition: opacity .3s cubic-bezier(.16, 1, .3, 1), transform .3s cubic-bezier(.16, 1, .3, 1);
     }
-    .mobile-menu-expanded.expanded {
+    #mobile-menu.menu-open {
       pointer-events: auto;
-      padding-bottom: 0.75rem;
+      opacity: 1;
+      transform: translateY(0) scale(1);
     }
-    .mobile-menu-expanded.collapsing {
-      animation: menu-slide-up .25s cubic-bezier(.4, 0, .2, 1) forwards;
+    #mobile-menu.menu-closing {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
       pointer-events: none;
     }
-    .mobile-menu-expanded .block {
-      transition: color .2s;
+    #mobile-menu .menu-link {
+      transition: color .2s, background-color .2s;
     }
-    .mobile-menu-expanded .block:hover {
+    #mobile-menu .menu-link:hover {
       color: var(--royal);
+      background: rgba(38, 84, 182, 0.06);
     }
-    @keyframes menu-slide-down {
-      from { opacity: 0; max-height: 0; }
-      to { opacity: 1; max-height: 320px; }
+    #menu-backdrop {
+      position: fixed; inset: 0; z-index: 80;
+      background: rgba(11, 21, 38, 0.2);
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s cubic-bezier(.16, 1, .3, 1);
     }
-    @keyframes menu-slide-up {
-      from { opacity: 1; max-height: 320px; }
-      to { opacity: 0; max-height: 0; }
+    #menu-backdrop.active {
+      opacity: 1; pointer-events: auto;
     }
 
     /* Responsive Mobile Overrides */
@@ -181,15 +257,64 @@
         padding-bottom: 3.5rem;
       }
       .text-hero {
-        font-size: clamp(2.1rem, 9vw, 3rem);
+        font-size: clamp(1.85rem, 7.8vw, 4.5rem);
         line-height: 1.05;
       }
       .text-h2 {
-        font-size: clamp(1.8rem, 7vw, 2.6rem);
-        line-height: 1.08;
+        font-size: clamp(1.65rem, 5.5vw, 3rem);
+        line-height: 1.1;
       }
-      .mobile-menu-expanded {
-        will-change: max-height, opacity;
+      /* Tighten section padding on mobile */
+      section:not(.hero-vignette) {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+      }
+      /* Optimize card padding on mobile */
+      .glass-card-dark, .glass-card-light, .ledger-card, .sprint-card {
+        border-radius: 1rem;
+      }
+      .faq-q {
+        font-size: 1.05rem;
+        padding: 1.25rem 0;
+      }
+      /* Value Ledger: prevent currency wrap */
+      .ledger-line {
+        flex-wrap: nowrap;
+      }
+      .ledger-line > p:last-child {
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      /* Pricing countdown: ensure centered 4-cell grid */
+      #countdown .grid {
+        gap: .5rem;
+      }
+      /* Hero anti-objection pills: tighter on mobile */
+      .hero-vignette .flex-wrap {
+        gap: .5rem;
+      }
+      .hero-vignette .flex-wrap > div {
+        font-size: .78rem;
+        padding: .4rem .75rem;
+      }
+      /* Sticky bar: ensure toast doesn't overlap */
+      #sales-toast {
+        bottom: 5rem;
+        max-width: calc(100vw - 2.5rem);
+        left: 1.25rem;
+      }
+      /* Bonuses section: stack cleanly */
+      #bonuses .grid {
+        gap: 2rem;
+      }
+      /* Proof cards: ensure proper sizing */
+      figure.w-\\[82vw\\] {
+        width: 85vw;
+      }
+      /* Closing CTA: adjust heading */
+      #join .text-4xl {
+        font-size: 1.75rem;
+        line-height: 1.1;
       }
     }
 
@@ -308,9 +433,9 @@
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 800;
       line-height: 1;
-      font-size: clamp(7rem, 16vw, 15rem);
+      font-size: clamp(4.5rem, 16vw, 15rem);
       color: transparent;
-      -webkit-text-stroke: 1px rgba(38, 84, 182, 0.14);
+      -webkit-text-stroke: 1px rgba(38, 84, 182, 0.12);
     }
     .watermark--light { -webkit-text-stroke: 1px rgba(251, 252, 248, 0.07); }
 
@@ -425,9 +550,42 @@
       transition: transform .35s cubic-bezier(.16, 1, .3, 1), box-shadow .35s cubic-bezier(.16, 1, .3, 1), border-color .35s;
     }
     .sprint-card:hover {
-      transform: translateX(6px);
+      transform: translateX(4px);
       border-color: rgba(38, 84, 182, 0.4);
       box-shadow: 0 4px 16px rgba(22, 53, 127, 0.08), 0 18px 36px -18px rgba(22, 53, 127, 0.18);
+    }
+    .sprint-day-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+    }
+    .sprint-day-num {
+      font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+      font-size: 1rem; line-height: 1;
+      min-width: 2.2rem; text-align: center;
+      padding: .35rem .6rem; border-radius: .6rem;
+      background: var(--tint); color: var(--royal);
+    }
+    .sprint-day-tag {
+      font-family: 'IBM Plex Mono', monospace; font-size: .58rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      padding: .25rem .6rem; border-radius: .4rem;
+      background: var(--tint); color: var(--royal);
+    }
+    .sprint-day-tag--accent {
+      background: rgba(255,107,53,.1); color: var(--accent);
+    }
+    .sprint-deliverable {
+      display: flex; align-items: center; gap: .5rem;
+      margin-top: .75rem; padding: .6rem .8rem;
+      border-radius: .75rem;
+      background: rgba(237,242,251,.6);
+      border: 1px solid rgba(38,84,182,.1);
+    }
+    .sprint-deliverable--accent {
+      background: rgba(255,107,53,.06);
+      border-color: rgba(255,107,53,.2);
+    }
+    @media (min-width: 640px) {
+      .sprint-deliverable { margin-top: 1rem; }
     }
 
     /* Financial Ledger Card */
@@ -629,15 +787,25 @@
 <body class="bg-[#FBFCF8] text-[#0B1526]">
   <!-- PRELOADER INTRO SCREEN -->
   <div id="preloader" aria-hidden="true">
-    <div class="relative flex flex-col items-center">
-      <div class="absolute -inset-10 rounded-full bg-[#2654B6]/30 blur-2xl preloader-pulse"></div>
-      <div class="relative grid h-20 w-20 place-items-center rounded-3xl bg-gradient-to-br from-[#3A6FE0] to-[#16357F] border border-white/20 shadow-2xl">
-        <span class="font-display text-3xl font-extrabold text-[#FBFCF8] tracking-tight">TDB</span>
+    <div class="preloader-mesh-1" aria-hidden="true"></div>
+    <div class="preloader-mesh-2" aria-hidden="true"></div>
+    <div class="relative flex flex-col items-center" style="z-index:1">
+      <div class="preloader-ring">
+        <div class="preloader-ring-track"></div>
+        <div class="preloader-ring-glow"></div>
+        <div class="preloader-ring-accent"></div>
+        <div class="preloader-crest">
+          <div class="preloader-crest-inner">
+            <span class="font-display text-2xl font-extrabold text-white tracking-tight" style="position:relative;z-index:1">TDB</span>
+          </div>
+        </div>
       </div>
-      <p class="mono mt-5 text-[.72rem] uppercase tracking-[.24em] text-[#FFA37D] font-bold">Sell Out Challenge</p>
-      <div class="mt-4 h-1 w-32 rounded-full bg-white/10 overflow-hidden">
-        <div class="h-full w-full bg-gradient-to-r from-[#3A6FE0] to-[#FF6B35] animate-pulse"></div>
+      <p class="preloader-title mt-8">Sell Out Challenge</p>
+      <p class="preloader-subtitle">7-Day Implementation Sprint</p>
+      <div class="preloader-bar-track">
+        <div id="preloader-bar" class="preloader-bar-fill"></div>
       </div>
+      <p id="preloader-percent" class="preloader-percent">0%</p>
     </div>
   </div>
 
@@ -674,18 +842,29 @@
           </button>
         </div>
       </nav>
-
-      <div id="mobile-menu" class="hidden border-t border-[rgba(11,21,38,.1)] mt-3 pt-3 pb-2 text-center lg:hidden">
-        <a href="#trap" class="block py-2.5 text-[0.9rem] font-semibold text-[#0B1526]">The Problem</a>
-        <a href="#system" class="block py-2.5 text-[0.9rem] font-semibold text-[#0B1526]">3 Pillars</a>
-        <a href="#sprint" class="block py-2.5 text-[0.9rem] font-semibold text-[#0B1526]">7-Day Sprint</a>
-        <a href="#pricing" class="block py-2.5 text-[0.9rem] font-semibold text-[#0B1526]">Pricing</a>
-      </div>
     </header>
   </div>
 
+  <!-- MOBILE MENU BACKDROP -->
+  <div id="menu-backdrop" aria-hidden="true"></div>
+
+  <!-- MOBILE MENU (Floating Glass Card, separate from dock) -->
+  <div id="mobile-menu" class="lg:hidden" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <div class="px-5 pt-4 pb-5 space-y-1">
+      <a href="#trap" class="menu-link block rounded-xl px-4 py-3 text-[0.95rem] font-semibold text-[#0B1526]">The Problem</a>
+      <a href="#system" class="menu-link block rounded-xl px-4 py-3 text-[0.95rem] font-semibold text-[#0B1526]">3 Pillars</a>
+      <a href="#sprint" class="menu-link block rounded-xl px-4 py-3 text-[0.95rem] font-semibold text-[#0B1526]">7-Day Sprint</a>
+      <a href="#pricing" class="menu-link block rounded-xl px-4 py-3 text-[0.95rem] font-semibold text-[#0B1526]">Pricing</a>
+    </div>
+    <div class="px-5 pb-5 pt-2 border-t border-[rgba(11,21,38,0.08)]">
+      <a href="step-2.html" class="btn btn-accent btn-shine mag w-full text-center text-sm font-bold py-3">
+        Join the Challenge (₦5,000)
+      </a>
+    </div>
+  </div>
+
   <!-- SECTION 1: HERO & COMMAND CENTER -->
-  <section id="top" class="hero-vignette relative overflow-hidden pt-36 pb-24 text-center text-[#FBFCF8] sm:pt-44 sm:pb-32">
+  <section id="top" class="hero-vignette relative overflow-hidden pt-28 pb-16 text-center text-[#FBFCF8] sm:pt-44 sm:pb-32">
     <!-- Luminous Ambient Orbs -->
     <div class="pointer-events-none absolute -left-28 top-16 h-96 w-96 rounded-full bg-[#2654B6]/25 blur-[90px]" aria-hidden="true"></div>
     <div class="pointer-events-none absolute right-[-8rem] top-[-4rem] h-[28rem] w-[28rem] rounded-full bg-[#3A6FE0]/[0.22] blur-[100px]" aria-hidden="true"></div>
@@ -707,7 +886,7 @@
           Build a sales system that positions you to make your first, or next, <span class="money-sweep text-[#FFA37D]">₦50k–₦200k.</span>
         </h1>
 
-        <p class="hero-rise mx-auto mt-6 max-w-2xl text-xl font-normal leading-[1.6] text-[rgba(251,252,248,.88)] sm:text-2xl" style="--d:.3s">
+        <p class="hero-rise mx-auto mt-6 max-w-2xl text-base sm:text-xl font-normal leading-[1.6] text-[rgba(251,252,248,.88)] sm:text-2xl" style="--d:.3s">
           In just <span class="font-bold text-[#FBFCF8]">7 days.</span> Not with more confusing theory. With a practical, repeatable sales machine you build alongside me.
         </p>
 
@@ -827,7 +1006,7 @@
       <div class="max-w-3xl" data-reveal>
         <p class="sec-marker"><b>01</b> The Pattern</p>
         <h2 class="font-display text-h2 mt-5 font-extrabold text-[#0B1526]">Does this sound familiar?</h2>
-        <p class="mt-5 text-xl leading-[1.7] text-[#5A6B85]">
+        <p class="mt-5 text-base sm:text-xl leading-[1.7] text-[#5A6B85]">
           You have real talent and skills. Maybe you bake, design websites, sell fashion, run a skincare brand, freelance, or create digital products.
         </p>
       </div>
@@ -941,10 +1120,10 @@
       </div>
 
       <div class="mt-10 max-w-3xl" data-reveal>
-        <p class="text-xl leading-[1.7] text-[#5A6B85] sm:text-2xl">
+        <p class="text-base sm:text-xl leading-[1.7] text-[#5A6B85] sm:text-2xl">
           The problem is not that you do not know enough.
         </p>
-        <p class="font-display mt-6 text-3xl font-bold leading-[1.14] tracking-[-0.02em] text-[#0B1526] sm:text-[2.5rem]">
+        <p class="font-display mt-6 text-2xl sm:text-3xl font-bold leading-[1.14] tracking-[-0.02em] text-[#0B1526] sm:text-[2.5rem]">
           The problem is... you have never learned how to make people <span class="serif-i gradient-text font-normal">want</span> what you already have.
         </p>
       </div>
@@ -978,7 +1157,7 @@
       <div class="max-w-3xl" data-reveal>
         <p class="sec-marker sec-marker--light"><b>03</b> The Proprietary Engine</p>
         <h2 class="font-display text-h2 mt-5 font-extrabold text-[#FBFCF8]">The 3-Pillar Sell Out System.</h2>
-        <p class="mt-6 text-xl leading-[1.7] text-[#B7C2D6]">
+        <p class="mt-6 text-base sm:text-xl leading-[1.7] text-[#B7C2D6]">
           Making sales online is not luck or magic. It comes down to three repeatable building blocks you will set up during the challenge.
         </p>
       </div>
@@ -1069,7 +1248,7 @@
       <div class="max-w-3xl" data-reveal>
         <p class="sec-marker"><b>04</b> The Transformation</p>
         <h2 class="font-display text-h2 mt-5 font-extrabold text-[#0B1526]">Seven days from now.</h2>
-        <p class="mt-6 text-xl leading-[1.7] text-[#5A6B85] sm:text-2xl">
+        <p class="mt-6 text-base sm:text-xl leading-[1.7] text-[#5A6B85]">
           Imagine waking up one week from today and finally saying, <span class="font-display font-bold text-[#0B1526]">"I get it."</span>
         </p>
         <p class="mt-3 text-lg text-[#2654B6] font-medium">
@@ -1126,7 +1305,7 @@
       <div class="max-w-3xl" data-reveal>
         <p class="sec-marker"><b>05</b> The Action Plan</p>
         <h2 class="font-display text-h2 mt-5 font-extrabold text-[#0B1526]">Here's what we'll build together.</h2>
-        <p class="mt-5 text-xl leading-[1.7] text-[#5A6B85]">
+        <p class="mt-5 text-base sm:text-xl leading-[1.7] text-[#5A6B85]">
           A day-by-day implementation sprint. You don't just watch classes; you submit work and get real feedback.
         </p>
       </div>
@@ -1134,141 +1313,123 @@
       <!-- 7 Day Sprint Cards -->
       <div class="mt-12 space-y-4 max-w-4xl" data-reveal>
         <!-- Day 1 -->
-        <div class="sprint-card p-6 sm:p-7">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-start gap-4">
-              <span class="font-display text-3xl font-extrabold text-[#2654B6] w-12 flex-none">01</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="mono text-[.6rem] uppercase tracking-[.14em] rounded bg-[#EDF2FB] text-[#2654B6] px-2 py-0.5 font-bold">Live Class</span>
-                  <h3 class="font-display text-lg font-bold text-[#0B1526]">Finding What Actually Sells</h3>
-                </div>
-                <p class="mt-1.5 text-sm text-[#5A6B85] leading-relaxed">Discover how to identify high-demand problems people are already willing and eager to pay to solve.</p>
-              </div>
-            </div>
-            <div class="rounded-xl bg-[#EDF2FB]/80 border border-[#2654B6]/15 px-3.5 py-2 sm:text-right flex-none">
-              <p class="mono text-[.6rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 1 Deliverable</p>
-              <p class="font-display text-xs font-bold text-[#0B1526]">The Profitable Opportunity Choice</p>
+        <div class="sprint-card p-5 sm:p-7">
+          <div class="sprint-day-badge">
+            <span class="sprint-day-num">01</span>
+            <span class="sprint-day-tag">Live Class</span>
+          </div>
+          <h3 class="font-display mt-3 text-lg sm:text-xl font-bold text-[#0B1526] leading-tight">Finding What Actually Sells</h3>
+          <p class="mt-2 text-sm text-[#5A6B85] leading-relaxed">Discover how to identify high-demand problems people are already willing and eager to pay to solve.</p>
+          <div class="sprint-deliverable">
+            <span class="text-sm">🎯</span>
+            <div>
+              <p class="mono text-[.58rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 1 Deliverable</p>
+              <p class="font-display text-xs font-bold text-[#0B1526] mt-0.5">The Profitable Opportunity Choice</p>
             </div>
           </div>
         </div>
 
         <!-- Day 2 -->
-        <div class="sprint-card p-6 sm:p-7">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-start gap-4">
-              <span class="font-display text-3xl font-extrabold text-[#2654B6] w-12 flex-none">02</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="mono text-[.6rem] uppercase tracking-[.14em] rounded bg-[#EDF2FB] text-[#2654B6] px-2 py-0.5 font-bold">Live Review</span>
-                  <h3 class="font-display text-lg font-bold text-[#0B1526]">Live Diagnostic &amp; Offer Surgery</h3>
-                </div>
-                <p class="mt-1.5 text-sm text-[#5A6B85] leading-relaxed">We will refine offers together until they are crystal clear so buyers instantly understand why they should buy.</p>
-              </div>
-            </div>
-            <div class="rounded-xl bg-[#EDF2FB]/80 border border-[#2654B6]/15 px-3.5 py-2 sm:text-right flex-none">
-              <p class="mono text-[.6rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 2 Deliverable</p>
-              <p class="font-display text-xs font-bold text-[#0B1526]">Value Clarity Scorecard</p>
+        <div class="sprint-card p-5 sm:p-7">
+          <div class="sprint-day-badge">
+            <span class="sprint-day-num">02</span>
+            <span class="sprint-day-tag">Live Review</span>
+          </div>
+          <h3 class="font-display mt-3 text-lg sm:text-xl font-bold text-[#0B1526] leading-tight">Live Diagnostic &amp; Offer Surgery</h3>
+          <p class="mt-2 text-sm text-[#5A6B85] leading-relaxed">We will refine offers together until they are crystal clear so buyers instantly understand why they should buy.</p>
+          <div class="sprint-deliverable">
+            <span class="text-sm">🎯</span>
+            <div>
+              <p class="mono text-[.58rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 2 Deliverable</p>
+              <p class="font-display text-xs font-bold text-[#0B1526] mt-0.5">Value Clarity Scorecard</p>
             </div>
           </div>
         </div>
 
         <!-- Day 3 -->
-        <div class="sprint-card p-6 sm:p-7">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-start gap-4">
-              <span class="font-display text-3xl font-extrabold text-[#2654B6] w-12 flex-none">03</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="mono text-[.6rem] uppercase tracking-[.14em] rounded bg-[#EDF2FB] text-[#2654B6] px-2 py-0.5 font-bold">Core Sprint</span>
-                  <h3 class="font-display text-lg font-bold text-[#0B1526]">The Offer That Makes Sense</h3>
-                </div>
-                <p class="mt-1.5 text-sm text-[#5A6B85] leading-relaxed">Package your idea or skill into something people actively crave. Not cheap; immensely valuable.</p>
-              </div>
-            </div>
-            <div class="rounded-xl bg-[#EDF2FB]/80 border border-[#2654B6]/15 px-3.5 py-2 sm:text-right flex-none">
-              <p class="mono text-[.6rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 3 Deliverable</p>
-              <p class="font-display text-xs font-bold text-[#0B1526]">The 1-Page Offer Blueprint</p>
+        <div class="sprint-card p-5 sm:p-7">
+          <div class="sprint-day-badge">
+            <span class="sprint-day-num">03</span>
+            <span class="sprint-day-tag">Core Sprint</span>
+          </div>
+          <h3 class="font-display mt-3 text-lg sm:text-xl font-bold text-[#0B1526] leading-tight">The Offer That Makes Sense</h3>
+          <p class="mt-2 text-sm text-[#5A6B85] leading-relaxed">Package your idea or skill into something people actively crave. Not cheap; immensely valuable.</p>
+          <div class="sprint-deliverable">
+            <span class="text-sm">🎯</span>
+            <div>
+              <p class="mono text-[.58rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 3 Deliverable</p>
+              <p class="font-display text-xs font-bold text-[#0B1526] mt-0.5">The 1-Page Offer Blueprint</p>
             </div>
           </div>
         </div>
 
         <!-- Day 4 -->
-        <div class="sprint-card p-6 sm:p-7">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-start gap-4">
-              <span class="font-display text-3xl font-extrabold text-[#2654B6] w-12 flex-none">04</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="mono text-[.6rem] uppercase tracking-[.14em] rounded bg-[#EDF2FB] text-[#2654B6] px-2 py-0.5 font-bold">Hotseat Session</span>
-                  <h3 class="font-display text-lg font-bold text-[#0B1526]">Live Offer Hotseat &amp; Teardowns</h3>
-                </div>
-                <p class="mt-1.5 text-sm text-[#5A6B85] leading-relaxed">Divine reviews selected offers live on screen. See exactly why some offers sound premium while others get ignored.</p>
-              </div>
-            </div>
-            <div class="rounded-xl bg-[#EDF2FB]/80 border border-[#2654B6]/15 px-3.5 py-2 sm:text-right flex-none">
-              <p class="mono text-[.6rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 4 Deliverable</p>
-              <p class="font-display text-xs font-bold text-[#0B1526]">Offer Polish &amp; Pricing Refinement</p>
+        <div class="sprint-card p-5 sm:p-7">
+          <div class="sprint-day-badge">
+            <span class="sprint-day-num">04</span>
+            <span class="sprint-day-tag">Hotseat Session</span>
+          </div>
+          <h3 class="font-display mt-3 text-lg sm:text-xl font-bold text-[#0B1526] leading-tight">Live Offer Hotseat &amp; Teardowns</h3>
+          <p class="mt-2 text-sm text-[#5A6B85] leading-relaxed">Divine reviews selected offers live on screen. See exactly why some offers sound premium while others get ignored.</p>
+          <div class="sprint-deliverable">
+            <span class="text-sm">🎯</span>
+            <div>
+              <p class="mono text-[.58rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 4 Deliverable</p>
+              <p class="font-display text-xs font-bold text-[#0B1526] mt-0.5">Offer Polish &amp; Pricing Refinement</p>
             </div>
           </div>
         </div>
 
         <!-- Day 5 -->
-        <div class="sprint-card p-6 sm:p-7">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-start gap-4">
-              <span class="font-display text-3xl font-extrabold text-[#2654B6] w-12 flex-none">05</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="mono text-[.6rem] uppercase tracking-[.14em] rounded bg-[#EDF2FB] text-[#2654B6] px-2 py-0.5 font-bold">Live Class</span>
-                  <h3 class="font-display text-lg font-bold text-[#0B1526]">Simple Inbound Sales Messaging</h3>
-                </div>
-                <p class="mt-1.5 text-sm text-[#5A6B85] leading-relaxed">Learn how to explain your offer in a way that attracts paying buyers into your DMs instead of confusing them.</p>
-              </div>
-            </div>
-            <div class="rounded-xl bg-[#EDF2FB]/80 border border-[#2654B6]/15 px-3.5 py-2 sm:text-right flex-none">
-              <p class="mono text-[.6rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 5 Deliverable</p>
-              <p class="font-display text-xs font-bold text-[#0B1526]">Inbound DM &amp; Content Scripts</p>
+        <div class="sprint-card p-5 sm:p-7">
+          <div class="sprint-day-badge">
+            <span class="sprint-day-num">05</span>
+            <span class="sprint-day-tag">Live Class</span>
+          </div>
+          <h3 class="font-display mt-3 text-lg sm:text-xl font-bold text-[#0B1526] leading-tight">Simple Inbound Sales Messaging</h3>
+          <p class="mt-2 text-sm text-[#5A6B85] leading-relaxed">Learn how to explain your offer in a way that attracts paying buyers into your DMs instead of confusing them.</p>
+          <div class="sprint-deliverable">
+            <span class="text-sm">🎯</span>
+            <div>
+              <p class="mono text-[.58rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 5 Deliverable</p>
+              <p class="font-display text-xs font-bold text-[#0B1526] mt-0.5">Inbound DM &amp; Content Scripts</p>
             </div>
           </div>
         </div>
 
         <!-- Day 6 -->
-        <div class="sprint-card p-6 sm:p-7">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-start gap-4">
-              <span class="font-display text-3xl font-extrabold text-[#2654B6] w-12 flex-none">06</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="mono text-[.6rem] uppercase tracking-[.14em] rounded bg-[#EDF2FB] text-[#2654B6] px-2 py-0.5 font-bold">Live Review</span>
-                  <h3 class="font-display text-lg font-bold text-[#0B1526]">Messaging Review &amp; Persuasion Polish</h3>
-                </div>
-                <p class="mt-1.5 text-sm text-[#5A6B85] leading-relaxed">We will refine messaging together until it is clear, believable, and persuasive without sounding sleazy.</p>
-              </div>
-            </div>
-            <div class="rounded-xl bg-[#EDF2FB]/80 border border-[#2654B6]/15 px-3.5 py-2 sm:text-right flex-none">
-              <p class="mono text-[.6rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 6 Deliverable</p>
-              <p class="font-display text-xs font-bold text-[#0B1526]">Final Sales Script Validation</p>
+        <div class="sprint-card p-5 sm:p-7">
+          <div class="sprint-day-badge">
+            <span class="sprint-day-num">06</span>
+            <span class="sprint-day-tag">Live Review</span>
+          </div>
+          <h3 class="font-display mt-3 text-lg sm:text-xl font-bold text-[#0B1526] leading-tight">Messaging Review &amp; Persuasion Polish</h3>
+          <p class="mt-2 text-sm text-[#5A6B85] leading-relaxed">We will refine messaging together until it is clear, believable, and persuasive without sounding sleazy.</p>
+          <div class="sprint-deliverable">
+            <span class="text-sm">🎯</span>
+            <div>
+              <p class="mono text-[.58rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Day 6 Deliverable</p>
+              <p class="font-display text-xs font-bold text-[#0B1526] mt-0.5">Final Sales Script Validation</p>
             </div>
           </div>
         </div>
 
-        <!-- Day 7 -->
-        <div class="sprint-card p-6 sm:p-7 border-[#FF6B35]/40 bg-gradient-to-r from-white to-[#EDF2FB]/50">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-start gap-4">
-              <span class="font-display text-3xl font-extrabold text-[#FF6B35] w-12 flex-none">07</span>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="mono text-[.6rem] uppercase tracking-[.14em] rounded bg-[#FF6B35] text-white px-2 py-0.5 font-bold">Final Rollout</span>
-                  <h3 class="font-display text-lg font-bold text-[#0B1526]">Launching Your ₦50k–₦200k Sales Engine</h3>
-                </div>
-                <p class="mt-1.5 text-sm text-[#5A6B85] leading-relaxed">Stitch everything together: a clear offer, strong positioning, winning messaging, and your execution rollout. Practical and ready to launch.</p>
-              </div>
+        <!-- Day 7 (Final Rollout) -->
+        <div class="sprint-card p-5 sm:p-7 border-[#FF6B35]/40 bg-gradient-to-r from-white to-[#EDF2FB]/50 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 rounded-full bg-[#FF6B35]/[0.06] blur-3xl -translate-y-1/2 translate-x-1/2" aria-hidden="true"></div>
+          <div class="relative">
+            <div class="sprint-day-badge">
+              <span class="sprint-day-num" style="background:rgba(255,107,53,.1);color:#FF6B35">07</span>
+              <span class="sprint-day-tag sprint-day-tag--accent">Final Rollout</span>
             </div>
-            <div class="rounded-xl bg-[#FF6B35]/15 border border-[#FF6B35]/30 px-3.5 py-2 sm:text-right flex-none">
-              <p class="mono text-[.6rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Final Outcome</p>
-              <p class="font-display text-xs font-bold text-[#0B1526]">Your Live Sales Machine</p>
+            <h3 class="font-display mt-3 text-lg sm:text-xl font-bold text-[#0B1526] leading-tight">Launching Your ₦50k–₦200k Sales Engine</h3>
+            <p class="mt-2 text-sm text-[#5A6B85] leading-relaxed">Stitch everything together: a clear offer, strong positioning, winning messaging, and your execution rollout. Practical and ready to launch.</p>
+            <div class="sprint-deliverable sprint-deliverable--accent">
+              <span class="text-sm">🚀</span>
+              <div>
+                <p class="mono text-[.58rem] uppercase tracking-[.12em] text-[#FF6B35] font-bold">Final Outcome</p>
+                <p class="font-display text-xs font-bold text-[#0B1526] mt-0.5">Your Live Sales Machine</p>
+              </div>
             </div>
           </div>
         </div>
@@ -1393,7 +1554,7 @@
       <div class="max-w-3xl" data-reveal>
         <p class="sec-marker text-[#FF6B35]"><b>07</b> The Bonuses</p>
         <h2 class="font-display text-h2 mt-5 font-extrabold text-[#0B1526]">Plus these 3 standalone bonuses.</h2>
-        <p class="mt-5 text-xl leading-[1.7] text-[#5A6B85]">
+        <p class="mt-5 text-base sm:text-xl leading-[1.7] text-[#5A6B85]">
           Included 100% free when you secure your spot today.
         </p>
       </div>
@@ -1495,7 +1656,7 @@
           <span class="pulse-dot inline-block h-2 w-2 rounded-full bg-[#FF6B35]"></span>
           <span class="mono text-[.7rem] font-bold uppercase tracking-[.18em] text-[#FFA37D]">Limited Time Offer</span>
         </div>
-        <h3 class="font-display text-2xl font-extrabold sm:text-3xl tracking-[-0.02em]">
+        <h3 class="font-display text-xl sm:text-3xl font-extrabold tracking-[-0.02em]">
           First 50 people get <span class="text-[#FFA37D]">25% OFF</span>
         </h3>
         <p class="max-w-xl text-base leading-relaxed text-[rgba(251,252,248,0.8)]">
@@ -1518,7 +1679,7 @@
       <div class="mx-auto max-w-3xl text-center" data-reveal>
         <p class="sec-marker sec-marker--center sec-marker--light"><b>08</b> The Investment</p>
         <h2 class="font-display text-h2 mt-5 font-extrabold text-[#FBFCF8]">Official Launch Pricing.</h2>
-        <p class="mt-5 text-xl leading-[1.7] text-[#B7C2D6]">
+        <p class="mt-5 text-base sm:text-xl leading-[1.7] text-[#B7C2D6]">
           The official public investment is anchored at ₦10,000–₦15,000. But the first 50 action-takers unlock the Early Bird rate today.
         </p>
       </div>
@@ -1529,7 +1690,7 @@
           <span class="mono font-bold uppercase tracking-[.18em]">Early Bird Active · First 50 People</span>
         </div>
 
-        <p class="font-display text-hero mt-6 font-extrabold text-[#FBFCF8]">
+        <p class="font-display text-4xl sm:text-hero mt-6 font-extrabold text-[#FBFCF8]">
           <span class="money-sweep" data-count="5000" data-prefix="₦">₦5,000</span>
         </p>
         <p class="mt-4 text-base text-[#B7C2D6]">
@@ -1662,7 +1823,7 @@
       <div class="max-w-3xl" data-reveal>
         <p class="sec-marker"><b>10</b> Real Results</p>
         <h2 class="font-display text-h2 mt-5 font-extrabold text-[#0B1526]">They have seen the system work up close.</h2>
-        <p class="mt-5 text-xl leading-[1.7] text-[#5A6B85]">
+        <p class="mt-5 text-base sm:text-xl leading-[1.7] text-[#5A6B85]">
           Unedited messages from real clients, students, and peers who applied these exact principles.
         </p>
       </div>
@@ -1805,10 +1966,10 @@
           <h2 class="font-display text-h2 mt-5 font-extrabold text-[#0B1526]">
             Earlier this year, I crossed six figures selling two digital products.
           </h2>
-          <p class="mt-6 text-lg leading-[1.75] text-[#5A6B85]">
+          <p class="mt-6 text-base sm:text-lg leading-[1.75] text-[#5A6B85]">
             No paid advertising. No massive celebrity following. No fancy technical funnels. Just pure sales positioning, clear offers, and clean execution.
           </p>
-          <p class="mt-5 text-lg leading-[1.75] text-[#5A6B85]">
+          <p class="mt-5 text-base sm:text-lg leading-[1.75] text-[#5A6B85]">
             That real-world experience taught me something I will never forget.
           </p>
           <blockquote class="mt-6 border-l-4 border-[#FF6B35] pl-6 py-1">
@@ -1838,7 +1999,7 @@
             <svg class="h-10 w-10 text-[#FBFCF8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
           </span>
           <div>
-            <p class="text-lg leading-[1.75] text-[#B7C2D6]">
+            <p class="text-base sm:text-lg leading-[1.75] text-[#B7C2D6]">
               This challenge has no refunds after you join, because it is not a passive video course you watch in bed. It is an active implementation sprint where you build alongside me.
             </p>
             <p class="serif-i mt-6 text-2xl leading-[1.35] text-[#FFA37D] sm:text-3xl">
@@ -1941,13 +2102,13 @@
 
     <div class="relative mx-auto max-w-4xl px-5 sm:px-8">
       <p class="sec-marker sec-marker--center sec-marker--light" data-reveal><b>14</b> The Decision</p>
-      <h2 class="font-display mt-6 text-4xl font-extrabold leading-[1.08] tracking-[-0.03em] sm:text-5xl lg:text-[3.5rem]" data-reveal>
+      <h2 class="font-display mt-6 text-3xl sm:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.08] tracking-[-0.03em]" data-reveal>
         The next 7 days will pass anyway.
       </h2>
       <p class="mx-auto mt-6 max-w-2xl text-xl leading-[1.7] text-[#B7C2D6]" data-reveal>
         The only question is: will you spend them wondering why sales are slow, or will you spend them building a proven sales engine that works for you?
       </p>
-      <p class="serif-i mt-8 text-3xl text-[#FFA37D] sm:text-4xl" data-reveal>
+      <p class="serif-i mt-8 text-2xl sm:text-4xl text-[#FFA37D]" data-reveal>
         The choice is entirely yours.
       </p>
 
@@ -2052,18 +2213,36 @@
     (function () {
       var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Preloader dismiss
+      // Preloader dismiss with progress bar
       var preloader = document.getElementById('preloader');
-      window.addEventListener('load', function () {
+      var preloaderBar = document.getElementById('preloader-bar');
+      var preloaderPercent = document.getElementById('preloader-percent');
+      var preloaderProgress = 0;
+      var preloaderInterval = setInterval(function () {
+        if (preloaderProgress >= 100) { clearInterval(preloaderInterval); return; }
+        var increment = preloaderProgress < 60 ? Math.random() * 18 + 6 : Math.random() * 4 + 1;
+        preloaderProgress = Math.min(preloaderProgress + increment, 100);
+        if (preloaderBar) preloaderBar.style.width = preloaderProgress + '%';
+        if (preloaderPercent) preloaderPercent.textContent = Math.round(preloaderProgress) + '%';
+      }, 120);
+
+      function dismissPreloader() {
+        if (preloaderProgress < 100) {
+          preloaderProgress = 100;
+          if (preloaderBar) preloaderBar.style.width = '100%';
+          if (preloaderPercent) preloaderPercent.textContent = '100%';
+        }
+        clearInterval(preloaderInterval);
         setTimeout(function () {
           if (preloader) preloader.classList.add('preloader-done');
-        }, 500);
+        }, 300);
+      }
+      window.addEventListener('load', function () {
+        setTimeout(dismissPreloader, 600);
       });
       setTimeout(function () {
-        if (preloader && !preloader.classList.contains('preloader-done')) {
-          preloader.classList.add('preloader-done');
-        }
-      }, 1500);
+        if (preloader && !preloader.classList.contains('preloader-done')) dismissPreloader();
+      }, 3500);
 
       var navDock = document.querySelector('.nav-dock');
       var progress = document.getElementById('progress');
@@ -2091,39 +2270,64 @@
 
       if (menuBtn && mobileMenu) {
         var hamburgerIcon = menuBtn.querySelector('.hamburger-icon');
+        var menuBackdrop = document.getElementById('menu-backdrop');
+
+        function positionMobileMenu() {
+          var dock = document.querySelector('.nav-dock');
+          if (!dock) return;
+          var rect = dock.getBoundingClientRect();
+          var topPos = rect.bottom + 8;
+          var dockLeft = rect.left + 16;
+          var dockRight = window.innerWidth - rect.right + 16;
+          mobileMenu.style.top = topPos + 'px';
+          mobileMenu.style.left = dockLeft + 'px';
+          mobileMenu.style.right = dockRight + 'px';
+        }
+
+        function openMenu() {
+          positionMobileMenu();
+          mobileMenu.classList.remove('menu-closing');
+          mobileMenu.classList.add('menu-open');
+          if (hamburgerIcon) hamburgerIcon.classList.add('expanded');
+          menuBtn.setAttribute('aria-expanded', 'true');
+          if (menuBackdrop) menuBackdrop.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+          mobileMenu.classList.remove('menu-open');
+          mobileMenu.classList.add('menu-closing');
+          if (hamburgerIcon) hamburgerIcon.classList.remove('expanded');
+          menuBtn.setAttribute('aria-expanded', 'false');
+          if (menuBackdrop) menuBackdrop.classList.remove('active');
+          document.body.style.overflow = '';
+          setTimeout(function () {
+            mobileMenu.classList.remove('menu-closing');
+          }, 300);
+        }
 
         menuBtn.addEventListener('click', function () {
-          var isOpen = mobileMenu.classList.contains('mobile-menu-expanded');
-
-          if (isOpen) {
-            mobileMenu.classList.remove('expanded');
-            mobileMenu.classList.add('collapsing');
-            if (hamburgerIcon) hamburgerIcon.classList.remove('expanded');
-            menuBtn.setAttribute('aria-expanded', 'false');
-            setTimeout(function () {
-              mobileMenu.classList.remove('mobile-menu-expanded', 'collapsing');
-            }, 250);
+          if (mobileMenu.classList.contains('menu-open')) {
+            closeMenu();
           } else {
-            mobileMenu.classList.remove('hidden');
-            mobileMenu.classList.add('mobile-menu-expanded');
-            if (hamburgerIcon) hamburgerIcon.classList.add('expanded');
-            menuBtn.setAttribute('aria-expanded', 'true');
-            requestAnimationFrame(function () {
-              mobileMenu.classList.add('expanded');
-            });
+            openMenu();
           }
         });
 
-        mobileMenu.querySelectorAll('a').forEach(function (link) {
-          link.addEventListener('click', function () {
-            mobileMenu.classList.remove('expanded');
-            mobileMenu.classList.add('collapsing');
-            if (hamburgerIcon) hamburgerIcon.classList.remove('expanded');
-            menuBtn.setAttribute('aria-expanded', 'false');
-            setTimeout(function () {
-              mobileMenu.classList.remove('mobile-menu-expanded', 'collapsing');
-            }, 250);
-          });
+        if (menuBackdrop) {
+          menuBackdrop.addEventListener('click', closeMenu);
+        }
+
+        mobileMenu.querySelectorAll('.menu-link, .btn').forEach(function (link) {
+          link.addEventListener('click', closeMenu);
+        });
+
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && mobileMenu.classList.contains('menu-open')) closeMenu();
+        });
+
+        window.addEventListener('resize', function () {
+          if (mobileMenu.classList.contains('menu-open')) positionMobileMenu();
         });
       }
 
