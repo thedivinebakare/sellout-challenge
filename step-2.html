@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Your Spot | The Sell Out Challenge</title>
+  <meta name="description" content="Complete your registration for the Sell Out Challenge. 7 days of live implementation, daily reviews, private community, and all bonuses.">
+  <meta name="theme-color" content="#0B1526">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232654B6'/%3E%3Crect x='9' y='9' width='14' height='14' rx='3' fill='%23FBFCF8'/%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <style>
+    :root {
+      --ink: #0B1526;
+      --royal: #2654B6;
+      --royal-deep: #16357F;
+      --royal-light: #3A6FE0;
+      --pearl: #FBFCF8;
+      --muted: #5A6B85;
+      --faint: #9AA7BE;
+      --tint: #EDF2FB;
+      --accent: #FF6B35;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Archivo', system-ui, -apple-system, sans-serif;
+      background: var(--pearl);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+      padding-top: 0;
+    }
+    .font-display { font-family: 'Bricolage Grotesque', 'Archivo', sans-serif; }
+    .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+    .serif-i { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; }
+    ::selection { background: rgba(38, 84, 182, 0.22); }
+    :focus-visible { outline: 2px solid var(--royal); outline-offset: 3px; border-radius: 6px; }
+
+    .grain {
+      position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: .038;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; border-radius: 9999px; font-weight: 700; letter-spacing: -.01em; line-height: 1; padding: 1rem 1.7rem; transition: transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s, background-color .3s, border-color .3s; will-change: transform; cursor: pointer; }
+    .btn:active { transform: scale(.97); }
+    .btn-accent { background: var(--accent); color: var(--ink); box-shadow: 0 2px 4px rgba(11,21,38,.14), 0 14px 26px -12px rgba(255,107,53,.55); }
+    .btn-accent:hover { transform: translateY(-2px); background: #FF7A47; box-shadow: 0 4px 8px rgba(11,21,38,.14), 0 20px 36px -14px rgba(255,107,53,.6); }
+    .btn-shine { position: relative; overflow: hidden; }
+    .btn-shine::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.25) 45%, rgba(255,255,255,.35) 50%, rgba(255,255,255,.25) 55%, transparent 60%);
+      transform: translateX(-100%);
+      transition: transform .6s cubic-bezier(.16,1,.3,1);
+    }
+    .btn-shine:hover::after { transform: translateX(100%); }
+    .btn-primary { background: linear-gradient(135deg, var(--royal-light), var(--royal-deep)); color: #fff; box-shadow: 0 2px 4px rgba(11,21,38,.10), 0 14px 26px -12px rgba(22,53,127,.55); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(11,21,38,.10), 0 20px 36px -14px rgba(22,53,127,.6); }
+    .btn-ghost { border: 1px solid rgba(251,252,248,.28); color: var(--pearl); background: transparent; }
+    .btn-ghost:hover { background: rgba(251,252,248,.08); border-color: rgba(251,252,248,.45); }
+
+    .pulse-dot { position: relative; }
+    .pulse-dot::before { content: ""; position: absolute; inset: -3px; border-radius: 9999px; background: inherit; opacity: .55; animation: pulse 2.2s cubic-bezier(.16,1,.3,1) infinite; }
+    @keyframes pulse { 0% { transform: scale(.7); opacity:.7 } 70%,100% { transform: scale(1.9); opacity:0 } }
+
+    /* Checkout Grid */
+    .checkout-grid { display: grid; gap: 2.5rem; }
+    @media (min-width: 1024px) {
+      .checkout-grid { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
+    }
+
+    /* Form Inputs */
+    .form-label { font-family: 'IBM Plex Mono', monospace; font-size: .68rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; display: block; }
+    .form-input {
+      width: 100%; padding: .85rem 1rem; border-radius: 12px;
+      border: 1.5px solid rgba(11,21,38,.12); background: #fff;
+      font-family: 'Archivo', sans-serif; font-size: .95rem; color: var(--ink);
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .form-input::placeholder { color: var(--faint); }
+    .form-input:focus { outline: none; border-color: var(--royal); box-shadow: 0 0 0 3px rgba(38,84,182,.12); }
+    .form-input.error { border-color: #EF4444; box-shadow: 0 0 0 3px rgba(239,68,68,.1); }
+    .form-helper { font-size: .75rem; color: var(--muted); margin-top: .4rem; line-height: 1.5; }
+    .form-error { font-size: .75rem; color: #EF4444; margin-top: .4rem; display: none; }
+    .form-error.show { display: block; }
+
+    /* Payment Tabs */
+    .payment-tabs { display: flex; gap: .5rem; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: .25rem; }
+    .payment-tab {
+      flex-shrink: 0; padding: .65rem 1.1rem; border-radius: 10px; font-size: .8rem; font-weight: 600;
+      border: 1.5px solid rgba(11,21,38,.1); background: #fff; color: var(--muted);
+      cursor: pointer; transition: border-color .2s, background .2s, color .2s; white-space: nowrap;
+    }
+    .payment-tab:hover { border-color: rgba(38,84,182,.25); color: var(--ink); }
+    .payment-tab.active { border-color: var(--royal); background: var(--tint); color: var(--royal); }
+    .payment-panel { display: none; }
+    .payment-panel.active { display: block; }
+
+    /* Order Summary */
+    .order-card { background: #fff; border-radius: 20px; border: 1px solid rgba(11,21,38,.08); overflow: hidden; }
+    .order-line { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: .75rem 0; border-bottom: 1px solid rgba(11,21,38,.06); font-size: .85rem; }
+    .order-line:last-child { border-bottom: none; }
+    .order-line .item-name { color: var(--ink); }
+    .order-line .item-price { font-weight: 700; white-space: nowrap; color: var(--ink); }
+    .order-line .item-price.free { color: #22c55e; font-weight: 600; }
+    .order-line .item-price.discount { color: var(--accent); }
+    .order-total { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 1.5rem; background: var(--ink); color: var(--pearl); }
+    .order-total .total-label { font-family: 'IBM Plex Mono', monospace; font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+    .order-total .total-amount { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+
+    /* Coupon Input */
+    .coupon-group { display: flex; gap: .5rem; }
+    .coupon-group .form-input { flex: 1; padding: .7rem .9rem; font-size: .85rem; border-radius: 10px; }
+    .coupon-btn {
+      padding: .7rem 1.1rem; border-radius: 10px; font-size: .8rem; font-weight: 700;
+      background: var(--royal); color: #fff; border: none; cursor: pointer;
+      transition: background .2s; white-space: nowrap;
+    }
+    .coupon-btn:hover { background: var(--royal-deep); }
+    .coupon-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .coupon-msg { font-size: .75rem; margin-top: .5rem; display: none; }
+    .coupon-msg.success { color: #22c55e; display: block; }
+    .coupon-msg.error { color: #EF4444; display: block; }
+
+    /* Guarantee Plaque */
+    .guarantee-plaque {
+      background: linear-gradient(135deg, #F8F6F0 0%, #FBFCF8 50%, #F8F6F0 100%);
+      border: 1.5px solid rgba(38,84,182,.12);
+      border-radius: 16px; padding: 1.5rem; position: relative;
+      box-shadow: 0 1px 3px rgba(11,21,38,.06), inset 0 1px 0 rgba(255,255,255,.8);
+    }
+
+    /* Testimonial Card */
+    .testimonial-card {
+      background: #fff; border: 1px solid rgba(11,21,38,.08);
+      border-radius: 14px; padding: 1.2rem;
+    }
+
+    /* Urgency Bar */
+    .urgency-bar {
+      background: linear-gradient(135deg, var(--ink) 0%, #121E33 100%);
+      color: var(--pearl); padding: .7rem 0; position: sticky; top: 0; z-index: 50;
+      border-bottom: 1px solid rgba(251,252,248,.08);
+    }
+
+    /* Exit Modal */
+    .exit-modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(11,21,38,.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden;
+      transition: opacity .35s cubic-bezier(.16,1,.3,1), visibility .35s;
+    }
+    .exit-modal-overlay.show { opacity: 1; visibility: visible; }
+    .exit-modal-card {
+      background: linear-gradient(135deg, rgba(11,21,38,.95), rgba(18,30,51,.95));
+      border: 1px solid rgba(251,252,248,.12); border-radius: 24px;
+      padding: 2.5rem; max-width: 420px; width: 90%; text-align: center; color: var(--pearl);
+      box-shadow: 0 24px 60px -20px rgba(0,0,0,.5);
+    }
+
+    /* WhatsApp FAB */
+    .whatsapp-fab {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 80;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #25D366; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(37,211,102,.4);
+      cursor: pointer; transition: transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s;
+    }
+    .whatsapp-fab:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(37,211,102,.5); }
+    .whatsapp-fab .fab-tooltip {
+      position: absolute; right: 68px; top: 50%; transform: translateY(-50%);
+      background: var(--ink); color: var(--pearl); padding: .5rem .85rem;
+      border-radius: 8px; font-size: .72rem; font-weight: 600; white-space: nowrap;
+      opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,.2);
+    }
+    .whatsapp-fab:hover .fab-tooltip { opacity: 1; visibility: visible; }
+
+    /* Social Toast */
+    .social-toast {
+      position: fixed; bottom: 5.5rem; left: 1.5rem; z-index: 80;
+      background: var(--ink); color: var(--pearl); padding: .85rem 1.1rem;
+      border-radius: 14px; border: 1px solid rgba(251,252,248,.1);
+      box-shadow: 0 8px 24px -8px rgba(0,0,0,.35);
+      display: flex; align-items: center; gap: .75rem;
+      max-width: 340px;
+      opacity: 0; transform: translateY(12px);
+      transition: opacity .35s cubic-bezier(.16,1,.3,1), transform .35s cubic-bezier(.16,1,.3,1);
+    }
+    .social-toast.show { opacity: 1; transform: translateY(0); }
+
+    /* Stripe discount */
+    .price-strike { text-decoration: line-through; color: var(--muted); font-size: .85em; }
+
+    /* Mobile CTA sticky */
+    @media (max-width: 1023px) {
+      .mobile-sticky-cta {
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+        background: rgba(251,252,248,.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid rgba(11,21,38,.08);
+        padding: .75rem 1rem; padding-bottom: max(.75rem, env(safe-area-inset-bottom));
+      }
+      .mobile-sticky-cta .btn { width: 100%; padding: .9rem 1rem; font-size: .9rem; }
+      body { padding-bottom: 5rem; }
+    }
+    @media (min-width: 1024px) {
+      .mobile-sticky-cta { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Grain Overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- MINIMAL HEADER -->
+  <header class="sticky top-0 z-50 border-b border-[rgba(11,21,38,.06)] bg-[rgba(251,252,248,.92)] backdrop-blur-xl">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8 sm:py-4">
+      <a href="index.html" class="flex items-center gap-3">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[#3A6FE0] to-[#16357F] text-white font-display text-sm font-black shadow-md">
+          TDB
+        </span>
+        <span class="font-display text-base font-bold text-[#0B1526] hidden sm:block">Sell Out Challenge</span>
+      </a>
+      <div class="flex items-center gap-3">
+        <span class="mono hidden sm:inline-flex items-center gap-1.5 text-[.65rem] font-semibold uppercase tracking-[.14em] text-[#5A6B85]">
+          <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="14" height="10" rx="2"/><path d="M6 8V6a4 4 0 118 0v2"/></svg>
+          256-Bit SSL Encrypted
+        </span>
+        <span class="rounded-full border border-[#2654B6]/20 bg-[#EDF2FB] px-3 py-1 text-[.65rem] font-bold uppercase tracking-[.12em] text-[#2654B6]">Cohort 01</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- URGENCY RESERVATION BAR -->
+  <div class="urgency-bar">
+    <div class="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 py-3 text-center sm:flex-row sm:justify-between sm:px-8">
+      <p class="text-sm font-semibold text-[rgba(251,252,248,.9)]">
+        Your seat is reserved for
+        <span id="reservation-timer" class="mono ml-1 inline-flex items-center gap-1 rounded-full bg-[rgba(251,252,248,.1)] px-2.5 py-0.5 text-xs font-bold text-[#FFA37D]">14:59</span>
+      </p>
+      <p class="mono text-[.6rem] uppercase tracking-[.14em] text-[rgba(251,252,248,.5)]">
+        Seats strictly capped at 50 participants
+      </p>
+    </div>
+  </div>
+
+  <!-- MAIN CHECKOUT CONTENT -->
+  <main class="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
+    <div class="checkout-grid">
+
+      <!-- LEFT COLUMN: CHECKOUT ENGINE -->
+      <div class="space-y-8">
+
+        <!-- STEP 01: Participant Details -->
+        <div>
+          <p class="mono text-[.68rem] font-bold uppercase tracking-[.16em] text-[#2654B6]">Step 01 / Your Details</p>
+          <h2 class="font-display mt-2 text-xl font-extrabold text-[#0B1526] tracking-[-0.02em]">Enter where your challenge access and workbooks should be sent.</h2>
+
+          <div class="mt-6 space-y-5">
+            <div>
+              <label class="form-label" for="full-name">Full Name</label>
+              <input type="text" id="full-name" class="form-input" placeholder="e.g. Adebayo Johnson" required autocomplete="name">
+              <p class="form-error" id="err-name">Please enter your full name.</p>
+            </div>
+            <div>
+              <label class="form-label" for="whatsapp">WhatsApp Number</label>
+              <input type="tel" id="whatsapp" class="form-input" placeholder="e.g. 0801 234 5678" required autocomplete="tel">
+              <p class="form-helper">Your private Telegram invite and daily assignment reminders will be delivered here.</p>
+              <p class="form-error" id="err-whatsapp">Please enter a valid WhatsApp number.</p>
+            </div>
+            <div>
+              <label class="form-label" for="email">Email Address</label>
+              <input type="email" id="email" class="form-input" placeholder="e.g. adebayo@gmail.com" required autocomplete="email">
+              <p class="form-helper">Your receipt and access credentials will be emailed immediately.</p>
+              <p class="form-error" id="err-email">Please enter a valid email address.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 02: Coupon Code -->
+        <div>
+          <p class="mono text-[.68rem] font-bold uppercase tracking-[.16em] text-[#FF6B35]">Step 02: Claim Your Coupon</p>
+          <h2 class="font-display mt-2 text-xl font-extrabold text-[#0B1526] tracking-[-0.02em]">Have a launch coupon? Apply it here.</h2>
+          <p class="mt-2 text-sm text-[#5A6B85]">The first 50 people can use the25% OFF coupon to join for ₦7,500 instead of ₦10,000.</p>
+
+          <div class="mt-4">
+            <div class="coupon-group">
+              <input type="text" id="coupon-input" class="form-input mono" placeholder="Enter coupon code" autocomplete="off">
+              <button type="button" class="coupon-btn" onclick="applyCoupon()">Apply</button>
+            </div>
+            <p class="coupon-msg" id="coupon-msg"></p>
+            <div id="coupon-applied-tag" class="mt-3 hidden">
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-[#22c55e]/10 border border-[#22c55e]/25 px-3 py-1 text-xs font-bold text-[#22c55e]">
+                <svg class="h-3 w-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 10.5l4 4 8-9"/></svg>
+                25% OFF Applied: You save ₦2,500
+              </span>
+              <button type="button" class="ml-2 text-xs text-[#5A6B85] underline" onclick="removeCoupon()">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 03: Payment Method -->
+        <div>
+          <p class="mono text-[.68rem] font-bold uppercase tracking-[.16em] text-[#2654B6]">Step 03: Choose Payment Method</p>
+          <h2 class="font-display mt-2 text-xl font-extrabold text-[#0B1526] tracking-[-0.02em]">Select how you'd like to pay.</h2>
+
+          <div class="payment-tabs mt-5">
+            <button class="payment-tab active" onclick="switchPaymentTab('paystack')">
+              <span class="mr-1">💳</span> Paystack
+            </button>
+            <button class="payment-tab" onclick="switchPaymentTab('bank')">
+              <span class="mr-1">🏦</span> Bank Transfer
+            </button>
+            <button class="payment-tab" onclick="switchPaymentTab('international')">
+              <span class="mr-1">🌍</span> International
+            </button>
+          </div>
+
+          <!-- Paystack Panel -->
+          <div class="payment-panel active" id="panel-paystack">
+            <div class="rounded-2xl border border-[rgba(11,21,38,.08)] bg-white p-6">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#2654B6]/10 text-[#2654B6]">
+                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M2 8h16"/></svg>
+                </span>
+                <div>
+                  <p class="font-display text-sm font-bold text-[#0B1526]">Pay with Card, Bank Transfer, USSD, or Apple Pay</p>
+                  <p class="text-xs text-[#5A6B85]">Instant automated activation</p>
+                </div>
+              </div>
+              <div class="rounded-xl bg-[#EDF2FB]/60 p-4 text-center">
+                <p class="text-xs text-[#5A6B85]">Click the button below to open the secure Paystack checkout window.</p>
+                <div class="mt-3 flex justify-center gap-3">
+                  <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[.65rem] font-semibold text-[#5A6B85] border border-[rgba(11,21,38,.06)]">💳 Cards</span>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[.65rem] font-semibold text-[#5A6B85] border border-[rgba(11,21,38,.06)]">🏦 Transfer</span>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[.65rem] font-semibold text-[#5A6B85] border border-[rgba(11,21,38,.06)]">📱 USSD</span>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[.65rem] font-semibold text-[#5A6B85] border border-[rgba(11,21,38,.06)]">🍎 Apple Pay</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bank Transfer Panel -->
+          <div class="payment-panel" id="panel-bank">
+            <div class="rounded-2xl border border-[rgba(11,21,38,.08)] bg-white p-6">
+              <div class="flex items-center gap-3 mb-5">
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#22c55e]/10 text-[#22c55e]">
+                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10h14M3 14h14M5 6l5-3 5 3M4 10v7h12v-7"/></svg>
+                </span>
+                <div>
+                  <p class="font-display text-sm font-bold text-[#0B1526]">Direct Bank Transfer</p>
+                  <p class="text-xs text-[#5A6B85]">Transfer directly to our bank account. Manual verification within 2 hours.</p>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
+                  <div>
+                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Bank Name</p>
+                    <p class="font-display text-sm font-bold text-[#0B1526]">Providus Bank</p>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
+                  <div>
+                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Account Number</p>
+                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-account">5401234567</p>
+                  </div>
+                  <button type="button" onclick="copyBankNumber()" class="rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20" id="copy-bank-btn">Copy</button>
+                </div>
+                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
+                  <div>
+                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Account Name</p>
+                    <p class="font-display text-sm font-bold text-[#0B1526]">The Divine Bakare</p>
+                  </div>
+                </div>
+              </div>
+
+              <a href="https://wa.me/234XXXXXXXXXX?text=Hello Divine, I just completed my payment for the Sell Out Challenge. Here are my details:%0AName:%0APayment: Bank Transfer" target="_blank" rel="noopener" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3.5 text-sm font-bold text-white hover:bg-[#20BD5A]">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492l4.632-1.223A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.115 0-4.09-.612-5.764-1.656l-.412-.25-2.748.723.734-2.678-.268-.426A9.71 9.71 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
+                Send Payment Proof via WhatsApp
+              </a>
+            </div>
+          </div>
+
+          <!-- International Panel -->
+          <div class="payment-panel" id="panel-international">
+            <div class="rounded-2xl border border-[rgba(11,21,38,.08)] bg-white p-6">
+              <div class="flex items-center gap-3 mb-5">
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#FF6B35]/10 text-[#FF6B35]">
+                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><path d="M2 10h16M10 2c2.5 2.5 3.5 5 3.5 8s-1 5.5-3.5 8M10 2c-2.5 2.5-3.5 5-3.5 8s1 5.5 3.5 8"/></svg>
+                </span>
+                <div>
+                  <p class="font-display text-sm font-bold text-[#0B1526]">International / Diaspora Payment</p>
+                  <p class="text-xs text-[#5A6B85]">Powered by Paystack International. Pay in your local currency.</p>
+                </div>
+              </div>
+
+              <div class="flex gap-2 mb-5">
+                <button class="payment-tab active text-xs" onclick="switchCurrency(this, 'usd')">$ USD</button>
+                <button class="payment-tab text-xs" onclick="switchCurrency(this, 'gbp')">£ GBP</button>
+                <button class="payment-tab text-xs" onclick="switchCurrency(this, 'eur')">€ EUR</button>
+                <button class="payment-tab text-xs" onclick="switchCurrency(this, 'ghs')">₵ GHS</button>
+              </div>
+
+              <div class="rounded-xl bg-[#EDF2FB]/60 p-5 text-center">
+                <p class="text-xs text-[#5A6B85] mb-2">Your checkout total (approximate)</p>
+                <p class="font-display text-3xl font-extrabold text-[#0B1526]" id="international-price">$6.50</p>
+                <p class="mono mt-1 text-[.6rem] uppercase tracking-[.12em] text-[#5A6B85]" id="currency-note">Converted at today's rate. Final amount charged in USD.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRIMARY CTA -->
+        <div class="hidden lg:block">
+          <button type="button" onclick="submitRegistration()" class="btn btn-accent btn-shine w-full py-4 text-base font-bold">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="14" height="10" rx="2"/><path d="M6 8V6a4 4 0 118 0v2"/></svg>
+            <span id="cta-label">Complete Registration & Secure My Seat · ₦10,000</span>
+          </button>
+          <div class="mt-4 flex flex-wrap justify-center gap-4 text-[.72rem] text-[#5A6B85]">
+            <span class="flex items-center gap-1.5"><svg class="h-3 w-3 text-[#22c55e]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 10.5l4 4 8-9"/></svg> Instant Access via Email & WhatsApp</span>
+            <span class="flex items-center gap-1.5"><svg class="h-3 w-3 text-[#22c55e]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 10.5l4 4 8-9"/></svg> 256-Bit Encrypted</span>
+            <span class="flex items-center gap-1.5"><svg class="h-3 w-3 text-[#22c55e]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 10.5l4 4 8-9"/></svg> Commitment Guarantee</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: ORDER SUMMARY & TRUST -->
+      <div class="space-y-6 lg:sticky lg:top-28">
+
+        <!-- Order Summary Ledger -->
+        <div class="order-card">
+          <div class="border-b border-[rgba(11,21,38,.06)] bg-[#EDF2FB]/50 px-5 py-4">
+            <p class="mono text-[.68rem] font-bold uppercase tracking-[.16em] text-[#2654B6]">Order Summary</p>
+          </div>
+          <div class="px-5 py-4 space-y-0">
+            <div class="order-line">
+              <span class="item-name">7-Day Live Implementation Sprint</span>
+              <span class="item-price">₦25,000</span>
+            </div>
+            <div class="order-line">
+              <span class="item-name">Live Assignment Reviews & Hotseats</span>
+              <span class="item-price">₦15,000</span>
+            </div>
+            <div class="order-line">
+              <span class="item-name">Private Telegram Community Access</span>
+              <span class="item-price">₦10,000</span>
+            </div>
+            <div class="order-line">
+              <span class="item-name">Challenge Workbook & Action Sheets</span>
+              <span class="item-price">₦10,000</span>
+            </div>
+            <div class="order-line">
+              <span class="item-name">Bonus: 10 AI Messaging Prompts</span>
+              <span class="item-price free">FREE</span>
+            </div>
+            <div class="order-line">
+              <span class="item-name">Bonus: Sell Out Messaging Guide</span>
+              <span class="item-price free">FREE</span>
+            </div>
+            <div class="order-line">
+              <span class="item-name">Bonus: Live Offer Review Opportunity</span>
+              <span class="item-price free">FREE</span>
+            </div>
+            <div class="order-line">
+              <span class="item-name font-semibold text-[#FF6B35]">Launch Cohort Discount</span>
+              <span class="item-price discount">-₦15,000</span>
+            </div>
+          </div>
+          <div class="order-total">
+            <span class="total-label">Total Due Today</span>
+            <span class="total-amount" id="order-total-display">₦10,000</span>
+          </div>
+        </div>
+
+        <!-- Coupon Inside Order Summary -->
+        <div class="rounded-2xl border border-[rgba(11,21,38,.08)] bg-white p-5">
+          <p class="mono text-[.62rem] font-bold uppercase tracking-[.14em] text-[#5A6B85] mb-3">Have a coupon code?</p>
+          <div class="coupon-group">
+            <input type="text" id="coupon-input-sidebar" class="form-input mono" placeholder="Enter code" autocomplete="off">
+            <button type="button" class="coupon-btn" onclick="applyCouponSidebar()">Apply</button>
+          </div>
+          <p class="coupon-msg" id="coupon-msg-sidebar"></p>
+          <div id="coupon-applied-tag-sidebar" class="mt-2 hidden">
+            <span class="inline-flex items-center gap-1 rounded-full bg-[#22c55e]/10 px-2.5 py-0.5 text-[.65rem] font-bold text-[#22c55e]">
+              <svg class="h-2.5 w-2.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 10.5l4 4 8-9"/></svg>
+              25% OFF Applied
+            </span>
+          </div>
+        </div>
+
+        <!-- Guarantee Badge -->
+        <div class="guarantee-plaque">
+          <div class="flex items-start gap-3">
+            <span class="flex-none grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[#C9A84C] to-[#A67C2E] text-white text-sm shadow-md">🛡️</span>
+            <div>
+              <p class="font-display text-sm font-bold text-[#0B1526]">The Commitment Guarantee</p>
+              <p class="mt-1.5 text-xs leading-[1.7] text-[#5A6B85]">
+                Complete all seven assignments. If the system does not give you clarity and positioning to sell, Divine will personally continue reviewing your work until it does. No fluff, no fine print.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial -->
+        <div class="testimonial-card">
+          <div class="flex items-start gap-3">
+            <img src="https://placehold.co/44x44" alt="King David" class="h-11 w-11 flex-none rounded-full object-cover">
+            <div>
+              <p class="text-sm leading-[1.65] text-[#0B1526]">
+                "Divine's offer framework helped me close ₦180,000 in 48 hours without spending a kobo on ads."
+              </p>
+              <p class="mono mt-1.5 text-[.65rem] font-bold uppercase tracking-[.12em] text-[#FF6B35]">King David</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Badges -->
+        <div class="flex flex-wrap items-center justify-center gap-4 text-[.65rem] text-[#9AA7BE]">
+          <span class="flex items-center gap-1">
+            <svg class="h-3 w-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="14" height="10" rx="2"/><path d="M6 8V6a4 4 0 118 0v2"/></svg>
+            SSL Secured
+          </span>
+          <span class="flex items-center gap-1">
+            <svg class="h-3 w-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2l7 4v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-4z"/></svg>
+            Paystack Partner
+          </span>
+          <span class="flex items-center gap-1">
+            <svg class="h-3 w-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><path d="M7 10l2 2 4-4"/></svg>
+            256-Bit Encryption
+          </span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MOBILE STICKY CTA -->
+  <div class="mobile-sticky-cta">
+    <button type="button" onclick="submitRegistration()" class="btn btn-accent btn-shine">
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="14" height="10" rx="2"/><path d="M6 8V6a4 4 0 118 0v2"/></svg>
+      <span id="cta-label-mobile">Secure My Seat · ₦10,000</span>
+    </button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-[rgba(11,21,38,.06)] bg-white py-10 text-center">
+    <div class="mx-auto flex max-w-6xl flex-col items-center gap-3 px-5 sm:px-8">
+      <div class="flex items-center gap-2 text-[.65rem] text-[#9AA7BE]">
+        <span class="flex items-center gap-1"><svg class="h-3 w-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="14" height="10" rx="2"/><path d="M6 8V6a4 4 0 118 0v2"/></svg> SSL Encrypted</span>
+        <span>·</span>
+        <span>Paystack Secured</span>
+        <span>·</span>
+        <span>GDPR Compliant</span>
+      </div>
+      <p class="text-[.68rem] text-[#9AA7BE]">© 2026 The Divine Bakare. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FAB -->
+  <a href="https://wa.me/234XXXXXXXXXX?text=Hello Divine, I need help with my Sell Out Challenge registration." target="_blank" rel="noopener" class="whatsapp-fab" aria-label="Chat on WhatsApp">
+    <svg class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492l4.632-1.223A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.115 0-4.09-.612-5.764-1.656l-.412-.25-2.748.723.734-2.678-.268-.426A9.71 9.71 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
+    <span class="fab-tooltip">Having payment issues? Chat with Divine</span>
+  </a>
+
+  <!-- EXIT INTENT MODAL -->
+  <div id="exit-modal" class="exit-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="exit-heading">
+    <div class="exit-modal-card">
+      <div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-[#FF6B35]/20 text-2xl mb-4">⏳</div>
+      <h3 id="exit-heading" class="font-display text-xl font-extrabold text-[#FBFCF8] tracking-[-0.02em]">Wait! Don't lose your spot.</h3>
+      <p class="mt-3 text-sm leading-relaxed text-[rgba(251,252,248,.7)]">
+        Need help paying via bank transfer? Click below to get instant assistance on WhatsApp.
+      </p>
+      <a href="https://wa.me/234XXXXXXXXXX?text=Hello Divine, I need help completing my payment for the Sell Out Challenge." target="_blank" rel="noopener" class="btn btn-accent btn-shine mt-6 w-full text-center text-sm font-bold">
+        Chat on WhatsApp
+      </a>
+      <button type="button" onclick="closeExitModal()" class="mt-3 w-full text-center text-xs font-semibold text-[rgba(251,252,248,.45)] hover:text-[rgba(251,252,248,.7)]">
+        No thanks, continue
+      </button>
+    </div>
+  </div>
+
+  <!-- SOCIAL PROOF TOAST -->
+  <div id="social-toast" class="social-toast">
+    <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-gradient-to-br from-[#3A6FE0] to-[#FF6B35] font-display text-xs font-bold text-white shadow">TC</span>
+    <div>
+      <p id="toast-name" class="text-xs font-bold text-[#FBFCF8]">Chidinma from Abuja</p>
+      <p id="toast-msg" class="text-[.68rem] text-[#FFA37D] mt-0.5">Secured a spot 4 minutes ago</p>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    (function () {
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // === STATE ===
+      var BASE_PRICE = 10000;
+      var COUPON_DISCOUNT = 2500;
+      var couponApplied = false;
+
+      // === DOM REFS ===
+      var nameInput = document.getElementById('full-name');
+      var whatsappInput = document.getElementById('whatsapp');
+      var emailInput = document.getElementById('email');
+      var couponInput = document.getElementById('coupon-input');
+      var couponInputSidebar = document.getElementById('coupon-input-sidebar');
+      var couponMsg = document.getElementById('coupon-msg');
+      var couponMsgSidebar = document.getElementById('coupon-msg-sidebar');
+      var couponAppliedTag = document.getElementById('coupon-applied-tag');
+      var couponAppliedTagSidebar = document.getElementById('coupon-applied-tag-sidebar');
+      var orderTotalDisplay = document.getElementById('order-total-display');
+      var ctaLabel = document.getElementById('cta-label');
+      var ctaLabelMobile = document.getElementById('cta-label-mobile');
+      var reservationTimer = document.getElementById('reservation-timer');
+      var exitModal = document.getElementById('exit-modal');
+      var socialToast = document.getElementById('social-toast');
+      var toastName = document.getElementById('toast-name');
+      var toastMsg = document.getElementById('toast-msg');
+
+      // === FORMATTING ===
+      function formatWhatsAppNumber() {
+        var val = whatsappInput.value.replace(/\s/g, '');
+        if (val.length > 0 && val.charAt(0) === '0') {
+          val = '+234' + val.substring(1);
+        }
+        if (val.length > 0 && !val.startsWith('+')) {
+          val = '+234' + val;
+        }
+        whatsappInput.value = val;
+      }
+
+      whatsappInput.addEventListener('blur', formatWhatsAppNumber);
+
+      // === SESSION STORAGE ===
+      function saveFormState() {
+        var state = { name: nameInput.value, whatsapp: whatsappInput.value, email: emailInput.value };
+        try { sessionStorage.setItem('soc_form', JSON.stringify(state)); } catch (e) {}
+      }
+      function loadFormState() {
+        try {
+          var raw = sessionStorage.getItem('soc_form');
+          if (raw) {
+            var state = JSON.parse(raw);
+            if (state.name) nameInput.value = state.name;
+            if (state.whatsapp) whatsappInput.value = state.whatsapp;
+            if (state.email) emailInput.value = state.email;
+          }
+        } catch (e) {}
+      }
+      [nameInput, whatsappInput, emailInput].forEach(function (el) {
+        el.addEventListener('blur', saveFormState);
+      });
+      loadFormState();
+
+      // === COUPON ===
+      function setCouponState(applied) {
+        couponApplied = applied;
+        var total = applied ? BASE_PRICE - COUPON_DISCOUNT : BASE_PRICE;
+        var formatted = '₦' + total.toLocaleString('en-US');
+        var ctaText = 'Complete Registration & Secure My Seat · ' + formatted;
+        var ctaTextMobile = 'Secure My Seat · ' + formatted;
+
+        orderTotalDisplay.textContent = formatted;
+        ctaLabel.textContent = ctaText;
+        ctaLabelMobile.textContent = ctaTextMobile;
+
+        if (applied) {
+          couponAppliedTag.classList.remove('hidden');
+          couponAppliedTagSidebar.classList.remove('hidden');
+        } else {
+          couponAppliedTag.classList.add('hidden');
+          couponAppliedTagSidebar.classList.add('hidden');
+        }
+
+        try { sessionStorage.setItem('soc_coupon', applied ? '1' : '0'); } catch (e) {}
+      }
+
+      function applyCouponCore(inputEl, msgEl) {
+        var code = inputEl.value.trim().toUpperCase();
+        if (code === 'SELLOUT25') {
+          msgEl.textContent = '25% OFF applied! You save ₦2,500.';
+          msgEl.className = 'coupon-msg success';
+          setCouponState(true);
+          inputEl.disabled = true;
+        } else if (code === '') {
+          msgEl.textContent = 'Please enter a coupon code.';
+          msgEl.className = 'coupon-msg error';
+        } else {
+          msgEl.textContent = 'Invalid coupon code. Please check and try again.';
+          msgEl.className = 'coupon-msg error';
+        }
+      }
+
+      window.applyCoupon = function () { applyCouponCore(couponInput, couponMsg); };
+      window.applyCouponSidebar = function () { applyCouponCore(couponInputSidebar, couponMsgSidebar); };
+
+      window.removeCoupon = function () {
+        couponApplied = false;
+        setCouponState(false);
+        couponInput.value = '';
+        couponInput.disabled = false;
+        couponMsg.textContent = '';
+        couponMsg.className = 'coupon-msg';
+        couponInputSidebar.value = '';
+        couponInputSidebar.disabled = false;
+        couponMsgSidebar.textContent = '';
+        couponMsgSidebar.className = 'coupon-msg';
+      };
+
+      // Auto-apply from URL
+      function checkUrlCoupon() {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('coupon') === 'SELLOUT25' && !couponApplied) {
+          couponInput.value = 'SELLOUT25';
+          applyCouponCore(couponInput, couponMsg);
+        }
+      }
+
+      // Restore coupon from sessionStorage
+      function loadCouponState() {
+        try {
+          if (sessionStorage.getItem('soc_coupon') === '1') {
+            couponInput.value = 'SELLOUT25';
+            setCouponState(true);
+            couponInput.disabled = true;
+          }
+        } catch (e) {}
+      }
+
+      checkUrlCoupon();
+      loadCouponState();
+
+      // === PAYMENT TABS ===
+      window.switchPaymentTab = function (tab) {
+        document.querySelectorAll('.payment-tab').forEach(function (t) { t.classList.remove('active'); });
+        document.querySelectorAll('.payment-panel').forEach(function (p) { p.classList.remove('active'); });
+        event.currentTarget.classList.add('active');
+        var panel = document.getElementById('panel-' + tab);
+        if (panel) panel.classList.add('active');
+      };
+
+      // === INTERNATIONAL CURRENCY ===
+      var currencyRates = { usd: 6.50, gbp: 5.50, eur: 6.00, ghs: 80.00 };
+      var currencySymbols = { usd: '$', gbp: '£', eur: '€', ghs: '₵' };
+      var currencyNotes = {
+        usd: "Converted at today's rate. Final amount charged in USD.",
+        gbp: "Converted at today's rate. Final amount charged in GBP.",
+        eur: "Converted at today's rate. Final amount charged in EUR.",
+        ghs: "Converted at today's rate. Final amount charged in GHS."
+      };
+
+      window.switchCurrency = function (btn, curr) {
+        btn.parentElement.querySelectorAll('.payment-tab').forEach(function (t) { t.classList.remove('active'); });
+        btn.classList.add('active');
+        var rate = currencyRates[curr];
+        var price = couponApplied ? (BASE_PRICE - COUPON_DISCOUNT) / rate : BASE_PRICE / rate;
+        document.getElementById('international-price').textContent = currencySymbols[curr] + price.toFixed(2);
+        document.getElementById('currency-note').textContent = currencyNotes[curr];
+      };
+
+      // === COPY BANK NUMBER ===
+      window.copyBankNumber = function () {
+        var accountNum = document.getElementById('bank-account').textContent;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(accountNum).then(function () {
+            var btn = document.getElementById('copy-bank-btn');
+            btn.textContent = 'Copied!';
+            setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
+          });
+        }
+      };
+
+      // === RESERVATION TIMER ===
+      function startReservationTimer() {
+        var storageKey = 'soc_timer_end';
+        var endTime = null;
+        try { endTime = sessionStorage.getItem(storageKey); } catch (e) {}
+
+        if (!endTime || parseInt(endTime) <= Date.now()) {
+          endTime = Date.now() + 15 * 60 * 1000;
+          try { sessionStorage.setItem(storageKey, endTime); } catch (e) {}
+        } else {
+          endTime = parseInt(endTime);
+        }
+
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function tick() {
+          var diff = endTime - Date.now();
+          if (diff <= 0) {
+            reservationTimer.textContent = 'Expired';
+            return;
+          }
+          var mins = Math.floor(diff / 60000);
+          var secs = Math.floor((diff % 60000) / 1000);
+          reservationTimer.textContent = pad(mins) + ':' + pad(secs);
+        }
+
+        tick();
+        setInterval(tick, 1000);
+      }
+      startReservationTimer();
+
+      // === FORM VALIDATION ===
+      function validateForm() {
+        var valid = true;
+        var name = nameInput.value.trim();
+        var whatsapp = whatsappInput.value.trim();
+        var email = emailInput.value.trim();
+
+        if (!name) { document.getElementById('err-name').classList.add('show'); nameInput.classList.add('error'); valid = false; }
+        else { document.getElementById('err-name').classList.remove('show'); nameInput.classList.remove('error'); }
+
+        if (!whatsapp || whatsapp.length < 10) { document.getElementById('err-whatsapp').classList.add('show'); whatsappInput.classList.add('error'); valid = false; }
+        else { document.getElementById('err-whatsapp').classList.remove('show'); whatsappInput.classList.remove('error'); }
+
+        if (!email || !email.includes('@')) { document.getElementById('err-email').classList.add('show'); emailInput.classList.add('error'); valid = false; }
+        else { document.getElementById('err-email').classList.remove('show'); emailInput.classList.remove('error'); }
+
+        return valid;
+      }
+
+      [nameInput, whatsappInput, emailInput].forEach(function (el) {
+        el.addEventListener('input', function () {
+          var errId = 'err-' + el.id.replace('full-name', 'name').replace('whatsapp', 'whatsapp').replace('email', 'email');
+          document.getElementById(errId).classList.remove('show');
+          el.classList.remove('error');
+        });
+      });
+
+      // === SUBMIT ===
+      window.submitRegistration = function () {
+        if (!validateForm()) return;
+        var total = couponApplied ? BASE_PRICE - COUPON_DISCOUNT : BASE_PRICE;
+        var params = new URLSearchParams({
+          name: nameInput.value.trim(),
+          whatsapp: whatsappInput.value.trim(),
+          email: emailInput.value.trim(),
+          coupon: couponApplied ? 'SELLOUT25' : '',
+          total: total
+        });
+        window.location.href = 'step-3.html?' + params.toString();
+      };
+
+      // === EXIT INTENT ===
+      var exitShown = false;
+      function handleExitIntent(e) {
+        if (exitShown) return;
+        if (e.clientY <= 5) {
+          exitShown = true;
+          try { sessionStorage.setItem('soc_exit_shown', '1'); } catch (err) {}
+          exitModal.classList.add('show');
+        }
+      }
+      function closeExitModal() {
+        exitModal.classList.remove('show');
+      }
+      window.closeExitModal = closeExitModal;
+
+      (function () {
+        try { if (sessionStorage.getItem('soc_exit_shown') === '1') { exitShown = true; return; } } catch (e) {}
+        if (window.matchMedia('(hover: hover)').matches) {
+          document.addEventListener('mouseleave', handleExitIntent);
+        }
+      })();
+
+      if (exitModal) {
+        exitModal.addEventListener('click', function (e) { if (e.target === exitModal) closeExitModal(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeExitModal(); });
+      }
+
+      // === SOCIAL PROOF TOASTS ===
+      var toasts = [
+        { name: 'Chidinma from Abuja', msg: 'Secured a spot 4 minutes ago', initials: 'CA' },
+        { name: 'Tola from Lagos', msg: 'Just registered for the Challenge', initials: 'TL' },
+        { name: 'Morayo from Ibadan', msg: 'Completed registration 6 minutes ago', initials: 'MO' },
+        { name: 'Emeka from Port Harcourt', msg: 'Joined the Sell Out Challenge', initials: 'EP' },
+        { name: 'Fatima from Kaduna', msg: 'Locked in the launch coupon price', initials: 'FA' },
+        { name: 'Kemi from Benin', msg: 'Secured a spot 8 minutes ago', initials: 'KE' }
+      ];
+      var toastIndex = 0;
+
+      function showSocialToast() {
+        if (!socialToast) return;
+        var data = toasts[toastIndex];
+        toastName.textContent = data.name;
+        toastMsg.textContent = data.msg;
+        socialToast.classList.add('show');
+        setTimeout(function () { socialToast.classList.remove('show'); }, 5000);
+        toastIndex = (toastIndex + 1) % toasts.length;
+      }
+
+      setTimeout(function () {
+        showSocialToast();
+        setInterval(showSocialToast, 14000);
+      }, 5000);
+
+      // === MAGNETIC BUTTONS ===
+      if (!reduceMotion) {
+        document.querySelectorAll('.btn').forEach(function (el) {
+          el.addEventListener('pointermove', function (e) {
+            var r = el.getBoundingClientRect();
+            var dx = e.clientX - (r.left + r.width / 2);
+            var dy = e.clientY - (r.top + r.height / 2);
+            el.style.transform = 'translate(' + (dx * 0.12).toFixed(1) + 'px,' + (dy * 0.16).toFixed(1) + 'px)';
+          });
+          el.addEventListener('pointerleave', function () { el.style.transform = ''; });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
