@@ -288,7 +288,7 @@
         <div>
           <p class="mono text-[.68rem] font-bold uppercase tracking-[.16em] text-[#FF6B35]">Step 02: Claim Your Coupon</p>
           <h2 class="font-display mt-2 text-xl font-extrabold text-[#0B1526] tracking-[-0.02em]">Have a launch coupon? Apply it here.</h2>
-          <p class="mt-2 text-sm text-[#5A6B85]">The first 50 people can use the25% OFF coupon to join for ₦7,500 instead of ₦10,000.</p>
+          <p class="mt-2 text-sm text-[#5A6B85]">The first 50 people can use the 25% OFF coupon to join for ₦7,500 instead of ₦10,000.</p>
 
           <div class="mt-4">
             <div class="coupon-group">
@@ -364,25 +364,39 @@
                 <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
                   <div>
                     <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Bank Name</p>
-                    <p class="font-display text-sm font-bold text-[#0B1526]">Providus Bank</p>
+                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-name">Moniepoint</p>
                   </div>
                 </div>
                 <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
                   <div>
                     <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Account Number</p>
-                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-account">5401234567</p>
+                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-account">8055791348</p>
                   </div>
-                  <button type="button" onclick="copyBankNumber()" class="rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20" id="copy-bank-btn">Copy</button>
+                  <button type="button" data-copy-target="bank-account" class="copy-btn rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20">Copy</button>
                 </div>
                 <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
                   <div>
                     <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Account Name</p>
-                    <p class="font-display text-sm font-bold text-[#0B1526]">The Divine Bakare</p>
+                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-account-name">DIVINE BOLUWATIFE BAKARE-ADEWALE</p>
                   </div>
+                </div>
+                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
+                  <div>
+                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Payment Reference</p>
+                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-ref">SOC-XXXXX</p>
+                  </div>
+                  <button type="button" data-copy-target="bank-ref" class="copy-btn rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20">Copy</button>
+                </div>
+                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
+                  <div>
+                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Exact Amount</p>
+                    <p class="font-display text-sm font-bold text-[#FF6B35]" id="bank-amount">₦10,000</p>
+                  </div>
+                  <button type="button" data-copy-target="bank-amount" class="copy-btn rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20">Copy</button>
                 </div>
               </div>
 
-              <a href="https://wa.me/234XXXXXXXXXX?text=Hello Divine, I just completed my payment for the Sell Out Challenge. Here are my details:%0AName:%0APayment: Bank Transfer" target="_blank" rel="noopener" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3.5 text-sm font-bold text-white hover:bg-[#20BD5A]">
+              <a href="#" target="_blank" rel="noopener" id="wa-proof-link" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3.5 text-sm font-bold text-white hover:bg-[#20BD5A]">
                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492l4.632-1.223A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.115 0-4.09-.612-5.764-1.656l-.412-.25-2.748.723.734-2.678-.268-.426A9.71 9.71 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
                 Send Payment Proof via WhatsApp
               </a>
@@ -564,7 +578,7 @@
   </footer>
 
   <!-- WHATSAPP FAB -->
-  <a href="https://wa.me/234XXXXXXXXXX?text=Hello Divine, I need help with my Sell Out Challenge registration." target="_blank" rel="noopener" class="whatsapp-fab" aria-label="Chat on WhatsApp">
+  <a href="#" target="_blank" rel="noopener" id="fab-wa-link" class="whatsapp-fab" aria-label="Chat on WhatsApp">
     <svg class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492l4.632-1.223A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.115 0-4.09-.612-5.764-1.656l-.412-.25-2.748.723.734-2.678-.268-.426A9.71 9.71 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
     <span class="fab-tooltip">Having payment issues? Chat with Divine</span>
   </a>
@@ -577,7 +591,7 @@
       <p class="mt-3 text-sm leading-relaxed text-[rgba(251,252,248,.7)]">
         Need help paying via bank transfer? Click below to get instant assistance on WhatsApp.
       </p>
-      <a href="https://wa.me/234XXXXXXXXXX?text=Hello Divine, I need help completing my payment for the Sell Out Challenge." target="_blank" rel="noopener" class="btn btn-accent btn-shine mt-6 w-full text-center text-sm font-bold">
+      <a href="#" target="_blank" rel="noopener" id="exit-wa-link" class="btn btn-accent btn-shine mt-6 w-full text-center text-sm font-bold">
         Chat on WhatsApp
       </a>
       <button type="button" onclick="closeExitModal()" class="mt-3 w-full text-center text-xs font-semibold text-[rgba(251,252,248,.45)] hover:text-[rgba(251,252,248,.7)]">
@@ -604,6 +618,71 @@
       var BASE_PRICE = 10000;
       var COUPON_DISCOUNT = 2500;
       var couponApplied = false;
+      var paymentInProgress = false;
+
+      // === CONFIG ===
+      var SOC_CONFIG = {
+        PAYSTACK_PUBLIC_KEY: 'pk_live_3ccdad9a5a51ae0a9fa2c7263773af8aa681a6ee',
+        BANK_NAME: 'Moniepoint',
+        BANK_ACCOUNT_NUMBER: '8055791348',
+        BANK_ACCOUNT_NAME: 'DIVINE BOLUWATIFE BAKARE-ADEWALE',
+        WHATSAPP_NUMBER: '2348055791348',
+        TELEGRAM_INVITE_LINK: 'https://t.me/+7TwKf3rnJD0zZDlk',
+        CHALLENGE_START_ISO: '2026-09-07T20:00:00+01:00',
+        META_PIXEL_ID: '',
+        GA4_MEASUREMENT_ID: ''
+      };
+
+      // === AD TRACKING (activates when IDs are added to SOC_CONFIG) ===
+      function initTracking() {
+        try {
+          if (SOC_CONFIG.META_PIXEL_ID) {
+            !function (f, b, e, v, n, t, s) {
+              if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+              if (!f._fbq) f._fbq = n; n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+              t = b.createElement(e); t.async = true; t.src = v;
+              s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+            }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', SOC_CONFIG.META_PIXEL_ID);
+            fbq('track', 'PageView');
+          }
+          if (SOC_CONFIG.GA4_MEASUREMENT_ID) {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function () { dataLayer.push(arguments); };
+            var ga = document.createElement('script');
+            ga.async = true;
+            ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + SOC_CONFIG.GA4_MEASUREMENT_ID;
+            document.head.appendChild(ga);
+            gtag('js', new Date());
+            gtag('config', SOC_CONFIG.GA4_MEASUREMENT_ID);
+          }
+        } catch (e) {}
+      }
+      initTracking();
+
+      function trackEvent(name, data) {
+        try {
+          if (SOC_CONFIG.META_PIXEL_ID && window.fbq) fbq('track', name, data);
+          if (SOC_CONFIG.GA4_MEASUREMENT_ID && window.gtag) gtag('event', name.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase(), data);
+        } catch (e) {}
+      }
+
+      function currentTotal() {
+        return couponApplied ? BASE_PRICE - COUPON_DISCOUNT : BASE_PRICE;
+      }
+
+      // === BANK REFERENCE ===
+      function getBankRef() {
+        try {
+          var existing = sessionStorage.getItem('soc_bank_ref');
+          if (existing) return existing;
+          var ref = 'SOC-' + Math.random().toString(36).slice(2, 7).toUpperCase();
+          sessionStorage.setItem('soc_bank_ref', ref);
+          return ref;
+        } catch (e) {
+          return 'SOC-' + Date.now().toString(36).toUpperCase();
+        }
+      }
 
       // === DOM REFS ===
       var nameInput = document.getElementById('full-name');
@@ -623,6 +702,11 @@
       var socialToast = document.getElementById('social-toast');
       var toastName = document.getElementById('toast-name');
       var toastMsg = document.getElementById('toast-msg');
+      var bankRefDisplay = document.getElementById('bank-ref');
+      var bankAmountDisplay = document.getElementById('bank-amount');
+      var waProofLink = document.getElementById('wa-proof-link');
+      var fabWaLink = document.getElementById('fab-wa-link');
+      var exitWaLink = document.getElementById('exit-wa-link');
 
       // === FORMATTING ===
       function formatWhatsAppNumber() {
@@ -655,21 +739,25 @@
         } catch (e) {}
       }
       [nameInput, whatsappInput, emailInput].forEach(function (el) {
-        el.addEventListener('blur', saveFormState);
+        el.addEventListener('blur', function () {
+          saveFormState();
+          updateBankPanel();
+        });
       });
       loadFormState();
+      updateBankPanel();
 
       // === COUPON ===
       function setCouponState(applied) {
         couponApplied = applied;
-        var total = applied ? BASE_PRICE - COUPON_DISCOUNT : BASE_PRICE;
-        var formatted = '₦' + total.toLocaleString('en-US');
+        var formatted = '₦' + currentTotal().toLocaleString('en-US');
         var ctaText = 'Complete Registration & Secure My Seat · ' + formatted;
         var ctaTextMobile = 'Secure My Seat · ' + formatted;
 
         orderTotalDisplay.textContent = formatted;
         ctaLabel.textContent = ctaText;
         ctaLabelMobile.textContent = ctaTextMobile;
+        updateBankPanel();
 
         if (applied) {
           couponAppliedTag.classList.remove('hidden');
@@ -765,17 +853,45 @@
         document.getElementById('currency-note').textContent = currencyNotes[curr];
       };
 
-      // === COPY BANK NUMBER ===
-      window.copyBankNumber = function () {
-        var accountNum = document.getElementById('bank-account').textContent;
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(accountNum).then(function () {
-            var btn = document.getElementById('copy-bank-btn');
-            btn.textContent = 'Copied!';
-            setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
-          });
+      // === BANK PANEL & WHATSAPP LINKS ===
+      function waLink(message) {
+        return 'https://wa.me/' + SOC_CONFIG.WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
+      }
+
+      function updateBankPanel() {
+        var total = '₦' + currentTotal().toLocaleString('en-US');
+        if (bankRefDisplay) bankRefDisplay.textContent = getBankRef();
+        if (bankAmountDisplay) bankAmountDisplay.textContent = total;
+
+        var buyerName = nameInput.value.trim() || '(name pending)';
+        if (waProofLink) {
+          waProofLink.href = waLink(
+            'Hello Divine, I just completed my bank transfer payment for the Sell Out Challenge.' +
+            '\nName: ' + buyerName +
+            '\nAmount: ' + total +
+            '\nBank: ' + SOC_CONFIG.BANK_NAME +
+            '\nRef: ' + getBankRef()
+          );
         }
-      };
+        if (fabWaLink) {
+          fabWaLink.href = waLink('Hello Divine, I need help with my Sell Out Challenge registration.');
+        }
+        if (exitWaLink) {
+          exitWaLink.href = waLink('Hello Divine, I need help completing my payment for the Sell Out Challenge.');
+        }
+      }
+
+      document.querySelectorAll('.copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var target = document.getElementById(btn.getAttribute('data-copy-target'));
+          if (!target || !navigator.clipboard) return;
+          navigator.clipboard.writeText(target.textContent).then(function () {
+            var original = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(function () { btn.textContent = original; }, 2000);
+          });
+        });
+      });
 
       // === RESERVATION TIMER ===
       function startReservationTimer() {
@@ -836,17 +952,79 @@
       });
 
       // === SUBMIT ===
-      window.submitRegistration = function () {
-        if (!validateForm()) return;
-        var total = couponApplied ? BASE_PRICE - COUPON_DISCOUNT : BASE_PRICE;
-        var params = new URLSearchParams({
-          name: nameInput.value.trim(),
-          whatsapp: whatsappInput.value.trim(),
-          email: emailInput.value.trim(),
-          coupon: couponApplied ? 'SELLOUT25' : '',
-          total: total
+      var ctaBackup = { desktop: '', mobile: '' };
+
+      function setPaymentProcessing(processing) {
+        paymentInProgress = processing;
+        [ctaLabel, ctaLabelMobile].forEach(function (label) {
+          if (!label) return;
+          var btn = label.closest('button');
+          if (btn) {
+            btn.disabled = processing;
+            btn.style.opacity = processing ? '.6' : '';
+          }
         });
-        window.location.href = 'step-3.html?' + params.toString();
+        if (processing) {
+          ctaBackup.desktop = ctaLabel.textContent;
+          ctaBackup.mobile = ctaLabelMobile.textContent;
+          ctaLabel.textContent = 'Processing... do not close this page';
+          ctaLabelMobile.textContent = 'Processing...';
+        } else {
+          if (ctaBackup.desktop) ctaLabel.textContent = ctaBackup.desktop;
+          if (ctaBackup.mobile) ctaLabelMobile.textContent = ctaBackup.mobile;
+        }
+      }
+
+      window.submitRegistration = function () {
+        if (paymentInProgress) return;
+        if (!validateForm()) return;
+        saveFormState();
+
+        if (!window.PaystackPop || typeof window.PaystackPop.setup !== 'function') {
+          setPaymentProcessing(true);
+          ctaLabel.textContent = 'Payment window unavailable. Check your connection.';
+          setTimeout(function () { setPaymentProcessing(false); }, 3500);
+          return;
+        }
+
+        var total = currentTotal();
+        var buyerName = nameInput.value.trim();
+        var buyerEmail = emailInput.value.trim();
+        var buyerPhone = whatsappInput.value.trim();
+
+        setPaymentProcessing(true);
+        try {
+          var handler = PaystackPop.setup({
+            key: SOC_CONFIG.PAYSTACK_PUBLIC_KEY,
+            email: buyerEmail,
+            amount: total * 100,
+            currency: 'NGN',
+            metadata: {
+              custom_fields: [
+                { display_name: 'Full Name', variable_name: 'full_name', value: buyerName },
+                { display_name: 'WhatsApp Number', variable_name: 'whatsapp_number', value: buyerPhone },
+                { display_name: 'Coupon Code', variable_name: 'coupon_code', value: couponApplied ? 'SELLOUT25' : 'none' }
+              ]
+            },
+            callback: function (response) {
+              var params = new URLSearchParams({
+                ref: response.reference,
+                name: buyerName,
+                email: buyerEmail,
+                coupon: couponApplied ? 'SELLOUT25' : '',
+                total: total
+              });
+              window.location.href = 'step-3.html?' + params.toString();
+            },
+            onClose: function () {
+              setPaymentProcessing(false);
+            }
+          });
+          handler.openIframe();
+          trackEvent('InitiateCheckout', { value: total, currency: 'NGN', content_name: 'Sell Out Challenge' });
+        } catch (err) {
+          setPaymentProcessing(false);
+        }
       };
 
       // === EXIT INTENT ===

@@ -1,20 +1,21 @@
 # Memory — Sell Out Challenge
 
-Session note: created 2026-08-12. Keep this current — overwrite stale sections.
+Session note: updated 2026-08-20. Keep this current — overwrite stale sections.
 
 ## Project overview
 - **Sell Out Challenge** = Divine Bakare's 3-step challenge course funnel (3 separate pages).
 - **Location:** `C:\Users\NexusPC\Projects\Sell Out Challenge`
 - **Sibling repo:** Sell Out Campaign registration funnel at `C:\Users\NexusPC\Projects\Sell Out Campaign` (live: https://selloutreg.vercel.app). Brand + assets are shared; needed assets are copied into this repo so it's self-contained.
-- **Git repo:** yes — no remote yet. Intended: `https://github.com/thedivinebakare/sellout-challenge.git`, branch `main`, identity Divine Bakare <officialdivinebakare@gmail.com>.
-- **Not yet deployed.** Intended Vercel project: `sellout-challenge` → `https://sellout-challenge.vercel.app`. First deploy links the project.
+- **Git repo:** yes — remote `origin` at `https://github.com/thedivinebakare/sellout-challenge.git`, branch `main`, identity Divine Bakare <officialdivinebakare@gmail.com>.
+- **Deployed.** Vercel project: `sellout-challenge` (alias: `sellout-challenge.vercel.app`). Org: `team_cY5WvfjeD9RZJh1Pn3thYMXD`, project ID: `prj_cCRFjEhjMm3qy39lnxPrANJimq3S`. Deploy via `vercel deploy --prod --yes`.
 
 ## Structure
-- `index.html` — **Step 1** of the funnel (single-file, inline styles, Tailwind CDN, mobile-first). **BUILT + ELEVATED (2026-08-13): 15 sections.**
-- `step-2.html` — **Step 2** (payment page — NOT built yet; all CTAs on `index.html` link here).
+- `index.html` — **Step 1** of the funnel (single-file, inline styles, Tailwind CDN, mobile-first). **BUILT + ELEVATED + PRICING UPDATED (2026-08-20): 15 sections.**
+- `step-2.html` — **Step 2** (checkout/payment page). **BUILT (2026-08-20): two-column layout, coupon system, payment tabs, 10 upgrades.** Payment integration pending (placeholder only).
 - `step-3.html` — **Step 3** (thank-you — NOT built yet).
-- `docs/superpowers/plans/2026-08-12-page-1-sales-page.md` — implementation plan.
-- `docs/superpowers/plans/2026-08-12-page-1-copy.md` — final copy map (copy source for the build; updated 2026-08-13 with new sections + em-dash purge).
+- `docs/step2-implementation-plan.md` — full technical spec for step-2.html build.
+- `docs/superpowers/plans/2026-08-12-page-1-sales-page.md` — original implementation plan.
+- `docs/superpowers/plans/2026-08-12-page-1-copy.md` — final copy map.
 - `docs/superpowers/plans/2026-08-13-page-1-elevation.md` — elevation implementation plan.
 
 ## COPY RULES (user-set)
