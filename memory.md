@@ -10,10 +10,9 @@ Session note: updated 2026-08-20. Keep this current — overwrite stale sections
 - **Deployed.** Vercel project: `sellout-challenge` (alias: `sellout-challenge.vercel.app`). Org: `team_cY5WvfjeD9RZJh1Pn3thYMXD`, project ID: `prj_cCRFjEhjMm3qy39lnxPrANJimq3S`. Deploy via `vercel deploy --prod --yes`.
 
 ## Structure
-- `index.html` — **Step 1** of the funnel (single-file, inline styles, Tailwind CDN, mobile-first). **BUILT + ELEVATED + PRICING UPDATED (2026-08-20): 15 sections.**
-- `step-2.html` — **Step 2** (checkout/payment page). **BUILT (2026-08-20): two-column layout, coupon system, payment tabs, 10 upgrades.** Payment integration pending (placeholder only).
-- `step-3.html` — **Step 3** (thank-you — NOT built yet).
-- `docs/step2-implementation-plan.md` — full technical spec for step-2.html build.
+- `index.html` — **Step 1** of the funnel (single-file, inline styles, Tailwind CDN, mobile-first). **BUILT + ELEVATED + PRICING UPDATED: 15 sections.**
+- `step-2.html` — **Step 2** (checkout/payment page). **BUILT + LIVE PAYSTACK INTEGRATION + MONIEPOINT DYNAMIC REF + WHATSAPP PROOF LINK + SESSION STORAGE.**
+- `step-3.html` — **Step 3** (thank-you / onboarding hub). **BUILT + PERSONALIZED ADMISSION PASS + TELEGRAM JOIN CTA + GOOGLE CALENDAR & ICAL (.ICS) + VCARD CONTACT + COUNTDOWN TO SEPT 7 2026.**
 - `docs/superpowers/plans/2026-08-12-page-1-sales-page.md` — original implementation plan.
 - `docs/superpowers/plans/2026-08-12-page-1-copy.md` — final copy map.
 - `docs/superpowers/plans/2026-08-13-page-1-elevation.md` — elevation implementation plan.
