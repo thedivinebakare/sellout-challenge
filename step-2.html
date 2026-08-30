@@ -11,7 +11,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-  <script src="https://js.paystack.co/v1/inline.js"></script>
   <style>
     :root {
       --ink: #0B1526;
@@ -88,18 +87,6 @@
     .form-helper { font-size: .75rem; color: var(--muted); margin-top: .4rem; line-height: 1.5; }
     .form-error { font-size: .75rem; color: #EF4444; margin-top: .4rem; display: none; }
     .form-error.show { display: block; }
-
-    /* Payment Tabs */
-    .payment-tabs { display: flex; gap: .5rem; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: .25rem; }
-    .payment-tab {
-      flex-shrink: 0; padding: .65rem 1.1rem; border-radius: 10px; font-size: .8rem; font-weight: 600;
-      border: 1.5px solid rgba(11,21,38,.1); background: #fff; color: var(--muted);
-      cursor: pointer; transition: border-color .2s, background .2s, color .2s; white-space: nowrap;
-    }
-    .payment-tab:hover { border-color: rgba(38,84,182,.25); color: var(--ink); }
-    .payment-tab.active { border-color: var(--royal); background: var(--tint); color: var(--royal); }
-    .payment-panel { display: none; }
-    .payment-panel.active { display: block; }
 
     /* Order Summary */
     .order-card { background: #fff; border-radius: 20px; border: 1px solid rgba(11,21,38,.08); overflow: hidden; }
@@ -246,7 +233,7 @@
         <span id="reservation-timer" class="mono ml-1 inline-flex items-center gap-1 rounded-full bg-[rgba(251,252,248,.1)] px-2.5 py-0.5 text-xs font-bold text-[#FFA37D]">14:59</span>
       </p>
       <p class="mono text-[.6rem] uppercase tracking-[.14em] text-[rgba(251,252,248,.5)]">
-        Seats strictly capped at 50 participants
+        Seats strictly capped at 25 participants
       </p>
     </div>
   </div>
@@ -288,7 +275,7 @@
         <div>
           <p class="mono text-[.68rem] font-bold uppercase tracking-[.16em] text-[#FF6B35]">Step 02: Claim Your Coupon</p>
           <h2 class="font-display mt-2 text-xl font-extrabold text-[#0B1526] tracking-[-0.02em]">Have a launch coupon? Apply it here.</h2>
-          <p class="mt-2 text-sm text-[#5A6B85]">The first 50 people can use the 25% OFF coupon to join for ₦7,500 instead of ₦10,000.</p>
+          <p class="mt-2 text-sm text-[#5A6B85]">The first 25 people can use the 25% OFF coupon to join for ₦7,500 instead of ₦10,000.</p>
 
           <div class="mt-4">
             <div class="coupon-group">
@@ -306,128 +293,82 @@
           </div>
         </div>
 
-        <!-- STEP 03: Payment Method -->
+        <!-- STEP 03: Direct Bank Transfer -->
         <div>
-          <p class="mono text-[.68rem] font-bold uppercase tracking-[.16em] text-[#2654B6]">Step 03: Choose Payment Method</p>
-          <h2 class="font-display mt-2 text-xl font-extrabold text-[#0B1526] tracking-[-0.02em]">Select how you'd like to pay.</h2>
+          <p class="mono text-[.68rem] font-bold uppercase tracking-[.16em] text-[#2654B6]">Step 03: Direct Bank Transfer</p>
+          <h2 class="font-display mt-2 text-xl font-extrabold text-[#0B1526] tracking-[-0.02em]">Transfer the exact amount to activate your spot.</h2>
 
-          <div class="payment-tabs mt-5">
-            <button class="payment-tab active" onclick="switchPaymentTab('paystack')">
-              <span class="mr-1">💳</span> Paystack
-            </button>
-            <button class="payment-tab" onclick="switchPaymentTab('bank')">
-              <span class="mr-1">🏦</span> Bank Transfer
-            </button>
-            <button class="payment-tab" onclick="switchPaymentTab('international')">
-              <span class="mr-1">🌍</span> International
-            </button>
-          </div>
-
-          <!-- Paystack Panel -->
-          <div class="payment-panel active" id="panel-paystack">
-            <div class="rounded-2xl border border-[rgba(11,21,38,.08)] bg-white p-6">
-              <div class="flex items-center gap-3 mb-4">
-                <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#2654B6]/10 text-[#2654B6]">
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M2 8h16"/></svg>
-                </span>
-                <div>
-                  <p class="font-display text-sm font-bold text-[#0B1526]">Pay with Card, Bank Transfer, USSD, or Apple Pay</p>
-                  <p class="text-xs text-[#5A6B85]">Instant automated activation</p>
-                </div>
-              </div>
-              <div class="rounded-xl bg-[#EDF2FB]/60 p-4 text-center">
-                <p class="text-xs text-[#5A6B85]">Click the button below to open the secure Paystack checkout window.</p>
-                <div class="mt-3 flex justify-center gap-3">
-                  <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[.65rem] font-semibold text-[#5A6B85] border border-[rgba(11,21,38,.06)]">💳 Cards</span>
-                  <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[.65rem] font-semibold text-[#5A6B85] border border-[rgba(11,21,38,.06)]">🏦 Transfer</span>
-                  <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[.65rem] font-semibold text-[#5A6B85] border border-[rgba(11,21,38,.06)]">📱 USSD</span>
-                  <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[.65rem] font-semibold text-[#5A6B85] border border-[rgba(11,21,38,.06)]">🍎 Apple Pay</span>
-                </div>
+          <div class="mt-6 overflow-hidden rounded-3xl border border-[rgba(11,21,38,.08)] bg-white">
+            <div class="flex items-center gap-3 border-b border-[rgba(11,21,38,.06)] bg-[#22c55e]/5 px-5 py-4">
+              <span class="grid h-10 w-10 flex-none place-items-center rounded-xl bg-[#22c55e]/15 text-[#22c55e]">
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10h14M3 14h14M5 6l5-3 5 3M4 10v7h12v-7"/></svg>
+              </span>
+              <div>
+                <p class="font-display text-sm font-bold text-[#0B1526]">Direct Bank Transfer</p>
+                <p class="text-xs text-[#5A6B85]">Verified moniepoint account. Instant WhatsApp activation after proof is received.</p>
               </div>
             </div>
-          </div>
 
-          <!-- Bank Transfer Panel -->
-          <div class="payment-panel" id="panel-bank">
-            <div class="rounded-2xl border border-[rgba(11,21,38,.08)] bg-white p-6">
-              <div class="flex items-center gap-3 mb-5">
-                <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#22c55e]/10 text-[#22c55e]">
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10h14M3 14h14M5 6l5-3 5 3M4 10v7h12v-7"/></svg>
-                </span>
+            <div class="space-y-2.5 p-5">
+              <div class="flex items-center justify-between gap-3 rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
                 <div>
-                  <p class="font-display text-sm font-bold text-[#0B1526]">Direct Bank Transfer</p>
-                  <p class="text-xs text-[#5A6B85]">Transfer directly to our bank account. Manual verification within 2 hours.</p>
+                  <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Bank Name</p>
+                  <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-name">Moniepoint Microfinance Bank</p>
                 </div>
               </div>
-
-              <div class="space-y-3">
-                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
-                  <div>
-                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Bank Name</p>
-                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-name">Moniepoint</p>
-                  </div>
+              <div class="flex items-center justify-between gap-3 rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
+                <div>
+                  <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Account Number</p>
+                  <p class="font-display text-base font-extrabold tracking-[.08em] text-[#0B1526]" id="bank-account">8055791348</p>
                 </div>
-                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
-                  <div>
-                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Account Number</p>
-                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-account">8055791348</p>
-                  </div>
-                  <button type="button" data-copy-target="bank-account" class="copy-btn rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20">Copy</button>
-                </div>
-                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
-                  <div>
-                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Account Name</p>
-                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-account-name">DIVINE BOLUWATIFE BAKARE-ADEWALE</p>
-                  </div>
-                </div>
-                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
-                  <div>
-                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Payment Reference</p>
-                    <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-ref">SOC-XXXXX</p>
-                  </div>
-                  <button type="button" data-copy-target="bank-ref" class="copy-btn rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20">Copy</button>
-                </div>
-                <div class="flex items-center justify-between rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
-                  <div>
-                    <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Exact Amount</p>
-                    <p class="font-display text-sm font-bold text-[#FF6B35]" id="bank-amount">₦10,000</p>
-                  </div>
-                  <button type="button" data-copy-target="bank-amount" class="copy-btn rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20">Copy</button>
+                <button type="button" data-copy-target="bank-account" class="copy-btn rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20">Copy</button>
+              </div>
+              <div class="flex items-center justify-between gap-3 rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
+                <div>
+                  <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Account Name</p>
+                  <p class="font-display text-sm font-bold text-[#0B1526]" id="bank-account-name">DIVINE BOLUWATIFE BAKARE-ADEWALE</p>
                 </div>
               </div>
+              <div class="flex items-center justify-between gap-3 rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
+                <div>
+                  <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Your Payment Reference</p>
+                  <p class="font-display text-base font-extrabold tracking-[.06em] text-[#2654B6]" id="bank-ref">SOC-XXXXX</p>
+                </div>
+                <button type="button" data-copy-target="bank-ref" class="copy-btn rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20">Copy</button>
+              </div>
+              <div class="flex items-center justify-between gap-3 rounded-xl bg-[#FBFCF8] border border-[rgba(11,21,38,.06)] px-4 py-3">
+                <div>
+                  <p class="mono text-[.62rem] uppercase tracking-[.12em] text-[#5A6B85]">Exact Amount</p>
+                  <p class="font-display text-lg font-extrabold text-[#FF6B35]" id="bank-amount">₦10,000</p>
+                </div>
+                <button type="button" data-copy-target="bank-amount" class="copy-btn rounded-lg bg-[#2654B6]/10 px-3 py-1.5 text-xs font-bold text-[#2654B6] hover:bg-[#2654B6]/20">Copy</button>
+              </div>
+            </div>
 
-              <a href="#" target="_blank" rel="noopener" id="wa-proof-link" class="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3.5 text-sm font-bold text-white hover:bg-[#20BD5A]">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492l4.632-1.223A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.115 0-4.09-.612-5.764-1.656l-.412-.25-2.748.723.734-2.678-.268-.426A9.71 9.71 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
+            <!-- 3-Step Instructions -->
+            <div class="border-t border-[rgba(11,21,38,.06)] bg-[#EDF2FB]/40 px-5 py-5">
+              <p class="mono text-[.62rem] font-bold uppercase tracking-[.16em] text-[#2654B6]">How To Activate Your Spot</p>
+              <ol class="mt-3 space-y-3">
+                <li class="flex items-start gap-3 text-sm leading-relaxed text-[#5A6B85]">
+                  <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-[#2654B6] font-display text-xs font-bold text-white">1</span>
+                  <span>Transfer the exact amount to the Moniepoint account above.</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm leading-relaxed text-[#5A6B85]">
+                  <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-[#2654B6] font-display text-xs font-bold text-white">2</span>
+                  <span>Use your Payment Reference (<span class="mono font-semibold text-[#0B1526]" id="instructions-ref">SOC-XXXXX</span>) as the transfer narration / remark.</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm leading-relaxed text-[#5A6B85]">
+                  <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-[#2654B6] font-display text-xs font-bold text-white">3</span>
+                  <span>Click the confirmation button below and send your receipt on WhatsApp for instant activation.</span>
+                </li>
+              </ol>
+            </div>
+
+            <div class="border-t border-[rgba(11,21,38,.06)] p-5">
+              <a href="#" target="_blank" rel="noopener" id="wa-proof-link" class="flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#25D366] py-3.5 text-sm font-bold text-white shadow-[0_4px_14px_-4px_rgba(37,211,102,.5)] hover:bg-[#20BD5A] hover:-translate-y-0.5 transition-[transform,background-color]">
+                <svg class="h-5 w-5 flex-none" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492l4.632-1.223A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.115 0-4.09-.612-5.764-1.656l-.412-.25-2.748.723.734-2.678-.268-.426A9.71 9.71 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
                 Send Payment Proof via WhatsApp
               </a>
-            </div>
-          </div>
-
-          <!-- International Panel -->
-          <div class="payment-panel" id="panel-international">
-            <div class="rounded-2xl border border-[rgba(11,21,38,.08)] bg-white p-6">
-              <div class="flex items-center gap-3 mb-5">
-                <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#FF6B35]/10 text-[#FF6B35]">
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><path d="M2 10h16M10 2c2.5 2.5 3.5 5 3.5 8s-1 5.5-3.5 8M10 2c-2.5 2.5-3.5 5-3.5 8s1 5.5 3.5 8"/></svg>
-                </span>
-                <div>
-                  <p class="font-display text-sm font-bold text-[#0B1526]">International / Diaspora Payment</p>
-                  <p class="text-xs text-[#5A6B85]">Powered by Paystack International. Pay in your local currency.</p>
-                </div>
-              </div>
-
-              <div class="flex gap-2 mb-5">
-                <button class="payment-tab active text-xs" onclick="switchCurrency(this, 'usd')">$ USD</button>
-                <button class="payment-tab text-xs" onclick="switchCurrency(this, 'gbp')">£ GBP</button>
-                <button class="payment-tab text-xs" onclick="switchCurrency(this, 'eur')">€ EUR</button>
-                <button class="payment-tab text-xs" onclick="switchCurrency(this, 'ghs')">₵ GHS</button>
-              </div>
-
-              <div class="rounded-xl bg-[#EDF2FB]/60 p-5 text-center">
-                <p class="text-xs text-[#5A6B85] mb-2">Your checkout total (approximate)</p>
-                <p class="font-display text-3xl font-extrabold text-[#0B1526]" id="international-price">$6.50</p>
-                <p class="mono mt-1 text-[.6rem] uppercase tracking-[.12em] text-[#5A6B85]" id="currency-note">Converted at today's rate. Final amount charged in USD.</p>
-              </div>
             </div>
           </div>
         </div>
@@ -436,7 +377,7 @@
         <div class="hidden lg:block">
           <button type="button" onclick="submitRegistration()" class="btn btn-accent btn-shine w-full py-4 text-base font-bold">
             <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="14" height="10" rx="2"/><path d="M6 8V6a4 4 0 118 0v2"/></svg>
-            <span id="cta-label">Complete Registration & Secure My Seat · ₦10,000</span>
+            <span id="cta-label">I Have Made This Transfer · Confirm Registration · ₦10,000</span>
           </button>
           <div class="mt-4 flex flex-wrap justify-center gap-4 text-[.72rem] text-[#5A6B85]">
             <span class="flex items-center gap-1.5"><svg class="h-3 w-3 text-[#22c55e]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 10.5l4 4 8-9"/></svg> Instant Access via Email & WhatsApp</span>
@@ -543,8 +484,8 @@
             SSL Secured
           </span>
           <span class="flex items-center gap-1">
-            <svg class="h-3 w-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2l7 4v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-4z"/></svg>
-            Paystack Partner
+            <svg class="h-3 w-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10h14M3 14h14M5 6l5-3 5 3M4 10v7h12v-7"/></svg>
+            Direct Bank Verification
           </span>
           <span class="flex items-center gap-1">
             <svg class="h-3 w-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><path d="M7 10l2 2 4-4"/></svg>
@@ -559,7 +500,7 @@
   <div class="mobile-sticky-cta">
     <button type="button" onclick="submitRegistration()" class="btn btn-accent btn-shine">
       <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="14" height="10" rx="2"/><path d="M6 8V6a4 4 0 118 0v2"/></svg>
-      <span id="cta-label-mobile">Secure My Seat · ₦10,000</span>
+      <span id="cta-label-mobile">I Have Made This Transfer · Confirm · ₦10,000</span>
     </button>
   </div>
 
@@ -569,7 +510,7 @@
       <div class="flex items-center gap-2 text-[.65rem] text-[#9AA7BE]">
         <span class="flex items-center gap-1"><svg class="h-3 w-3" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="14" height="10" rx="2"/><path d="M6 8V6a4 4 0 118 0v2"/></svg> SSL Encrypted</span>
         <span>·</span>
-        <span>Paystack Secured</span>
+        <span>Moniepoint Instant Verification</span>
         <span>·</span>
         <span>GDPR Compliant</span>
       </div>
@@ -618,12 +559,10 @@
       var BASE_PRICE = 10000;
       var COUPON_DISCOUNT = 2500;
       var couponApplied = false;
-      var paymentInProgress = false;
 
       // === CONFIG ===
       var SOC_CONFIG = {
-        PAYSTACK_PUBLIC_KEY: 'pk_live_3ccdad9a5a51ae0a9fa2c7263773af8aa681a6ee',
-        BANK_NAME: 'Moniepoint',
+        BANK_NAME: 'Moniepoint Microfinance Bank',
         BANK_ACCOUNT_NUMBER: '8055791348',
         BANK_ACCOUNT_NAME: 'DIVINE BOLUWATIFE BAKARE-ADEWALE',
         WHATSAPP_NUMBER: '2348055791348',
@@ -751,8 +690,8 @@
       function setCouponState(applied) {
         couponApplied = applied;
         var formatted = '₦' + currentTotal().toLocaleString('en-US');
-        var ctaText = 'Complete Registration & Secure My Seat · ' + formatted;
-        var ctaTextMobile = 'Secure My Seat · ' + formatted;
+        var ctaText = 'I Have Made This Transfer · Confirm Registration · ' + formatted;
+        var ctaTextMobile = 'I Have Made This Transfer · Confirm · ' + formatted;
 
         orderTotalDisplay.textContent = formatted;
         ctaLabel.textContent = ctaText;
@@ -826,32 +765,6 @@
       loadCouponState();
 
       // === PAYMENT TABS ===
-      window.switchPaymentTab = function (tab) {
-        document.querySelectorAll('.payment-tab').forEach(function (t) { t.classList.remove('active'); });
-        document.querySelectorAll('.payment-panel').forEach(function (p) { p.classList.remove('active'); });
-        event.currentTarget.classList.add('active');
-        var panel = document.getElementById('panel-' + tab);
-        if (panel) panel.classList.add('active');
-      };
-
-      // === INTERNATIONAL CURRENCY ===
-      var currencyRates = { usd: 6.50, gbp: 5.50, eur: 6.00, ghs: 80.00 };
-      var currencySymbols = { usd: '$', gbp: '£', eur: '€', ghs: '₵' };
-      var currencyNotes = {
-        usd: "Converted at today's rate. Final amount charged in USD.",
-        gbp: "Converted at today's rate. Final amount charged in GBP.",
-        eur: "Converted at today's rate. Final amount charged in EUR.",
-        ghs: "Converted at today's rate. Final amount charged in GHS."
-      };
-
-      window.switchCurrency = function (btn, curr) {
-        btn.parentElement.querySelectorAll('.payment-tab').forEach(function (t) { t.classList.remove('active'); });
-        btn.classList.add('active');
-        var rate = currencyRates[curr];
-        var price = couponApplied ? (BASE_PRICE - COUPON_DISCOUNT) / rate : BASE_PRICE / rate;
-        document.getElementById('international-price').textContent = currencySymbols[curr] + price.toFixed(2);
-        document.getElementById('currency-note').textContent = currencyNotes[curr];
-      };
 
       // === BANK PANEL & WHATSAPP LINKS ===
       function waLink(message) {
@@ -862,6 +775,8 @@
         var total = '₦' + currentTotal().toLocaleString('en-US');
         if (bankRefDisplay) bankRefDisplay.textContent = getBankRef();
         if (bankAmountDisplay) bankAmountDisplay.textContent = total;
+        var instructionsRef = document.getElementById('instructions-ref');
+        if (instructionsRef) instructionsRef.textContent = getBankRef();
 
         var buyerName = nameInput.value.trim() || '(name pending)';
         if (waProofLink) {
@@ -952,79 +867,38 @@
       });
 
       // === SUBMIT ===
-      var ctaBackup = { desktop: '', mobile: '' };
-
-      function setPaymentProcessing(processing) {
-        paymentInProgress = processing;
-        [ctaLabel, ctaLabelMobile].forEach(function (label) {
-          if (!label) return;
-          var btn = label.closest('button');
-          if (btn) {
-            btn.disabled = processing;
-            btn.style.opacity = processing ? '.6' : '';
-          }
-        });
-        if (processing) {
-          ctaBackup.desktop = ctaLabel.textContent;
-          ctaBackup.mobile = ctaLabelMobile.textContent;
-          ctaLabel.textContent = 'Processing... do not close this page';
-          ctaLabelMobile.textContent = 'Processing...';
-        } else {
-          if (ctaBackup.desktop) ctaLabel.textContent = ctaBackup.desktop;
-          if (ctaBackup.mobile) ctaLabelMobile.textContent = ctaBackup.mobile;
-        }
-      }
-
       window.submitRegistration = function () {
-        if (paymentInProgress) return;
         if (!validateForm()) return;
         saveFormState();
-
-        if (!window.PaystackPop || typeof window.PaystackPop.setup !== 'function') {
-          setPaymentProcessing(true);
-          ctaLabel.textContent = 'Payment window unavailable. Check your connection.';
-          setTimeout(function () { setPaymentProcessing(false); }, 3500);
-          return;
-        }
 
         var total = currentTotal();
         var buyerName = nameInput.value.trim();
         var buyerEmail = emailInput.value.trim();
         var buyerPhone = whatsappInput.value.trim();
+        var ref = getBankRef();
 
-        setPaymentProcessing(true);
         try {
-          var handler = PaystackPop.setup({
-            key: SOC_CONFIG.PAYSTACK_PUBLIC_KEY,
+          sessionStorage.setItem('soc_buyer', JSON.stringify({
+            name: buyerName,
             email: buyerEmail,
-            amount: total * 100,
-            currency: 'NGN',
-            metadata: {
-              custom_fields: [
-                { display_name: 'Full Name', variable_name: 'full_name', value: buyerName },
-                { display_name: 'WhatsApp Number', variable_name: 'whatsapp_number', value: buyerPhone },
-                { display_name: 'Coupon Code', variable_name: 'coupon_code', value: couponApplied ? 'SELLOUT25' : 'none' }
-              ]
-            },
-            callback: function (response) {
-              var params = new URLSearchParams({
-                ref: response.reference,
-                name: buyerName,
-                email: buyerEmail,
-                coupon: couponApplied ? 'SELLOUT25' : '',
-                total: total
-              });
-              window.location.href = 'step-3.html?' + params.toString();
-            },
-            onClose: function () {
-              setPaymentProcessing(false);
-            }
-          });
-          handler.openIframe();
-          trackEvent('InitiateCheckout', { value: total, currency: 'NGN', content_name: 'Sell Out Challenge' });
-        } catch (err) {
-          setPaymentProcessing(false);
-        }
+            whatsapp: buyerPhone,
+            coupon: couponApplied ? 'SELLOUT25' : '',
+            total: total,
+            ref: ref,
+            method: 'bank'
+          }));
+        } catch (e) {}
+
+        var params = new URLSearchParams({
+          ref: ref,
+          name: buyerName,
+          email: buyerEmail,
+          coupon: couponApplied ? 'SELLOUT25' : '',
+          total: total,
+          method: 'bank'
+        });
+        trackEvent('InitiateCheckout', { value: total, currency: 'NGN', content_name: 'Sell Out Challenge', method: 'bank' });
+        window.location.href = 'step-3.html?' + params.toString();
       };
 
       // === EXIT INTENT ===

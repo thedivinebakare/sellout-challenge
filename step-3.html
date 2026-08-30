@@ -330,6 +330,36 @@
     <!-- ONBOARDING COMMAND CENTER -->
     <section class="bg-[#FBFCF8] py-16 sm:py-24">
       <div class="mx-auto max-w-4xl px-5 sm:px-8">
+
+        <!-- BANK TRANSFER PROOF BANNER -->
+        <div id="bank-proof-banner" class="reveal mb-10 hidden overflow-hidden rounded-3xl border border-[#25D366]/30 bg-gradient-to-br from-[#0D1730] to-[#0B1526] shadow-[0_24px_50px_-22px_rgba(11,21,38,.5)]">
+          <div class="relative flex flex-col gap-6 p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9 lg:flex-row">
+            <span class="absolute -right-8 -top-10 h-40 w-40 rounded-full bg-[#22c55e]/15 blur-[70px]" aria-hidden="true"></span>
+            <div class="relative flex items-start gap-4 sm:items-center">
+              <span class="grid h-12 w-12 flex-none place-items-center rounded-2xl bg-[#25D366]/15 text-[#25D366]">
+                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492l4.632-1.223A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.115 0-4.09-.612-5.764-1.656l-.412-.25-2.748.723.734-2.678-.268-.426A9.71 9.71 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
+              </span>
+              <div>
+                <p class="mono text-[.62rem] font-bold uppercase tracking-[.18em] text-[#25D366]">Bank Transfer Submitted</p>
+                <h3 class="font-display mt-1.5 text-lg font-extrabold tracking-[-0.02em] text-[#FBFCF8] sm:text-xl">One final step to activate your access.</h3>
+                <p class="mt-2 max-w-md text-sm leading-[1.7] text-[rgba(251,252,248,.72)]">
+                  Send your payment screenshot to Divine on WhatsApp to finalize instant access approval.
+                </p>
+                <p class="mono mt-2 inline-flex items-center gap-1.5 text-[.6rem] font-semibold uppercase tracking-[.14em] text-[rgba(251,252,248,.45)]">
+                  <span class="pulse-dot" aria-hidden="true"></span>
+                  Access activates after proof is received
+                </p>
+              </div>
+            </div>
+            <div class="relative flex-none">
+              <a href="https://wa.me/2348055791348" target="_blank" rel="noopener" id="bank-proof-wa-link" class="btn btn-whatsapp btn-shine w-full whitespace-nowrap px-7 py-4 text-sm sm:w-auto">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492l4.632-1.223A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-2.115 0-4.09-.612-5.764-1.656l-.412-.25-2.748.723.734-2.678-.268-.426A9.71 9.71 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75S21.75 6.615 21.75 12s-4.365 9.75-9.75 9.75z"/></svg>
+                Send Payment Proof on WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div class="reveal text-center">
           <p class="mono text-[.66rem] font-bold uppercase tracking-[.2em] text-[#2654B6]">Your Onboarding Checklist</p>
           <h2 class="font-display mt-3 text-[clamp(1.7rem,4vw,2.6rem)] font-extrabold leading-tight tracking-[-0.03em] text-[#0B1526]">Three moves before Day 1.</h2>
@@ -556,6 +586,18 @@
       }
       if (coupon === 'SELLOUT25') {
         document.getElementById('pass-coupon-tag').classList.remove('hidden');
+      }
+
+      var method = params.get('method') || '';
+      var bankBanner = document.getElementById('bank-proof-banner');
+      if (method === 'bank' && bankBanner) {
+        bankBanner.classList.remove('hidden');
+        var proofMessage = 'Hello Divine, I just made my bank transfer for the Sell Out Challenge.'
+          + '\nName: ' + (rawName.trim() || '(name pending)')
+          + '\nAmount: ' + amountText
+          + '\nReference: ' + (ref || '(pending)');
+        document.getElementById('bank-proof-wa-link').href =
+          'https://wa.me/' + SOC_CONFIG.WHATSAPP_NUMBER + '?text=' + encodeURIComponent(proofMessage);
       }
 
       var start = new Date(SOC_CONFIG.CHALLENGE_START_ISO);
