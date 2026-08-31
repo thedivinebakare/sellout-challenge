@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell Out Challenge · Outreach Command Center</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232654B6'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='bold' fill='%23FBFCF8' text-anchor='middle'%3ESO%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            royal: '#2654B6',
+            'royal-deep': '#16357F',
+            'royal-light': '#3A6FE0',
+            pearl: '#FBFCF8',
+            surface: '#070B16',
+            tier1: '#F5A623',
+            tier2: '#4A9EFF',
+            tier3: '#34D399',
+            tier4: '#6B7280',
+          },
+          fontFamily: {
+            display: ['"Instrument Serif"', 'serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background: #070B16;
+      font-family: 'Inter', sans-serif;
+      color: #d7dbe6;
+      min-height: 100vh;
+    }
+    /* layered radial gradients + grain */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(60% 50% at 15% 0%, rgba(38,84,182,0.18), transparent 60%),
+        radial-gradient(50% 40% at 85% 15%, rgba(58,111,224,0.10), transparent 60%),
+        radial-gradient(40% 40% at 50% 100%, rgba(38,84,182,0.12), transparent 60%),
+        #070B16;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .glass-deep {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px -18px rgba(38,84,182,0.35);
+    }
+    .card {
+      transition: transform 0.35s cubic-bezier(.16,1,.3,1), box-shadow 0.35s cubic-bezier(.16,1,.3,1), background 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+    select, input {
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    select::-ms-expand { display: none; }
+    .filter-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23848ca3' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+    .btn-royal {
+      background: linear-gradient(180deg, #2f63c7, #2654B6);
+      box-shadow: 0 8px 24px -8px rgba(38,84,182,0.55), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .btn-royal:hover { background: linear-gradient(180deg, #3a6fe0, #2654B6); }
+    .btn-royal:active { transform: translateY(1px); box-shadow: 0 4px 12px -6px rgba(38,84,182,0.5); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+    *:focus-visible {
+      outline: 2px solid #3A6FE0;
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeUp 0.4s cubic-bezier(.16,1,.3,1) forwards; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .card:hover { transform: none; }
+    }
+  </style>
+</head>
+<body class="antialiased">
+  <script src="data/leads-data.js"></script>
+
+  <!-- Access gate -->
+  <div id="gate" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+    <form id="gate-form" class="glass relative rounded-2xl max-w-sm w-full p-7 animate-in" autocomplete="off">
+      <div class="w-10 h-10 rounded-xl bg-royal/20 flex items-center justify-center mb-4">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h2 class="font-display text-2xl text-pearl mb-1 tracking-tight">Restricted access</h2>
+      <p class="text-sm text-gray-400 font-body mb-5 leading-relaxed">This command center contains private participant data. Enter the access code to continue.</p>
+      <label for="gate-pass" class="sr-only">Access code</label>
+      <input id="gate-pass" type="password" placeholder="Access code"
+        class="w-full glass rounded-lg px-4 py-3 text-sm font-mono text-pearl placeholder-gray-600 bg-transparent outline-none focus:ring-2 focus:ring-royal">
+      <p id="gate-error" class="hidden text-red-400 text-xs font-mono mt-2"></p>
+      <button type="submit" class="btn-royal w-full mt-4 text-white text-sm font-mono py-3 rounded-lg transition-colors">Unlock command center</button>
+    </form>
+  </div>
+
+  <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+        </span>
+        <span class="font-mono text-[11px] uppercase tracking-[0.2em] text-gray-500">Live Command Center</span>
+      </div>
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 class="font-display text-4xl sm:text-5xl text-pearl tracking-tight leading-none">
+            Outreach <span class="italic text-royal-light">command center</span>
+          </h1>
+          <p class="text-gray-400 mt-2 text-sm sm:text-base font-body max-w-xl leading-relaxed">
+            Scored, deduplicated and niche-classified leads from the Sell Out Challenge registration funnel. One-click WhatsApp dispatch.
+          </p>
+        </div>
+        <a href="/" target="_blank" rel="noopener"
+           class="btn-ghost glass rounded-lg px-4 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors">
+          View live funnel →
+        </a>
+      </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div id="stats-bar" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8"></div>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap items-center gap-3 mb-6">
+      <select id="filter-tier" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors">
+        <option value="">All Tiers</option>
+        <option value="Tier 1">🔥 Tier 1 · VIP</option>
+        <option value="Tier 2">⚡ Tier 2 · Warm</option>
+        <option value="Tier 3">🌱 Tier 3 · Nurture</option>
+        <option value="Tier 4">Tier 4 · Cold</option>
+      </select>
+
+      <select id="filter-niche" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors">
+        <option value="">All Niches</option>
+      </select>
+
+      <select id="filter-status" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors">
+        <option value="">All Statuses</option>
+        <option value="New">New</option>
+        <option value="Contacted">Contacted</option>
+        <option value="In Conversation">In Conversation</option>
+        <option value="Enrolled">Enrolled</option>
+        <option value="Follow-up">Follow-up</option>
+      </select>
+
+      <input id="search-input" type="text" placeholder="Search name, phone, offer..."
+        class="glass rounded-lg px-4 py-2.5 text-sm font-body text-gray-300 placeholder-gray-600 bg-transparent flex-1 min-w-[200px] focus:ring-2 focus:ring-royal outline-none border-0">
+
+      <select id="sort-select" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Sort leads">
+        <option value="score">Sort · Score</option>
+        <option value="name">Sort · Name</option>
+      </select>
+
+      <button onclick="exportCSV()"
+        class="btn-ghost glass rounded-lg px-4 py-2.5 text-sm font-mono text-royal-light hover:text-white transition-colors">
+        Export CSV
+      </button>
+    </div>
+
+    <!-- Lead Cards -->
+    <div id="leads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+    <!-- Load more -->
+    <div id="load-more-wrap" class="hidden mt-8 flex justify-center">
+      <button id="load-more-btn" class="btn-ghost glass px-6 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors flex items-center gap-2">
+        <span>Load more</span>
+        <span id="load-more-count" class="text-gray-500 text-xs"></span>
+      </button>
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="hidden text-center py-20">
+      <div class="font-display text-2xl text-gray-500 mb-2">No leads match</div>
+      <p class="text-gray-600 text-sm font-mono">Try clearing a filter or adjusting your search.</p>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="glass relative rounded-2xl max-w-lg w-full p-6 max-h-[85vh] overflow-y-auto animate-in">
+      <button onclick="closeModal()" aria-label="Close"
+        class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">&times;</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script>
+    const LEADS = window.LEADS_DATA || [];
+    const statusKey = (phone) => "lead_status_" + phone;
+
+    // ---- Access gate ----
+    const GATE_HASH = "10ae97f858eed6bb6bd8d22f9e8c58f673e4fc4bcf2b46abdc1c9b2ed95aa75f";
+    const GATE_SESSION = "soc_cmd_unlocked";
+    const gate = document.getElementById("gate");
+
+    function hex(buf) { return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join(""); }
+
+    async function sha256(str) {
+      const data = new TextEncoder().encode(str);
+      return hex(await crypto.subtle.digest("SHA-256", data));
+    }
+
+    function showGate() { gate.classList.remove("hidden"); gate.classList.add("flex"); }
+    function hideGate() { gate.classList.add("hidden"); gate.classList.remove("flex"); }
+
+    function unlock() {
+      sessionStorage.setItem(GATE_SESSION, "1");
+      hideGate();
+      document.getElementById("app").classList.remove("hidden");
+      bootstrap();
+    }
+
+    document.getElementById("gate-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const err = document.getElementById("gate-error");
+      const val = document.getElementById("gate-pass").value;
+      const ok = (await sha256(val)) === GATE_HASH;
+      if (ok) {
+        err.classList.add("hidden");
+        unlock();
+      } else {
+        err.textContent = "Incorrect access code.";
+        err.classList.remove("hidden");
+        document.getElementById("gate-pass").value = "";
+        document.getElementById("gate-pass").focus();
+      }
+    });
+
+    if (sessionStorage.getItem(GATE_SESSION) === "1") {
+      hideGate();
+    } else {
+      document.getElementById("app").classList.add("hidden");
+      showGate();
+      document.getElementById("gate-pass").focus();
+    }
+
+    // ---- Tier / Niche / status helpers ----
+    const tierStyles = {
+      "Tier 1": { badge: "bg-tier1/15 text-tier1 border-tier1/30", bar: "bg-tier1", text: "text-tier1" },
+      "Tier 2": { badge: "bg-tier2/15 text-tier2 border-tier2/30", bar: "bg-tier2", text: "text-tier2" },
+      "Tier 3": { badge: "bg-tier3/15 text-tier3 border-tier3/30", bar: "bg-tier3", text: "text-tier3" },
+      "Tier 4": { badge: "bg-tier4/15 text-tier4 border-tier4/30", bar: "bg-tier4", text: "text-tier4" },
+    };
+    const statusOptions = ["New", "Contacted", "In Conversation", "Enrolled", "Follow-up"];
+
+    // ---- Stats ----
+    function renderStats(leads) {
+      const tiers = { "Tier 1": 0, "Tier 2": 0, "Tier 3": 0, "Tier 4": 0 };
+      leads.forEach(l => { if (tiers[l.tier] !== undefined) tiers[l.tier]++; });
+      const stats = [
+        { label: "Total Leads", value: leads.length, cls: "text-pearl", tier: "" },
+        { label: "🔥 Tier 1 · VIP", value: tiers["Tier 1"], cls: "text-tier1", tier: "Tier 1" },
+        { label: "⚡ Tier 2 · Warm", value: tiers["Tier 2"], cls: "text-tier2", tier: "Tier 2" },
+        { label: "🌱 Tier 3 · Nurture", value: tiers["Tier 3"], cls: "text-tier3", tier: "Tier 3" },
+        { label: "Tier 4 · Cold", value: tiers["Tier 4"], cls: "text-tier4", tier: "Tier 4" },
+      ];
+      const activeTier = document.getElementById("filter-tier").value;
+      document.getElementById("stats-bar").innerHTML = stats.map(s => {
+        const clickable = s.tier !== "";
+        const isActive = s.tier !== "" && s.tier === activeTier;
+        const cls = [
+          "glass rounded-xl px-4 py-4 animate-in",
+          clickable ? "cursor-pointer transition-colors hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-royal outline-none" : "",
+          isActive ? "ring-2 ring-royal/60" : "",
+        ].filter(Boolean).join(" ");
+        return `
+        <div class="${cls}" ${clickable ? `data-tier="${s.tier}" tabindex="0" role="button" aria-label="Filter by ${s.tier}"` : ""}>
+          <div class="font-mono text-2xl sm:text-3xl font-semibold ${s.cls}">${s.value}</div>
+          <div class="text-[11px] text-gray-500 font-mono uppercase tracking-wider mt-1">${s.label}</div>
+        </div>`;
+      }).join("");
+    }
+
+    // ---- Populate niches ----
+    function populateNiches() {
+      const niches = [...new Set(LEADS.map(l => l.niche))].sort();
+      const sel = document.getElementById("filter-niche");
+      niches.forEach(n => {
+        const opt = document.createElement("option");
+        opt.value = n; opt.textContent = n;
+        sel.appendChild(opt);
+      });
+    }
+
+    // ---- Filtering ----
+    let filteredLeads = [...LEADS];
+
+    function applyFilters() {
+      const tier = document.getElementById("filter-tier").value;
+      const niche = document.getElementById("filter-niche").value;
+      const status = document.getElementById("filter-status").value;
+      const search = document.getElementById("search-input").value.toLowerCase();
+      const sort = document.getElementById("sort-select").value;
+
+      filteredLeads = LEADS.filter(l => {
+        if (tier && l.tier !== tier) return false;
+        if (niche && l.niche !== niche) return false;
+        if (status && (l.status !== status)) return false;
+        if (search) {
+          const haystack = `${l.name} ${l.phone} ${l.whatSells} ${l.challenge} ${l.email} ${l.niche}`.toLowerCase();
+          if (!haystack.includes(search)) return false;
+        }
+        return true;
+      });
+
+      if (sort === "name") {
+        filteredLeads.sort((a, b) => a.name.localeCompare(b.name));
+      } else {
+        filteredLeads.sort((a, b) => b.leadScore - a.leadScore);
+      }
+
+      visibleCount = PAGE_SIZE;
+      renderLeads();
+    }
+
+    document.getElementById("sort-select").addEventListener("change", applyFilters);
+
+    document.getElementById("filter-tier").addEventListener("change", () => { renderStats(LEADS); applyFilters(); });
+    document.getElementById("filter-niche").addEventListener("change", applyFilters);
+    document.getElementById("filter-status").addEventListener("change", applyFilters);
+    document.getElementById("search-input").addEventListener("input", applyFilters);
+
+    document.getElementById("stats-bar").addEventListener("click", (e) => {
+      const card = e.target.closest("[data-tier]");
+      if (!card) return;
+      const tierFilter = document.getElementById("filter-tier");
+      const tier = card.dataset.tier;
+      if (tierFilter.value === tier) {
+        tierFilter.value = "";
+      } else {
+        tierFilter.value = tier;
+      }
+      renderStats(LEADS);
+      applyFilters();
+    });
+
+    // ---- Status ----
+    LEADS.forEach(l => {
+      const saved = localStorage.getItem(statusKey(l.phone));
+      if (saved) l.status = saved;
+    });
+
+    document.addEventListener("change", (e) => {
+      const sel = e.target.closest(".status-select");
+      if (!sel) return;
+      e.stopPropagation();
+      const phone = sel.dataset.phone;
+      LEADS.forEach(l => { if (l.phone === phone) l.status = sel.value; });
+      localStorage.setItem(statusKey(phone), sel.value);
+    });
+
+    // ---- Copy message ----
+    async function copyMessage(phone) {
+      const lead = LEADS.find(l => l.phone === phone);
+      if (!lead) return;
+      try {
+        await navigator.clipboard.writeText(lead.message);
+        flash("Message copied");
+      } catch (err) {
+        const ta = document.createElement("textarea");
+        ta.value = lead.message;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        flash("Message copied");
+      }
+    }
+
+    // ---- Toast ----
+    let toastTimer;
+    function flash(msg) {
+      let el = document.getElementById("toast");
+      if (!el) {
+        el = document.createElement("div");
+        el.id = "toast";
+        el.className = "fixed bottom-6 left-1/2 -translate-x-1/2 glass rounded-lg px-5 py-3 text-sm text-pearl font-mono z-50 animate-in";
+        document.body.appendChild(el);
+      }
+      el.textContent = msg;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.remove(), 1800);
+    }
+
+    // ---- Render ----
+    const PAGE_SIZE = 48;
+    let visibleCount = PAGE_SIZE;
+
+    function statusSelect(l) {
+      return statusOptions.map(s => `<option value="${s}" ${l.status === s ? "selected" : ""}>${s}</option>`).join("");
+    }
+
+    function renderLeads() {
+      const grid = document.getElementById("leads-grid");
+      const empty = document.getElementById("empty-state");
+      const wrap = document.getElementById("load-more-wrap");
+      const countEl = document.getElementById("load-more-count");
+
+      if (filteredLeads.length === 0) {
+        grid.innerHTML = "";
+        empty.classList.remove("hidden");
+        empty.classList.add("flex", "flex-col");
+        wrap.classList.add("hidden");
+        return;
+      }
+      empty.classList.add("hidden");
+      empty.classList.remove("flex");
+
+      const slice = filteredLeads.slice(0, visibleCount);
+      grid.innerHTML = slice.map((l, i) => {
+        const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
+        const preview = (l.challenge || l.whatSells || "No offer yet").replace(/\n/g, " ");
+        return `
+        <div class="glass card rounded-xl p-4 animate-in" style="animation-delay:${Math.min(i * 15, 300)}ms"
+             onclick="openModal('${l.phone}')" tabindex="0" role="button"
+             onkeydown="if(event.key==='Enter'||event.key===' '){openModal('${l.phone}')}">
+          <div class="flex items-start justify-between gap-2 mb-3">
+            <div class="min-w-0">
+              <h3 class="text-white font-body font-semibold text-[15px] leading-tight truncate">${l.name}</h3>
+              <p class="text-gray-500 font-mono text-[11px] mt-0.5">+${l.phone}</p>
+            </div>
+            <span class="font-mono text-[10px] px-2 py-0.5 rounded-full border whitespace-nowrap ${ts.badge}">${l.tier}</span>
+          </div>
+
+          <div class="mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] text-gray-500 font-mono w-10">Score</span>
+              <div class="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+                <div class="h-full rounded-full ${ts.bar}" style="width:${l.leadScore}%"></div>
+              </div>
+              <span class="text-[11px] font-mono ${ts.text} w-7 text-right">${l.leadScore}</span>
+            </div>
+            <p class="text-[11px] text-gray-500 font-mono mt-1.5">${l.niche}</p>
+          </div>
+
+          <p class="text-xs text-gray-400 mb-3 line-clamp-2 font-body leading-relaxed">${escapeHTML(preview)}</p>
+
+          <div class="flex items-center gap-2">
+            <a href="${l.whatsappURL}" target="_blank" rel="noopener" onclick="event.stopPropagation()"
+              class="btn-royal flex-1 text-white text-xs font-mono text-center py-2 rounded-lg transition-colors">WhatsApp</a>
+            <button onclick="event.stopPropagation(); copyMessage('${l.phone}')"
+              class="btn-ghost glass px-3 py-2 rounded-lg text-[11px] font-mono text-gray-400 hover:text-white transition-colors">Copy</button>
+            <select data-phone="${l.phone}" class="status-select glass rounded-lg text-[11px] font-mono text-gray-400 bg-transparent px-2 py-2 cursor-pointer hover:text-white transition-colors">
+              ${statusSelect(l)}
+            </select>
+          </div>
+        </div>`;
+      }).join("");
+
+      const remaining = filteredLeads.length - visibleCount;
+      if (remaining > 0) {
+        wrap.classList.remove("hidden");
+        wrap.classList.add("flex");
+        countEl.textContent = `+${remaining} of ${filteredLeads.length}`;
+      } else {
+        wrap.classList.add("hidden");
+        wrap.classList.remove("flex");
+      }
+    }
+
+    document.getElementById("load-more-btn").addEventListener("click", () => {
+      visibleCount += PAGE_SIZE;
+      renderLeads();
+    });
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, m => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[m]));
+    }
+
+    // ---- Modal ----
+    function openModal(phone) {
+      const l = LEADS.find(x => x.phone === phone);
+      if (!l) return;
+      const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
+
+      document.getElementById("modal-content").innerHTML = `
+        <div class="mb-5">
+          <span class="font-mono text-[11px] ${ts.text}">${l.tier} · Score ${l.leadScore} · ${escapeHTML(l.niche)}</span>
+          <h2 class="font-display text-3xl text-pearl mt-1.5 leading-tight">${escapeHTML(l.name)}</h2>
+          <p class="font-mono text-sm text-gray-500 mt-1">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}</p>
+        </div>
+
+        <div class="space-y-3.5 mb-5 text-sm font-body">
+          <div class="glass-deep rounded-lg px-3.5 py-2.5">
+            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Role</span>
+            <span class="text-gray-300">${escapeHTML(l.role || "N/A")}</span>
+          </div>
+          <div class="glass-deep rounded-lg px-3.5 py-2.5">
+            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Sells</span>
+            <span class="text-gray-300">${escapeHTML(l.whatSells || "Nothing yet")}</span>
+          </div>
+          <div class="glass-deep rounded-lg px-3.5 py-2.5">
+            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Challenge</span>
+            <span class="text-gray-300 whitespace-pre-wrap">${escapeHTML(l.challenge || "N/A")}</span>
+          </div>
+          <div class="glass-deep rounded-lg px-3.5 py-2.5">
+            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Budget</span>
+            <span class="text-gray-300">${escapeHTML(l.investment || "N/A")}</span>
+          </div>
+          <div class="glass-deep rounded-lg px-3.5 py-2.5">
+            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Goal</span>
+            <span class="text-gray-300 whitespace-pre-wrap">${escapeHTML(l.goal || "N/A")}</span>
+          </div>
+        </div>
+
+        <div class="glass rounded-lg p-3.5 mb-5">
+          <div class="text-[10px] text-gray-500 font-mono mb-2 uppercase tracking-wider">WhatsApp message</div>
+          <p class="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed font-body">${escapeHTML(l.message)}</p>
+        </div>
+
+        <div class="flex gap-3">
+          <a href="${l.whatsappURL}" target="_blank" rel="noopener"
+            class="btn-royal flex-1 text-white text-sm font-mono text-center py-3 rounded-lg transition-colors">Open WhatsApp</a>
+          <button onclick="copyMessage('${l.phone}')"
+            class="btn-ghost glass px-4 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors">Copy</button>
+        </div>
+      `;
+
+      const m = document.getElementById("modal");
+      m.classList.remove("hidden");
+      m.classList.add("flex");
+    }
+
+    function closeModal() {
+      const m = document.getElementById("modal");
+      m.classList.add("hidden");
+      m.classList.remove("flex");
+    }
+
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+    // ---- Export CSV ----
+    function exportCSV() {
+      const headers = ["Name","Phone","Email","Role","Sells","Challenge","Budget","Goal","Niche","Score","Tier","Message","Status"];
+      const rows = filteredLeads.map(l => [
+        `"${l.name.replace(/"/g,'""')}"`,
+        l.phone,
+        `"${l.email.replace(/"/g,'""')}"`,
+        `"${l.role.replace(/"/g,'""')}"`,
+        `"${l.whatSells.replace(/"/g,'""')}"`,
+        `"${l.challenge.replace(/"/g,'""')}"`,
+        `"${l.investment.replace(/"/g,'""')}"`,
+        `"${l.goal.replace(/"/g,'""')}"`,
+        `"${l.niche.replace(/"/g,'""')}"`,
+        l.leadScore,
+        `"${l.tier}"`,
+        `"${l.message.replace(/"/g,'""')}"`,
+        `"${l.status}"`
+      ]);
+      const csv = [headers.join(","), ...rows.map(a => a.join(","))].join("\n");
+      const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "enriched_leads_export.csv";
+      document.body.appendChild(a); a.click();
+      setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 100);
+      flash("Exporting " + filteredLeads.length + " leads");
+    }
+
+    // ---- Init ----
+    function bootstrap() {
+      const params = new URLSearchParams(location.search);
+      ["tier", "niche", "status"].forEach(k => {
+        const v = params.get(k);
+        if (v) document.getElementById("filter-" + k).value = v;
+      });
+      populateNiches();
+      renderStats(LEADS);
+      applyFilters();
+    }
+
+    if (sessionStorage.getItem(GATE_SESSION) === "1") {
+      bootstrap();
+    }
+  </script>
+</body>
+</html>

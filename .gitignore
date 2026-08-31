@@ -6,3 +6,8 @@ temporary screenshots/
 .vercel
 
 .vercel
+.env*
+
+# Private participant data — never ship raw source spreadsheets
+leads/data/registrations.csv
+leads/data/enriched_leads.csv
