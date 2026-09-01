@@ -262,8 +262,10 @@
     document.getElementById("gate-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const err = document.getElementById("gate-error");
-      const val = document.getElementById("gate-pass").value;
-      const ok = (await sha256(val)) === GATE_HASH;
+      const val = document.getElementById("gate-pass").value.trim();
+      const hash = await sha256(val);
+      const upperHash = await sha256(val.toUpperCase());
+      const ok = hash === GATE_HASH || upperHash === GATE_HASH;
       if (ok) {
         err.classList.add("hidden");
         unlock();
