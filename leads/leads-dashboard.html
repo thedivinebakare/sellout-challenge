@@ -39,8 +39,8 @@
       font-family: 'Inter', sans-serif;
       color: #d7dbe6;
       min-height: 100vh;
+      overflow-x: hidden;
     }
-    /* layered radial gradients + grain */
     body::before {
       content: "";
       position: fixed;
@@ -99,13 +99,20 @@
     .btn-royal:hover { background: linear-gradient(180deg, #3a6fe0, #2654B6); }
     .btn-royal:active { transform: translateY(1px); box-shadow: 0 4px 12px -6px rgba(38,84,182,0.5); }
     .btn-ghost:hover { background: rgba(255,255,255,0.08); }
-    /* Angle switcher (global segmented control) */
+    .btn-amber {
+      background: linear-gradient(180deg, #ffb84d, #F5A623);
+      box-shadow: 0 8px 24px -8px rgba(245,166,35,0.55), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+    .btn-amber:hover { background: linear-gradient(180deg, #ffc56b, #F5A623); }
+    .btn-amber:active { transform: translateY(1px); box-shadow: 0 4px 12px -6px rgba(245,166,35,0.5); }
     #angle-switcher {
-      display: inline-flex;
+      display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 2px;
       padding: 3px;
       border-radius: 10px;
+      max-width: 100%;
     }
     .angle-pill-global {
       appearance: none;
@@ -128,7 +135,6 @@
       box-shadow: 0 6px 16px -6px rgba(38,84,182,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
     }
     .angle-pill-global:focus-visible { outline: 2px solid #3A6FE0; outline-offset: 2px; border-radius: 8px; }
-    /* Modal angle tabs */
     .tab-pill {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
@@ -149,6 +155,12 @@
       border-color: transparent;
       box-shadow: 0 6px 16px -6px rgba(38,84,182,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
     }
+    .tab-pill.tab-pill-amber {
+      background: linear-gradient(180deg, #ffb84d, #F5A623);
+      color: #0B1526;
+      border-color: transparent;
+      box-shadow: 0 6px 16px -6px rgba(245,166,35,0.6), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
     .tab-pill:focus-visible { outline: 2px solid #3A6FE0; outline-offset: 2px; border-radius: 8px; }
     *:focus-visible {
       outline: 2px solid #3A6FE0;
@@ -164,9 +176,83 @@
     }
     .animate-in { animation: fadeUp 0.4s cubic-bezier(.16,1,.3,1) forwards; }
     .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* ---- Turbo bar ---- */
+    #turbo-bar {
+      transition: transform 0.45s cubic-bezier(.16,1,.3,1), opacity 0.35s ease;
+      transform: translate(-50%, 140%);
+    }
+    #turbo-bar.open { transform: translate(-50%, 0); }
+    .turbo-panel {
+      box-shadow:
+        0 24px 60px -20px rgba(245,166,35,0.28),
+        0 10px 40px -12px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .turbo-card-active {
+      box-shadow: 0 0 0 2px rgba(245,166,35,0.9), 0 20px 40px -18px rgba(245,166,35,0.4);
+      transform: translateY(-2px);
+    }
+    kbd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      line-height: 1;
+      padding: 3px 5px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #ffd28a;
+      white-space: nowrap;
+    }
+    .dot-queue {
+      transition: opacity 0.2s ease;
+    }
+    #turbo-bar.open ~ #arsenal-toggle { bottom: 6.5rem; }
+
+    /* ---- Arsenal drawer ---- */
+    #arsenal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #arsenal-backdrop.open { opacity: 1; pointer-events: auto; }
+    #arsenal-panel {
+      transform: translateX(100%);
+      transition: transform 0.45s cubic-bezier(.16,1,.3,1);
+    }
+    #arsenal-panel.open { transform: translateX(0); }
+    .arsenal-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+    .arsenal-item .txt { min-width: 0; }
+    .arsenal-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+    .arsenal-item:active { transform: translateY(1px); }
+    .arsenal-item { transition: transform 0.2s cubic-bezier(.16,1,.3,1), background 0.2s ease, border-color 0.2s ease; }
+
+    /* ---- Revenue bar ---- */
+    .rv-bar { background: linear-gradient(90deg, #F5A623, #ffb84d); box-shadow: 0 0 18px -4px rgba(245,166,35,0.7); }
+    .rv-track { background: rgba(255,255,255,0.06); box-shadow: inset 0 1px 3px rgba(0,0,0,0.4); }
+
+    /* ---- Confirm modal ---- */
+    #confirm-modal {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    #confirm-modal.open { opacity: 1; pointer-events: auto; }
+    #confirm-modal .cm-box { transition: transform 0.35s cubic-bezier(.16,1,.3,1); transform: translateY(12px) scale(0.97); }
+    #confirm-modal.open .cm-box { transform: translateY(0) scale(1); }
+
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
       .card:hover { transform: none; }
+      .turbo-card-active { transform: none; }
     }
   </style>
 </head>
@@ -206,15 +292,25 @@
             Outreach <span class="italic text-royal-light">command center</span>
           </h1>
           <p class="text-gray-400 mt-2 text-sm sm:text-base font-body max-w-xl leading-relaxed">
-            Scored, deduplicated and niche-classified leads from the Sell Out Challenge registration funnel. One-click WhatsApp dispatch.
+            Scored, deduplicated and niche-classified leads from the Sell Out Challenge registration funnel. One-click WhatsApp dispatch, turbo queue, follow-up radar.
           </p>
         </div>
-        <a href="/" target="_blank" rel="noopener"
-           class="btn-ghost glass rounded-lg px-4 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors">
-          View live funnel →
-        </a>
+        <div class="flex items-center gap-2">
+          <button onclick="exportProgress()"
+            class="btn-ghost glass rounded-lg px-4 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors">↧ Export</button>
+          <button onclick="document.getElementById('import-file').click()"
+            class="btn-ghost glass rounded-lg px-4 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors">↥ Import</button>
+          <input id="import-file" type="file" accept="application/json,.json" class="hidden">
+          <a href="/" target="_blank" rel="noopener"
+            class="btn-ghost glass rounded-lg px-4 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors">
+            View live funnel →
+          </a>
+        </div>
       </div>
     </header>
+
+    <!-- Pipeline + Revenue Goal -->
+    <div id="pipeline-strip" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mb-4"></div>
 
     <!-- Stats Bar -->
     <div id="stats-bar" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8"></div>
@@ -242,6 +338,14 @@
         <option value="Follow-up">Follow-up</option>
       </select>
 
+      <select id="filter-follow" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Follow-up radar">
+        <option value="">All Leads</option>
+        <option value="uncontacted">🆕 Uncontacted only</option>
+        <option value="touch2">⏳ Due · Touch 2</option>
+        <option value="touch3">⏳ Due · Touch 3</option>
+        <option value="touch4">⏳ Due · Touch 4</option>
+      </select>
+
       <div id="angle-switcher" class="glass" role="group" aria-label="Dispatch angle">
         <button type="button" class="angle-pill-global active" data-angle="story" aria-pressed="true">🔥 Story Hook</button>
         <button type="button" class="angle-pill-global" data-angle="future" aria-pressed="false">⚡ Future Pace</button>
@@ -256,6 +360,18 @@
         <option value="score">Sort · Score</option>
         <option value="name">Sort · Name</option>
       </select>
+
+      <select id="turbo-limit" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Turbo queue size">
+        <option value="20">Turbo · 20</option>
+        <option value="50">Turbo · 50</option>
+        <option value="100">Turbo · 100</option>
+        <option value="0">Turbo · All</option>
+      </select>
+
+      <button onclick="startTurbo()" id="turbo-start"
+        class="btn-amber text-[#0B1526] rounded-lg px-4 py-2.5 text-sm font-mono transition-colors">
+        🚀 Start Turbo
+      </button>
 
       <button onclick="exportCSV()"
         class="btn-ghost glass rounded-lg px-4 py-2.5 text-sm font-mono text-royal-light hover:text-white transition-colors">
@@ -281,7 +397,7 @@
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Lead Modal -->
   <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
     <div class="glass relative rounded-2xl max-w-lg w-full p-6 max-h-[85vh] overflow-y-auto animate-in">
@@ -291,9 +407,67 @@
     </div>
   </div>
 
+  <!-- Confirm modal -->
+  <div id="confirm-modal" class="fixed inset-0 z-[70] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="confirm-backdrop"></div>
+    <div class="cm-box glass relative rounded-2xl max-w-md w-full p-6">
+      <div id="confirm-icon" class="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center mb-4">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      </div>
+      <h3 id="confirm-title" class="font-display text-2xl text-pearl mb-1 tracking-tight">Already contacted</h3>
+      <p id="confirm-body" class="text-sm text-gray-400 font-body leading-relaxed mb-5"></p>
+      <div class="flex gap-3">
+        <button id="confirm-no" class="btn-ghost glass flex-1 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors">Cancel</button>
+        <button id="confirm-yes" class="btn-amber flex-1 py-3 rounded-lg text-sm font-mono text-[#0B1526] transition-colors">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Turbo bar -->
+  <div id="turbo-bar" class="fixed bottom-5 left-1/2 z-[60] w-[min(94vw,760px)]">
+    <div class="turbo-panel glass rounded-2xl p-3 sm:p-4">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="turboMove(-1)" title="Previous (←)"
+          class="btn-ghost glass w-9 h-9 rounded-lg text-gray-400 hover:text-white transition-colors flex items-center justify-center">◀</button>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2">
+            <span id="turbo-pos" class="font-mono text-[11px] text-amber-300 whitespace-nowrap">1 / 1</span>
+            <div id="turbo-queue-dots" class="hidden sm:flex gap-1 overflow-hidden flex-1"></div>
+          </div>
+          <p id="turbo-name" class="text-white font-body font-semibold text-sm truncate mt-0.5">No queue</p>
+          <p id="turbo-sub" class="text-gray-500 font-mono text-[11px] truncate mt-0.5"></p>
+        </div>
+        <button onclick="turboMove(1)" title="Skip (S)"
+          class="btn-ghost glass px-3 h-9 rounded-lg text-xs font-mono text-gray-400 hover:text-white transition-colors whitespace-nowrap">Skip <kbd>S</kbd></button>
+        <button onclick="turboAct()" title="Open chat + mark sent (W)"
+          class="btn-amber h-9 px-3 sm:px-4 rounded-lg text-xs font-mono text-[#0B1526] whitespace-nowrap flex items-center gap-1.5">Open &amp; Mark <kbd class="!bg-[#0B1526]/20 !border-transparent !text-[#0B1526]">W</kbd></button>
+        <button onclick="stopTurbo()" title="End queue (Esc)"
+          class="btn-ghost glass w-9 h-9 rounded-lg text-gray-400 hover:text-white transition-colors flex items-center justify-center">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Arsenal drawer -->
+  <button id="arsenal-toggle" onclick="toggleArsenal()" aria-label="Open arsenal"
+    class="fixed bottom-5 right-5 z-40 btn-amber w-12 h-12 rounded-2xl text-[#0B1526] text-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95">
+    <span id="arsenal-glyph">🧰</span>
+  </button>
+  <div id="arsenal-backdrop" class="fixed inset-0 z-[55] bg-black/60 backdrop-blur-sm"></div>
+  <aside id="arsenal-panel" class="fixed top-0 right-0 z-[56] h-full w-[min(92vw,380px)] glass rounded-l-2xl p-5 overflow-y-auto bg-[#0a1022]">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-amber-300">Speed Drawer</div>
+        <h2 class="font-display text-2xl text-pearl tracking-tight">Arsenal</h2>
+      </div>
+      <button onclick="toggleArsenal()" aria-label="Close arsenal"
+        class="text-gray-500 hover:text-white text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">&times;</button>
+    </div>
+
+    <div id="arsenal-content"></div>
+  </aside>
+
   <script>
     const LEADS = window.LEADS_DATA || [];
-    const statusKey = (phone) => "lead_status_" + phone;
 
     // ---- Copy angles ----
     const ANGLES = [
@@ -302,37 +476,147 @@
       { key: "casual", label: "Quick Icebreaker",  short: "Quick",   icon: "💬" },
       { key: "audio",  label: "Voice Note Script", short: "Voice",   icon: "🎙️" },
     ];
+    const FOLLOWUPS = [
+      { key: "touch2", short: "Touch 2", label: "Touch 2 · 24h · value check-in" },
+      { key: "touch3", short: "Touch 3", label: "Touch 3 · 48h · live hotseat" },
+      { key: "touch4", short: "Touch 4", label: "Touch 4 · Day 6 · early bird countdown" },
+    ];
+    const GATE_HASH = "10ae97f858eed6bb6bd8d22f9e8c58f673e4fc4bcf2b46abdc1c9b2ed95aa75f";
+    const GATE_SESSION = "soc_cmd_unlocked";
+    const PROGRESS_KEY = "soc_progress_v1";
+    const ARSENAL_KEY = "soc_arsenal_v1";
+
     let globalAngle = "story";
-    const cardAngles = {}; // per-lead override, keyed by phone
+    const cardAngles = {};
     const angleFor = (phone) => cardAngles[phone] || globalAngle;
     const labelFor = (key) => (ANGLES.find(a => a.key === key) || ANGLES[0]).label;
-    function waURL(lead, angle) {
-      const text = (lead.messages && lead.messages[angle]) ? lead.messages[angle] : (lead.message || "");
-      return "https://wa.me/" + lead.phone + "?text=" + encodeURIComponent(text);
+    const msgFor = (lead, angle) => (lead.messages && lead.messages[angle])
+      ? lead.messages[angle]
+      : (lead.followUps && lead.followUps[angle]) ? lead.followUps[angle] : (lead.message || "");
+    function waURL(lead, angle) { return waURLText(lead.phone, msgFor(lead, angle)); }
+    function waURLText(phone, text) { return "https://wa.me/" + phone + "?text=" + encodeURIComponent(text || ""); }
+    const findLead = (phone) => LEADS.find(x => x.phone === phone);
+
+    // ---- Sent-history / progress store ----
+    let progress = {};
+    const touchedStatus = ["Contacted", "In Conversation", "Enrolled", "Follow-up"];
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(PROGRESS_KEY);
+        if (raw) progress = JSON.parse(raw) || {};
+      } catch (e) { progress = {}; }
+      // migrate legacy per-phone status keys
+      if (Object.keys(progress).length === 0) {
+        let migrated = false;
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith("lead_status_")) {
+            const phone = k.slice("lead_status_".length);
+            const stat = localStorage.getItem(k);
+            if (stat) { progress[phone] = { status: stat }; migrated = true; }
+          }
+        }
+        if (migrated) saveProgress();
+      }
+      LEADS.forEach(l => {
+        const rec = progress[l.phone];
+        if (rec && rec.status) l.status = rec.status;
+      });
+    }
+
+    function saveProgress() {
+      try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress)); } catch (e) {}
+    }
+
+    function isContacted(phone) {
+      const rec = progress[phone];
+      return !!(rec && touchedStatus.includes(rec.status));
+    }
+
+    function markContact(phone, angle) {
+      const now = Date.now();
+      const rec = progress[phone] || { status: "New", history: [] };
+      if (!Array.isArray(rec.history)) rec.history = [];
+      rec.history.push({ angle, timestamp: now });
+      rec.angle = angle;
+      rec.sentAt = rec.sentAt || now;
+      rec.lastAt = now;
+      if (rec.status === "New" || !touchedStatus.includes(rec.status)) rec.status = "Contacted";
+      progress[phone] = rec;
+      const lead = findLead(phone);
+      if (lead) lead.status = rec.status;
+      saveProgress();
+    }
+
+    function setStatus(phone, status) {
+      const now = Date.now();
+      const rec = progress[phone] || { history: [] };
+      rec.status = status;
+      rec.lastAt = now;
+      if (!rec.sentAt) rec.sentAt = now;
+      progress[phone] = rec;
+      const lead = findLead(phone);
+      if (lead) lead.status = status;
+      saveProgress();
+    }
+
+    function timeAgo(ts) {
+      if (!ts) return "";
+      const s = Math.max(0, (Date.now() - ts) / 1000);
+      if (s < 60) return "just now";
+      if (s < 3600) return Math.floor(s / 60) + "m ago";
+      if (s < 86400) return Math.floor(s / 3600) + "h ago";
+      if (s < 86400 * 30) return Math.floor(s / 86400) + "d ago";
+      return new Date(ts).toLocaleDateString();
+    }
+
+    const TOUCH_MS = [0, 0, 24 * 3600e3, 48 * 3600e3, 6 * 86400e3];
+    function dueTouch(phone) {
+      const rec = progress[phone];
+      if (!rec || !rec.sentAt) return null;
+      if (rec.status === "Enrolled") return null;
+      const elapsed = Date.now() - rec.sentAt;
+      let due = null;
+      for (let t = 2; t <= 4; t++) { if (elapsed >= TOUCH_MS[t]) due = t; }
+      return due;
+    }
+
+    function statusBadge(l) {
+      const rec = progress[l.phone];
+      if (!rec || rec.status === "New") return "";
+      const map = {
+        "Contacted":      { label: "Contacted",      icon: "⚡", cls: "text-royal-light border-royal/30 bg-royal/15", angle: true },
+        "In Conversation":{ label: "Conversation",   icon: "💬", cls: "text-tier2 border-tier2/30 bg-tier2/15",       angle: false },
+        "Enrolled":       { label: "Enrolled",       icon: "✅", cls: "text-tier3 border-tier3/30 bg-tier3/15",       angle: false },
+        "Follow-up":      { label: "Follow-up",      icon: "🔁", cls: "text-tier1 border-tier1/30 bg-tier1/15",       angle: false },
+      };
+      const s = map[rec.status] || map.Contacted;
+      const angleText = s.angle ? " · " + labelFor(rec.angle || "story").split(" ")[0] : "";
+      return `<span class="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full border ${s.cls}">${s.icon}${s.label}${angleText} · ${timeAgo(rec.lastAt)}</span>`;
+    }
+
+    function dueChip(l) {
+      const dt = dueTouch(l.phone);
+      if (!dt) return "";
+      return `<span class="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full border bg-amber-500/15 text-amber-300 border-amber-500/30">⏳ Due T${dt}</span>`;
     }
 
     // ---- Access gate ----
-    const GATE_HASH = "10ae97f858eed6bb6bd8d22f9e8c58f673e4fc4bcf2b46abdc1c9b2ed95aa75f";
-    const GATE_SESSION = "soc_cmd_unlocked";
     const gate = document.getElementById("gate");
-
     function hex(buf) { return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join(""); }
-
     async function sha256(str) {
       const data = new TextEncoder().encode(str);
       return hex(await crypto.subtle.digest("SHA-256", data));
     }
-
     function showGate() { gate.classList.remove("hidden"); gate.classList.add("flex"); }
     function hideGate() { gate.classList.add("hidden"); gate.classList.remove("flex"); }
-
     function unlock() {
       sessionStorage.setItem(GATE_SESSION, "1");
       hideGate();
       document.getElementById("app").classList.remove("hidden");
       bootstrap();
     }
-
     document.getElementById("gate-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const err = document.getElementById("gate-error");
@@ -351,15 +635,7 @@
       }
     });
 
-    if (sessionStorage.getItem(GATE_SESSION) === "1") {
-      hideGate();
-    } else {
-      document.getElementById("app").classList.add("hidden");
-      showGate();
-      document.getElementById("gate-pass").focus();
-    }
-
-    // ---- Tier / Niche / status helpers ----
+    // ---- Tier / helpers ----
     const tierStyles = {
       "Tier 1": { badge: "bg-tier1/15 text-tier1 border-tier1/30", bar: "bg-tier1", text: "text-tier1" },
       "Tier 2": { badge: "bg-tier2/15 text-tier2 border-tier2/30", bar: "bg-tier2", text: "text-tier2" },
@@ -368,12 +644,70 @@
     };
     const statusOptions = ["New", "Contacted", "In Conversation", "Enrolled", "Follow-up"];
 
-    // ---- Stats ----
-    function renderStats(leads) {
+    // ---- Pipeline + Revenue ----
+    function pipelineCounts() {
+      let contacted = 0, inConv = 0, enrolled = 0, due = 0;
+      LEADS.forEach(l => {
+        const rec = progress[l.phone];
+        const st = l.status;
+        if (st === "Enrolled") enrolled++;
+        else if (st === "In Conversation") inConv++;
+        else if (touchedStatus.includes(st)) contacted++;
+        if (!rec) return;
+        if (dueTouch(l.phone)) due++;
+      });
+      return { total: LEADS.length, contacted, inConv, enrolled, due };
+    }
+
+    function renderPipeline() {
+      const p = pipelineCounts();
+      const SEAT_TARGET = 50;
+      const PRICE = 5000;
+      const revenue = p.enrolled * PRICE;
+      const goal = SEAT_TARGET * PRICE;
+      const pct = Math.min(100, Math.round((revenue / goal) * 100));
+      const chips = [
+        { label: "Total Leads", value: p.total, cls: "text-pearl", sub: "" },
+        { label: "Contacted", value: p.contacted + p.inConv + p.enrolled, cls: "text-royal-light", sub: "sent lanes" },
+        { label: "In Conversat.", value: p.inConv, cls: "text-tier2", sub: "live chats" },
+        { label: "Enrolled", value: p.enrolled, cls: "text-tier3", sub: "" + p.enrolled + "/" + SEAT_TARGET + " seats" },
+        { label: "Follow-ups due", value: p.due, cls: "text-tier1", sub: "radar hits" },
+      ];
+      const chipHtml = chips.map(c => `
+        <div class="glass rounded-xl px-4 py-3.5">
+          <div class="font-mono text-2xl sm:text-3xl font-semibold ${c.cls}">${c.value}</div>
+          <div class="text-[10px] text-gray-500 font-mono uppercase tracking-wider mt-1">${c.label}</div>
+          ${c.sub ? `<div class="text-[10px] font-mono text-gray-600 mt-0.5">${c.sub}</div>` : ""}
+        </div>`).join("");
+
+      const revHtml = `
+        <div class="glass rounded-xl px-4 py-3.5 flex flex-col justify-between col-span-2 min-w-0">
+          <div>
+            <div class="font-mono text-[11px] text-amber-300 uppercase tracking-wider">Early Bird Revenue Goal</div>
+            <div class="font-mono text-xl sm:text-2xl font-semibold text-pearl mt-1">
+              ₦${revenue.toLocaleString()} <span class="text-gray-500 text-sm">/ ₦${goal.toLocaleString()}</span>
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="rv-track h-2 rounded-full overflow-hidden">
+              <div class="rv-bar h-full rounded-full" style="width:${pct}%"></div>
+            </div>
+            <div class="flex justify-between mt-1.5 font-mono text-[10px] text-gray-500">
+              <span>${pct}% of goal</span>
+              <span>${Math.max(0, SEAT_TARGET - p.enrolled)} seats left at ₦${PRICE.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>`;
+
+      document.getElementById("pipeline-strip").innerHTML = chipHtml + revHtml;
+    }
+
+    // ---- Stats (tiers) ----
+    function renderStats() {
       const tiers = { "Tier 1": 0, "Tier 2": 0, "Tier 3": 0, "Tier 4": 0 };
-      leads.forEach(l => { if (tiers[l.tier] !== undefined) tiers[l.tier]++; });
+      LEADS.forEach(l => { if (tiers[l.tier] !== undefined) tiers[l.tier]++; });
       const stats = [
-        { label: "Total Leads", value: leads.length, cls: "text-pearl", tier: "" },
+        { label: "Total Leads", value: LEADS.length, cls: "text-pearl", tier: "" },
         { label: "🔥 Tier 1 · VIP", value: tiers["Tier 1"], cls: "text-tier1", tier: "Tier 1" },
         { label: "⚡ Tier 2 · Warm", value: tiers["Tier 2"], cls: "text-tier2", tier: "Tier 2" },
         { label: "🌱 Tier 3 · Nurture", value: tiers["Tier 3"], cls: "text-tier3", tier: "Tier 3" },
@@ -396,7 +730,7 @@
       }).join("");
     }
 
-    // ---- Populate niches ----
+    // ---- Niches ----
     function populateNiches() {
       const niches = [...new Set(LEADS.map(l => l.niche))].sort();
       const sel = document.getElementById("filter-niche");
@@ -409,11 +743,14 @@
 
     // ---- Filtering ----
     let filteredLeads = [...LEADS];
+    const PAGE_SIZE = 48;
+    let visibleCount = PAGE_SIZE;
 
     function applyFilters() {
       const tier = document.getElementById("filter-tier").value;
       const niche = document.getElementById("filter-niche").value;
       const status = document.getElementById("filter-status").value;
+      const follow = document.getElementById("filter-follow").value;
       const search = document.getElementById("search-input").value.toLowerCase();
       const sort = document.getElementById("sort-select").value;
 
@@ -421,6 +758,10 @@
         if (tier && l.tier !== tier) return false;
         if (niche && l.niche !== niche) return false;
         if (status && (l.status !== status)) return false;
+        if (follow === "uncontacted" && isContacted(l.phone)) return false;
+        if (follow === "touch2" && (dueTouch(l.phone) || 0) < 2) return false;
+        if (follow === "touch3" && (dueTouch(l.phone) || 0) < 3) return false;
+        if (follow === "touch4" && (dueTouch(l.phone) || 0) < 4) return false;
         if (search) {
           const haystack = `${l.name} ${l.phone} ${l.whatSells} ${l.challenge} ${l.email} ${l.niche}`.toLowerCase();
           if (!haystack.includes(search)) return false;
@@ -433,16 +774,18 @@
       } else {
         filteredLeads.sort((a, b) => b.leadScore - a.leadScore);
       }
-
       visibleCount = PAGE_SIZE;
+
+      if (turbo.active) stopTurbo();
       renderLeads();
+      renderPipeline();
     }
 
     document.getElementById("sort-select").addEventListener("change", applyFilters);
-
-    document.getElementById("filter-tier").addEventListener("change", () => { renderStats(LEADS); applyFilters(); });
+    document.getElementById("filter-tier").addEventListener("change", () => { renderStats(); applyFilters(); });
     document.getElementById("filter-niche").addEventListener("change", applyFilters);
     document.getElementById("filter-status").addEventListener("change", applyFilters);
+    document.getElementById("filter-follow").addEventListener("change", applyFilters);
     document.getElementById("search-input").addEventListener("input", applyFilters);
 
     document.getElementById("stats-bar").addEventListener("click", (e) => {
@@ -450,35 +793,25 @@
       if (!card) return;
       const tierFilter = document.getElementById("filter-tier");
       const tier = card.dataset.tier;
-      if (tierFilter.value === tier) {
-        tierFilter.value = "";
-      } else {
-        tierFilter.value = tier;
-      }
-      renderStats(LEADS);
+      if (tierFilter.value === tier) { tierFilter.value = ""; }
+      else { tierFilter.value = tier; }
+      renderStats();
       applyFilters();
     });
 
-    // ---- Status ----
-    LEADS.forEach(l => {
-      const saved = localStorage.getItem(statusKey(l.phone));
-      if (saved) l.status = saved;
-    });
-
+    // ---- Status change ----
     document.addEventListener("change", (e) => {
       const sel = e.target.closest(".status-select");
       if (!sel) return;
       e.stopPropagation();
       const phone = sel.dataset.phone;
-      LEADS.forEach(l => { if (l.phone === phone) l.status = sel.value; });
-      localStorage.setItem(statusKey(phone), sel.value);
+      setStatus(phone, sel.value);
+      renderLeads();
+      renderPipeline();
     });
 
     // ---- Copy message ----
-    async function copyMessage(phone, angle) {
-      const lead = LEADS.find(l => l.phone === phone);
-      if (!lead) return;
-      const text = (angle && lead.messages && lead.messages[angle]) ? lead.messages[angle] : (lead.message || "");
+    async function copyText(text, label) {
       try {
         await navigator.clipboard.writeText(text);
       } catch (err) {
@@ -489,7 +822,15 @@
         document.execCommand("copy");
         ta.remove();
       }
-      flash(angle ? labelFor(angle) + " copied" : "Message copied");
+      flash(label + " copied");
+    }
+    async function copyMessage(phone, angle) {
+      const lead = findLead(phone);
+      if (!lead) return;
+      await copyText(msgFor(lead, angle), labelFor(angle));
+      markContact(phone, angle);
+      renderLeads();
+      renderPipeline();
     }
 
     // ---- Toast ----
@@ -499,7 +840,7 @@
       if (!el) {
         el = document.createElement("div");
         el.id = "toast";
-        el.className = "fixed bottom-6 left-1/2 -translate-x-1/2 glass rounded-lg px-5 py-3 text-sm text-pearl font-mono z-50 animate-in";
+        el.className = "fixed bottom-6 left-1/2 -translate-x-1/2 glass rounded-lg px-5 py-3 text-sm text-pearl font-mono z-[80] animate-in";
         document.body.appendChild(el);
       }
       el.textContent = msg;
@@ -508,9 +849,6 @@
     }
 
     // ---- Render ----
-    const PAGE_SIZE = 48;
-    let visibleCount = PAGE_SIZE;
-
     function statusSelect(l) {
       return statusOptions.map(s => `<option value="${s}" ${l.status === s ? "selected" : ""}>${s}</option>`).join("");
     }
@@ -519,11 +857,12 @@
       const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
       const angle = angleFor(l.phone);
       const preview = (l.challenge || l.whatSells || "No offer yet").replace(/\n/g, " ");
-      const anglePreview = (l.messages && l.messages[angle]) ? l.messages[angle] : (l.message || "");
+      const anglePreview = msgFor(l, angle);
+      const active = turbo.active && turbo.queue[turbo.idx] === l.phone;
       return `
-        <div class="glass card rounded-xl p-4 animate-in" style="animation-delay:${Math.min(i * 15, 300)}ms"
+        <div class="glass card rounded-xl p-4 animate-in ${active ? "turbo-card-active" : ""}" style="animation-delay:${Math.min(i * 15, 300)}ms"
              data-card data-phone="${l.phone}"
-             onclick="openModal('${l.phone}')" tabindex="0" role="button"
+             onclick="if(!event.target.closest('a[data-wa]'))openModal('${l.phone}')" tabindex="0" role="button"
              onkeydown="if(event.key==='Enter'||event.key===' '){openModal('${l.phone}')}">
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="min-w-0">
@@ -544,6 +883,10 @@
             <p class="text-[11px] text-gray-500 font-mono mt-1.5">${l.niche}</p>
           </div>
 
+          <div class="flex flex-wrap gap-1.5 mb-2.5 min-h-[22px]">
+            ${statusBadge(l)}${dueChip(l)}
+          </div>
+
           <p class="text-xs text-gray-400 mb-2 line-clamp-2 font-body leading-relaxed">${escapeHTML(preview)}</p>
 
           <div class="flex gap-1 mb-2" role="group" aria-label="Copy angles for ${escapeHTML(l.name)}">
@@ -560,7 +903,7 @@
           </div>
 
           <div class="flex items-center gap-2">
-            <a href="${waURL(l, angle)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"
+            <a href="${waURL(l, angle)}" data-wa data-phone="${l.phone}" target="_blank" rel="noopener"
               class="btn-royal flex-1 text-white text-xs font-mono text-center py-2 rounded-lg transition-colors">WhatsApp · ${ANGLES.find(a => a.key === angle).short}</a>
             <button onclick="event.stopPropagation(); copyMessage('${l.phone}','${angle}')"
               class="btn-ghost glass px-3 py-2 rounded-lg text-[11px] font-mono text-gray-400 hover:text-white transition-colors">Copy</button>
@@ -577,7 +920,9 @@
       const wrap = document.getElementById("load-more-wrap");
       const countEl = document.getElementById("load-more-count");
 
-      if (filteredLeads.length === 0) {
+      const source = turbo.active ? turbo.queue.map(findLead).filter(Boolean) : filteredLeads;
+
+      if (source.length === 0) {
         grid.innerHTML = "";
         empty.classList.remove("hidden");
         empty.classList.add("flex", "flex-col");
@@ -587,14 +932,15 @@
       empty.classList.add("hidden");
       empty.classList.remove("flex");
 
-      const slice = filteredLeads.slice(0, visibleCount);
-      grid.innerHTML = slice.map((l, i) => renderCard(l, i)).join("");
+      const list = turbo.active ? source : source.slice(0, visibleCount);
+      grid.innerHTML = list.map((l, i) => renderCard(l, i)).join("");
 
-      const remaining = filteredLeads.length - visibleCount;
+      if (turbo.active) { wrap.classList.add("hidden"); return; }
+      const remaining = source.length - visibleCount;
       if (remaining > 0) {
         wrap.classList.remove("hidden");
         wrap.classList.add("flex");
-        countEl.textContent = `+${remaining} of ${filteredLeads.length}`;
+        countEl.textContent = `+${remaining} of ${source.length}`;
       } else {
         wrap.classList.add("hidden");
         wrap.classList.remove("flex");
@@ -629,14 +975,48 @@
       if (!pill) return;
       e.stopPropagation();
       const phone = pill.dataset.phone;
-      const angle = pill.dataset.angle;
-      cardAngles[phone] = angle;
+      cardAngles[phone] = pill.dataset.angle;
       const card = pill.closest("[data-card]");
       if (card) {
-        const l = LEADS.find(x => x.phone === phone);
+        const l = findLead(phone);
         if (l) card.outerHTML = renderCard(l, 0);
       }
     });
+
+    // ---- One-click WhatsApp with duplicate guard ----
+    function confirmDuplicate(lead, angle, onYes) {
+      const rec = progress[lead.phone];
+      const recLabel = rec && rec.lastAt ? timeAgo(rec.lastAt) : "earlier";
+      const angleName = rec && rec.angle ? labelFor(rec.angle) : labelFor(angle);
+      document.getElementById("confirm-title").textContent = "Already contacted";
+      document.getElementById("confirm-body").textContent =
+        lead.firstName + " was contacted " + recLabel + " with " + angleName + ". Open again as a follow-up send, or cancel?";
+      confirmYesCallback = onYes;
+      document.getElementById("confirm-modal").classList.add("open");
+    }
+    function closeConfirm() {
+      document.getElementById("confirm-modal").classList.remove("open");
+      confirmYesCallback = null;
+    }
+    let confirmYesCallback = null;
+
+    document.getElementById("leads-grid").addEventListener("click", (e) => {
+      const wa = e.target.closest("a[data-wa]");
+      if (!wa) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const phone = wa.dataset.phone;
+      const angle = angleFor(phone);
+      const lead = findLead(phone);
+      if (!lead) return;
+      const openIt = () => { window.open(waURL(lead, angle), "_blank"); markContact(phone, angle); renderLeads(); renderPipeline(); };
+      if (isContacted(phone)) confirmDuplicate(lead, angle, openIt);
+      else openIt();
+    });
+
+    document.getElementById("confirm-no").addEventListener("click", closeConfirm);
+    document.getElementById("confirm-yes").addEventListener("click", () => { if (confirmYesCallback) confirmYesCallback(); closeConfirm(); });
+    document.getElementById("confirm-backdrop").addEventListener("click", closeConfirm);
 
     function escapeHTML(str) {
       return String(str).replace(/[&<>"']/g, m => ({
@@ -647,11 +1027,24 @@
     // ---- Modal ----
     let modalAngle = "story";
     let modalPhone = "";
+    let modalFollow = "";
+
+    function modalMessage(l, angle, follow) {
+      if (follow) return l.followUps && l.followUps[follow] ? l.followUps[follow] : "";
+      return msgFor(l, angle);
+    }
+    function modalLabel(angle, follow) {
+      if (follow) { const f = FOLLOWUPS.find(x => x.key === follow); return f ? f.short : follow; }
+      return labelFor(angle);
+    }
 
     function renderModal(l, angle) {
       const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
       const tab = ANGLES.find(a => a.key === angle) || ANGLES[0];
-      const msg = (l.messages && l.messages[angle]) ? l.messages[angle] : (l.message || "");
+      const msg = modalMessage(l, angle, modalFollow);
+      const label = modalLabel(angle, modalFollow);
+      const isFollow = !!modalFollow;
+      const copyLabel = isFollow ? (FOLLOWUPS.find(f => f.key === modalFollow) || {}).label : tab.label;
 
       document.getElementById("modal-content").innerHTML = `
         <div class="mb-4">
@@ -660,16 +1053,21 @@
           <p class="font-mono text-sm text-gray-500 mt-1">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}${l.role ? " · " + escapeHTML(l.role) : ""}</p>
         </div>
 
-        <div class="flex flex-wrap gap-1 mb-4" role="tablist" aria-label="Copy angles">
+        <div class="flex flex-wrap gap-1 mb-1" role="tablist" aria-label="Copy angles">
           ${ANGLES.map(a => `
-          <button type="button" data-tab="${a.key}" role="tab" aria-selected="${a.key === angle}"
-            class="tab-pill ${a.key === angle ? "tab-pill-active" : ""}">${a.icon} ${a.label}</button>`).join("")}
+          <button type="button" data-tab="${a.key}" data-kind="angle" role="tab" aria-selected="${!isFollow && a.key === angle}"
+            class="tab-pill ${!isFollow && a.key === angle ? "tab-pill-active" : ""}">${a.icon} ${a.label}</button>`).join("")}
+        </div>
+        <div class="flex flex-wrap gap-1 mb-4 items-center">
+          ${FOLLOWUPS.map(f => `
+          <button type="button" data-tab="${f.key}" data-kind="follow" role="tab" aria-selected="${isFollow && f.key === modalFollow}"
+            class="tab-pill ${isFollow && f.key === modalFollow ? "tab-pill-amber" : ""}">⏳ ${f.label}</button>`).join("")}
         </div>
 
         <div class="glass rounded-xl p-4 mb-4">
           <div class="flex items-center justify-between gap-2 mb-2">
-            <span class="text-[10px] text-gray-500 font-mono uppercase tracking-wider">${angle === "audio" ? "Voice note teleprompter" : "WhatsApp message"}</span>
-            ${angle === "audio" ? '<span class="text-[10px] font-mono text-gray-500 whitespace-nowrap">read as a voice note</span>' : ""}
+            <span class="text-[10px] text-gray-500 font-mono uppercase tracking-wider">${isFollow ? "Follow-up · " + followTouchName(modalFollow) : (angle === "audio" ? "Voice note teleprompter" : "WhatsApp message")}</span>
+            ${angle === "audio" && !isFollow ? '<span class="text-[10px] font-mono text-gray-500 whitespace-nowrap">read as a voice note</span>' : ""}
           </div>
           <p class="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed font-body">${escapeHTML(msg)}</p>
         </div>
@@ -690,21 +1088,33 @@
         </div>
 
         <div class="flex gap-3">
-          <a href="${waURL(l, angle)}" target="_blank" rel="noopener"
-            class="btn-royal flex-1 text-white text-sm font-mono text-center py-3 rounded-lg transition-colors">Open WhatsApp · ${tab.label}</a>
-          <button onclick="copyMessage('${l.phone}','${angle}')"
-            class="btn-ghost glass px-4 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors">Copy ${tab.label}</button>
+          <a href="${waURLText(l.phone, msg)}" target="_blank" rel="noopener"
+            class="btn-royal flex-1 text-white text-sm font-mono text-center py-3 rounded-lg transition-colors">Open WhatsApp · ${label}</a>
+          <button onclick="copyModal()"
+            class="btn-ghost glass px-4 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors">Copy ${isFollow ? copyLabel : tab.label}</button>
         </div>
       `;
     }
 
+    function followTouchName(key) { const f = FOLLOWUPS.find(x => x.key === key); return f ? f.short : key; }
+    function copyModal() {
+      const l = findLead(modalPhone);
+      if (!l) return;
+      const msg = modalMessage(l, modalAngle, modalFollow);
+      copyText(msg, modalLabel(modalAngle, modalFollow));
+      if (modalFollow) markContact(modalPhone, modalFollow);
+      else markContact(modalPhone, modalAngle);
+      renderLeads();
+      renderPipeline();
+    }
+
     function openModal(phone) {
-      const l = LEADS.find(x => x.phone === phone);
+      const l = findLead(phone);
       if (!l) return;
       modalPhone = phone;
       modalAngle = angleFor(l.phone);
+      modalFollow = "";
       renderModal(l, modalAngle);
-
       const m = document.getElementById("modal");
       m.classList.remove("hidden");
       m.classList.add("flex");
@@ -713,9 +1123,15 @@
     document.getElementById("modal-content").addEventListener("click", (e) => {
       const tab = e.target.closest("[data-tab]");
       if (!tab) return;
-      const l = LEADS.find(x => x.phone === modalPhone);
+      const l = findLead(modalPhone);
       if (!l) return;
-      modalAngle = tab.dataset.tab;
+      if (tab.dataset.kind === "follow") {
+        modalFollow = tab.dataset.tab;
+        modalAngle = globalAngle; // keep an angle for the copy fallback
+      } else {
+        modalAngle = tab.dataset.tab;
+        modalFollow = "";
+      }
       renderModal(l, modalAngle);
     });
 
@@ -725,14 +1141,339 @@
       m.classList.remove("flex");
     }
 
-    document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+    // ---- Turbo queue ----
+    let turbo = { active: false, queue: [], idx: 0 };
+
+    function startTurbo() {
+      if (filteredLeads.length === 0) { flash("No leads in the current view"); return; }
+      const limit = parseInt(document.getElementById("turbo-limit").value || "20", 10);
+      const q = limit > 0 ? filteredLeads.slice(0, limit) : filteredLeads;
+      turbo = { active: true, queue: q.map(l => l.phone), idx: 0 };
+      document.getElementById("turbo-start").disabled = true;
+      document.getElementById("turbo-start").classList.add("opacity-40", "cursor-not-allowed");
+      renderLeads();
+      syncTurboBar();
+      document.getElementById("turbo-bar").classList.add("open");
+      flash("Turbo queue armed · " + q.length + " leads");
+    }
+
+    function stopTurbo() {
+      if (!turbo.active) return;
+      turbo = { active: false, queue: [], idx: 0 };
+      document.getElementById("turbo-start").disabled = false;
+      document.getElementById("turbo-start").classList.remove("opacity-40", "cursor-not-allowed");
+      document.getElementById("turbo-bar").classList.remove("open");
+      renderLeads();
+    }
+
+    function currentTurboLead() { return turbo.queue[turbo.idx] ? findLead(turbo.queue[turbo.idx]) : null; }
+
+    function turboMove(dir) {
+      if (!turbo.active) return;
+      const next = turbo.idx + dir;
+      if (next < 0) { flash("Already at queue start"); return; }
+      if (next >= turbo.queue.length) { flash("Queue complete"); return; }
+      turbo.idx = next;
+      syncTurboBar();
+      renderLeads();
+      scrollToTurboCard();
+    }
+
+    function turboSkip() { turboMove(1); }
+
+    function turboAct() {
+      if (!turbo.active) return;
+      const lead = currentTurboLead();
+      if (!lead) { stopTurbo(); return; }
+      const angle = angleFor(lead.phone);
+      const go = () => {
+        window.open(waURL(lead, angle), "_blank");
+        markContact(lead.phone, angle);
+        advanceAfterSend();
+      };
+      if (isContacted(lead.phone)) confirmDuplicate(lead, angle, go);
+      else go();
+    }
+
+    function advanceAfterSend() {
+      const next = turbo.idx + 1;
+      if (next >= turbo.queue.length) {
+        const sent = turbo.queue.filter(p => isContacted(p)).length;
+        stopTurbo();
+        flash("Queue complete · " + sent + " marked as sent");
+        renderPipeline();
+        return;
+      }
+      turbo.idx = next;
+      syncTurboBar();
+      renderLeads();
+      scrollToTurboCard();
+      renderPipeline();
+    }
+
+    function syncTurboBar() {
+      const lead = currentTurboLead();
+      const posEl = document.getElementById("turbo-pos");
+      const nameEl = document.getElementById("turbo-name");
+      const subEl = document.getElementById("turbo-sub");
+      const dots = document.getElementById("turbo-queue-dots");
+      if (!lead) return;
+      posEl.textContent = (turbo.idx + 1) + " / " + turbo.queue.length;
+      nameEl.textContent = lead.name;
+      subEl.textContent = "+" + lead.phone + " · " + lead.niche + " · " + labelFor(angleFor(lead.phone)) +
+        (isContacted(lead.phone) ? " · ⚡ already contacted" : "");
+      dots.innerHTML = turbo.queue.map((p, i) =>
+        `<span class="dot-queue h-1.5 ${i === turbo.idx ? "w-3.5 bg-amber-300" : (isContacted(p) ? "w-1.5 bg-amber-500/60" : "w-1.5 bg-white/15")} rounded-full ${i === turbo.idx ? "" : "opacity-70"}"></span>`
+      ).join("");
+    }
+
+    function scrollToTurboCard() {
+      const card = document.querySelector(`[data-card][data-phone="${turbo.queue[turbo.idx]}"]`);
+      if (card) card.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+
+    // ---- Keyboard ----
+    document.addEventListener("keydown", (e) => {
+      const typing = e.target && (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || e.target.tagName === "TEXTAREA");
+      if (e.key === "Escape") {
+        if (document.getElementById("confirm-modal").classList.contains("open")) { closeConfirm(); return; }
+        if (turbo.active) { stopTurbo(); return; }
+        if (document.getElementById("arsenal-panel").classList.contains("open")) { toggleArsenal(); return; }
+        closeModal();
+        return;
+      }
+      if (typing) return;
+      if (e.key === "Enter" || e.key === " " || e.key.toLowerCase() === "w" || e.key.toLowerCase() === "s" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        if (document.getElementById("confirm-modal").classList.contains("open")) return;
+        if (document.getElementById("arsenal-panel").classList.contains("open")) return;
+        if (!document.getElementById("modal").classList.contains("hidden")) return;
+        if (!turbo.active) return;
+        e.preventDefault();
+        const k = e.key.toLowerCase();
+        if (k === "w") turboAct();
+        else if (k === "s") turboSkip();
+        else if (e.key === "ArrowRight") turboMove(1);
+        else if (e.key === "ArrowLeft") turboMove(-1);
+      }
+    });
+
+    // ---- Arsenal ----
+    const ARSENAL_DEFAULTS = {
+      bank: "Moniepoint Microfinance Bank",
+      account: "8055791348",
+      accountName: "DIVINE BOLUWATIFE BAKARE-ADEWALE",
+      ref: "SOC-XXXXX",
+      amount: "₦10,000",
+      proofNote: "After you transfer, send the proof screenshot here and I will activate your seat instantly.",
+    };
+    function arsenalConfig() {
+      try {
+        const raw = localStorage.getItem(ARSENAL_KEY);
+        if (raw) return Object.assign({}, ARSENAL_DEFAULTS, JSON.parse(raw));
+      } catch (e) {}
+      return Object.assign({}, ARSENAL_DEFAULTS);
+    }
+
+    const NICHE_REASSURANCE = {
+      "Design & Creative": "It works for creative businesses specifically. Day 1-2 is about nailing the offer people will pay for, which fixes the two classic creative problems: underpricing, and clients not seeing the value before they haggle. Day 3-4 packages that offer, Day 5-6 gives you the simple messaging, Day 7 the sales system. Same craft, different price tag.",
+      "Coaching / Courses / Digital Products": "It is built for knowledge businesses. The knowledge is already there, the missing piece is packaging it into an offer people reach for, plus the messaging that sells it. That is literally the challenge: Day 1-2 finds the offer, Day 3-4 packages it, Day 5-6 the messaging, Day 7 the sales system.",
+      "Physical Products / Fashion / Beauty": "Yes. Product businesses usually have admirers, not buyers. Day 1-2 finds who buys and why, Day 3-4 packages your offer so people stop asking 'how much' and start asking 'when can I get it', Day 5-6 fixes the messaging, Day 7 the sales system.",
+      "Food & Pastries": "Yes, and it is common there. Great products, thin orders, and a lot of discounting. Day 3-4 packages your offer, Day 5-6 fixes the messaging so orders come in without you begging or dropping price, Day 7 builds the repeatable system.",
+      "Tech / Freelance Services": "Yes. Your skill is already strong, the gap is positioning. Day 3-4 packages your service so the price makes sense, Day 5-6 fixes the messaging so clients stop shopping around, Day 7 the sales system. Clients end up seeing you as the obvious choice instead of the cheap one.",
+      "Beginners / Idea Stage": "It is actually built for exactly where you are. The order matters: Day 1-2 finds what actually sells, Day 3-4 packages it into an offer, Day 5-6 the messaging, Day 7 the sales system. You build it live instead of guessing.",
+      "Other Business": "Yes. Most small businesses get sales in drips because the offer and message are unclear. Day 3-4 packages your offer, Day 5-6 gives you messaging that sells, Day 7 the sales system. It works from whatever stage you are at today.",
+    };
+
+    function bankDetailsMessage() {
+      const c = arsenalConfig();
+      return [
+        "Here are the payment details for the Sell Out Challenge:",
+        "",
+        "Bank: " + c.bank,
+        "Account Number: " + c.account,
+        "Account Name: " + c.accountName,
+        "Your Reference: " + c.ref,
+        "Amount: " + c.amount,
+        "",
+        c.proofNote,
+      ].join("\n");
+    }
+
+    function renderArsenal() {
+      const c = arsenalConfig();
+      const nicheRows = Object.keys(NICHE_REASSURANCE).map(n =>
+        `<button class="arsenal-item glass-deep rounded-xl px-3.5 py-3" onclick="copyArsenal('${n.replace(/'/g, "\\'")}')">
+          <span class="txt flex-1">
+            <span class="block font-mono text-[11px] text-gray-200 truncate">“Will this work for ${n}?”</span>
+            <span class="block text-[10px] text-gray-600 font-mono mt-0.5 truncate">1-click reassurance · ${n.split(" ")[0]}</span>
+          </span>
+          <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
+        </button>`).join("");
+
+      document.getElementById("arsenal-content").innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500">Direct Bank Transfer</div>
+          <button onclick="editArsenal()" class="font-mono text-[10px] text-royal-light hover:text-white transition-colors">edit</button>
+        </div>
+        <div class="glass-deep rounded-xl p-3.5 mb-5">
+          <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] font-mono">
+            <span class="text-gray-600">Bank</span><span class="text-gray-300 truncate">${c.bank}</span>
+            <span class="text-gray-600">Acct</span><span class="text-gray-300 tracking-widest">${c.account}</span>
+            <span class="text-gray-600">Name</span><span class="text-gray-300 truncate">${c.accountName}</span>
+            <span class="text-gray-600">Ref</span><span class="text-gray-300">${c.ref}</span>
+            <span class="text-gray-600">Amount</span><span class="text-amber-300">${c.amount}</span>
+          </div>
+          <button onclick="copyArsenal('PMT_BANK')"
+            class="btn-royal w-full mt-3 text-white text-xs font-mono py-2 rounded-lg transition-colors">Copy payment message</button>
+          <p class="text-[10px] text-gray-600 font-mono mt-2 leading-relaxed">Drops the full details, your reference and the proof instruction into one WhatsApp message.</p>
+        </div>
+
+        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">“Will this work for my niche?”</div>
+        <div class="flex flex-col gap-2 mb-5">${nicheRows}</div>
+
+        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">Money Objection</div>
+        <button class="arsenal-item glass-deep rounded-xl px-3.5 py-3 mb-5" onclick="copyArsenal('PMT_MONEY')">
+          <span class="txt flex-1">
+            <span class="block font-mono text-[11px] text-gray-200">“I don't have money right now”</span>
+            <span class="block text-[10px] text-gray-600 font-mono mt-0.5 truncate">value reframe · ₦5,000 vs guesswork</span>
+          </span>
+          <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
+        </button>
+
+        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">Missed Live Classes</div>
+        <button class="arsenal-item glass-deep rounded-xl px-3.5 py-3 mb-5" onclick="copyArsenal('PMT_RECORDING')">
+          <span class="txt flex-1">
+            <span class="block font-mono text-[11px] text-gray-200">“What if I miss live classes?”</span>
+            <span class="block text-[10px] text-gray-600 font-mono mt-0.5 truncate">recordings · Telegram · workbook</span>
+          </span>
+          <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
+        </button>
+      `;
+    }
+
+    const ARSENAL_COPY = {
+      PMT_MONEY: [
+        "I understand. But the real cost here is staying where you are: months of guessing, offers that do not sell, and prices that keep getting haggled down.",
+        "",
+        "The challenge replaces that guesswork with 7 live days to build your offer, your messaging and your sales system. Workbook, feedback teardowns and the Telegram community included. One better pricing decision pays for it several times over.",
+      ].join("\n"),
+      PMT_RECORDING: [
+        "You are covered even if you cannot make every live session. Each class is recorded in HD and dropped into the private Telegram community, so you catch up whenever you are free.",
+        "",
+        "You also get the daily assignment workbooks and my feedback teardowns, and the community stays open for your questions.",
+      ].join("\n"),
+    };
+
+    function copyArsenal(key) {
+      let text = "";
+      if (key === "PMT_BANK") text = bankDetailsMessage();
+      else if (key === "PMT_MONEY") text = ARSENAL_COPY.PMT_MONEY;
+      else if (key === "PMT_RECORDING") text = ARSENAL_COPY.PMT_RECORDING;
+      else if (NICHE_REASSURANCE[key]) text = NICHE_REASSURANCE[key];
+      if (!text) return;
+      copyText(text, "Arsenal");
+    }
+
+    function editArsenal() {
+      const c = arsenalConfig();
+      document.getElementById("arsenal-content").innerHTML = `
+        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-3">Edit payment details</div>
+        <div class="flex flex-col gap-2.5 mb-4">
+          <label class="block"><span class="text-[10px] font-mono text-gray-600">Bank name</span>
+            <input id="cfg-bank" value="${escapeHTML(c.bank)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
+          <label class="block"><span class="text-[10px] font-mono text-gray-600">Account number</span>
+            <input id="cfg-account" value="${escapeHTML(c.account)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
+          <label class="block"><span class="text-[10px] font-mono text-gray-600">Account name</span>
+            <input id="cfg-accountName" value="${escapeHTML(c.accountName)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
+          <label class="block"><span class="text-[10px] font-mono text-gray-600">Payment reference (narration)</span>
+            <input id="cfg-ref" value="${escapeHTML(c.ref)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
+          <label class="block"><span class="text-[10px] font-mono text-gray-600">Exact amount</span>
+            <input id="cfg-amount" value="${escapeHTML(c.amount)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
+        </div>
+        <div class="flex gap-3">
+          <button onclick="saveArsenal()" class="btn-royal flex-1 py-2.5 rounded-lg text-xs font-mono text-white transition-colors">Save details</button>
+          <button onclick="renderArsenal()" class="btn-ghost glass flex-1 py-2.5 rounded-lg text-xs font-mono text-gray-300 hover:text-white transition-colors">Cancel</button>
+        </div>`;
+      const g = document.getElementById("arsenal-glyph");
+      if (g) g.textContent = "✏️";
+    }
+
+    function saveArsenal() {
+      const pick = (id) => document.getElementById(id).value.trim();
+      const cfg = {
+        bank: pick("cfg-bank") || ARSENAL_DEFAULTS.bank,
+        account: pick("cfg-account") || ARSENAL_DEFAULTS.account,
+        accountName: pick("cfg-accountName") || ARSENAL_DEFAULTS.accountName,
+        ref: pick("cfg-ref") || ARSENAL_DEFAULTS.ref,
+        amount: pick("cfg-amount") || ARSENAL_DEFAULTS.amount,
+        proofNote: ARSENAL_DEFAULTS.proofNote,
+      };
+      localStorage.setItem(ARSENAL_KEY, JSON.stringify(cfg));
+      const g = document.getElementById("arsenal-glyph");
+      if (g) g.textContent = "🧰";
+      renderArsenal();
+      flash("Payment details saved");
+    }
+
+    function toggleArsenal() {
+      const panel = document.getElementById("arsenal-panel");
+      const backdrop = document.getElementById("arsenal-backdrop");
+      const open = panel.classList.toggle("open");
+      backdrop.classList.toggle("open", open);
+      if (open) renderArsenal();
+      const g = document.getElementById("arsenal-glyph");
+      if (g) g.textContent = open ? "✕" : "🧰";
+    }
+    document.getElementById("arsenal-backdrop").addEventListener("click", toggleArsenal);
+
+    // ---- Export / Import progress ----
+    function exportProgress() {
+      const data = { version: 1, exportedAt: new Date().toISOString(), progress };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "outreach_progress.json";
+      document.body.appendChild(a); a.click();
+      setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 100);
+      flash("Progress exported · " + Object.keys(progress).length + " contacts");
+    }
+
+    document.getElementById("import-file").addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = "";
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          const map = data && data.progress && typeof data.progress === "object" ? data.progress : data;
+          if (!map || typeof map !== "object") throw new Error("bad shape");
+          let added = 0, updated = 0;
+          Object.keys(map).forEach(phone => {
+            const rec = map[phone];
+            if (!rec || typeof rec !== "object") return;
+            if (!progress[phone]) { progress[phone] = rec; added++; }
+            else { progress[phone] = Object.assign({}, progress[phone], rec); updated++; }
+          });
+          LEADS.forEach(l => { if (progress[l.phone] && progress[l.phone].status) l.status = progress[l.phone].status; });
+          saveProgress();
+          renderLeads();
+          renderPipeline();
+          renderStats();
+          flash("Progress imported · " + added + " new, " + updated + " updated");
+        } catch (err) {
+          flash("Import failed: not a valid progress file");
+        }
+      };
+      reader.readAsText(file);
+    });
 
     // ---- Export CSV ----
     function exportCSV() {
       const headers = ["Name","Phone","Email","Role","Sells","Challenge","Budget","Goal","Niche","Score","Tier","Angle","Message","Status"];
-      const rows = filteredLeads.map(l => {
+      const rows = (turbo.active ? turbo.queue.map(findLead).filter(Boolean) : filteredLeads).map(l => {
         const angle = angleFor(l.phone);
-        const msg = (l.messages[angle] || l.message || "").replace(/"/g,'""');
+        const msg = (msgFor(l, angle) || "").replace(/"/g,'""');
         return [
           `"${l.name.replace(/"/g,'""')}"`,
           l.phone,
@@ -757,22 +1498,31 @@
       a.href = url; a.download = "enriched_leads_export.csv";
       document.body.appendChild(a); a.click();
       setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 100);
-      flash("Exporting " + filteredLeads.length + " leads");
+      flash("Exporting " + rows.length + " leads");
     }
 
     // ---- Init ----
     function bootstrap() {
+      loadProgress();
       const params = new URLSearchParams(location.search);
       ["tier", "niche", "status"].forEach(k => {
         const v = params.get(k);
         if (v) document.getElementById("filter-" + k).value = v;
       });
       populateNiches();
-      renderStats(LEADS);
+      renderPipeline();
+      renderStats();
       syncAngleSwitcher();
       applyFilters();
     }
 
+    if (sessionStorage.getItem(GATE_SESSION) === "1") {
+      hideGate();
+    } else {
+      document.getElementById("app").classList.add("hidden");
+      showGate();
+      document.getElementById("gate-pass").focus();
+    }
     if (sessionStorage.getItem(GATE_SESSION) === "1") {
       bootstrap();
     }

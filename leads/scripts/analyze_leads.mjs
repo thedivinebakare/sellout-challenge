@@ -435,6 +435,188 @@ const audioTemplates = {
   ].join("\n"),
 };
 
+// ------------------------------------------------------------
+// Follow-up cadence engine (Touches 2, 3 and 4)
+// Sent after first contact:
+//   Touch 2 = 24h later: quick value check-in
+//   Touch 3 = 48h later: Live Hotseat reminder
+//   Touch 4 = Day 6:     Early Bird ₦5,000 seat scarcity countdown
+// Same hard rules as the outreach angles: Sell Out 1.0 identity,
+// natural WhatsApp spacing, zero em dashes.
+// ------------------------------------------------------------
+const FOLLOWUP_ORDER = ["touch2", "touch3", "touch4"];
+
+const followUpTemplates = {
+  "Design & Creative": ({ name, product }) => ({
+    touch2: [
+      "Hey " + name + ", Divine here (Sell Out 1.0).",
+      "",
+      "Quick one while I am reviewing registrations: I saw " + product + " on your form. On Day 1-2 of the challenge we narrow down exactly what sells and who it is for, before we package anything. That alone usually saves people weeks of trial and error.",
+      "",
+      "Still weighing whether the challenge is for you?",
+    ].join("\n"),
+    touch3: [
+      "Hey " + name + ", Divine again.",
+      "",
+      "For creative businesses, the order is usually wrong: most people learn more skills before they fix the offer. The challenge flips that. Day 1-2 finds what actually sells, Day 3-4 packages it so you stop being the cheap option, Day 5-6 gives you messaging that sells without begging.",
+      "",
+      "I keep a few hotseats for people who were still deciding. Want me to hold one for you?",
+    ].join("\n"),
+    touch4: [
+      "Hey " + name + ", final check-in from Sell Out 1.0.",
+      "",
+      "The Early Bird seats at \u20A65,000 are down to the last few and the countdown closes soon. If growing " + product + " is this quarter's plan, lock the seat now and I will see you on Day 1.",
+      "",
+      "Reply here and I can send the payment details directly.",
+    ].join("\n"),
+  }),
+  "Coaching / Courses / Digital Products": ({ name, product }) => ({
+    touch2: [
+      "Hey " + name + ", Divine here (Sell Out 1.0).",
+      "",
+      "Quick one while I am reviewing registrations: I saw " + product + " on your form. The knowledge is clearly there. On Day 1-2 of the challenge we make that knowledge worth buying by finding the exact offer, before any packaging. That shift alone changes how people respond.",
+      "",
+      "Still weighing whether the challenge is for you?",
+    ].join("\n"),
+    touch3: [
+      "Hey " + name + ", Divine again.",
+      "",
+      "Most coaches and creators never get shown how knowledge becomes an offer people reach for. That is the whole challenge. Day 3-4 packages your expertise into something valuable, Day 5-6 gives you the messaging, Day 7 the sales system.",
+      "",
+      "I keep a few hotseats for people who were still deciding. Want me to hold one for you?",
+    ].join("\n"),
+    touch4: [
+      "Hey " + name + ", final check-in from Sell Out 1.0.",
+      "",
+      "The Early Bird seats at \u20A65,000 are down to the last few and the countdown closes soon. If " + product + " is the business you plan to build this quarter, lock the seat now and I will see you on Day 1.",
+      "",
+      "Reply here and I can send the payment details directly.",
+    ].join("\n"),
+  }),
+  "Physical Products / Fashion / Beauty": ({ name, product }) => ({
+    touch2: [
+      "Hey " + name + ", Divine here (Sell Out 1.0).",
+      "",
+      "Quick one while I am reviewing registrations: I saw " + product + " on your form. The products are the easy part, the offer is not. On Day 1-2 of the challenge we find who exactly buys and why, before we package anything.",
+      "",
+      "Still weighing whether the challenge is for you?",
+    ].join("\n"),
+    touch3: [
+      "Hey " + name + ", Divine again.",
+      "",
+      "For product businesses it is always the same gap: admirers, not buyers. Day 3-4 of the challenge packages your offer so people stop asking 'how much' and start asking 'when can I get it'. Day 5-6 handles the messaging, Day 7 the sales system.",
+      "",
+      "I keep a few hotseats for people who were still deciding. Want me to hold one for you?",
+    ].join("\n"),
+    touch4: [
+      "Hey " + name + ", final check-in from Sell Out 1.0.",
+      "",
+      "The Early Bird seats at \u20A65,000 are down to the last few and the countdown closes soon. If " + product + " is the business you want selling without you begging, lock the seat now and I will see you on Day 1.",
+      "",
+      "Reply here and I can send the payment details directly.",
+    ].join("\n"),
+  }),
+  "Food & Pastries": ({ name, product }) => ({
+    touch2: [
+      "Hey " + name + ", Divine here (Sell Out 1.0).",
+      "",
+      "Quick one while I am reviewing registrations: I saw " + product + " on your form. Your kind of business usually has the reverse problem, great taste, thin orders. On Day 1-2 of the challenge we find what really moves and who to put it in front of.",
+      "",
+      "Still weighing whether the challenge is for you?",
+    ].join("\n"),
+    touch3: [
+      "Hey " + name + ", Divine again.",
+      "",
+      "Food businesses rarely need the begging-and-discounting route, they need the right offer and message. Day 3-4 of the challenge packages yours, Day 5-6 fixes the messaging so orders come in, Day 7 builds the repeatable sales system.",
+      "",
+      "I keep a few hotseats for people who were still deciding. Want me to hold one for you?",
+    ].join("\n"),
+    touch4: [
+      "Hey " + name + ", final check-in from Sell Out 1.0.",
+      "",
+      "The Early Bird seats at \u20A65,000 are down to the last few and the countdown closes soon. If " + product + " is the business you want to grow this quarter, lock the seat now and I will see you on Day 1.",
+      "",
+      "Reply here and I can send the payment details directly.",
+    ].join("\n"),
+  }),
+  "Tech / Freelance Services": ({ name, product }) => ({
+    touch2: [
+      "Hey " + name + ", Divine here (Sell Out 1.0).",
+      "",
+      "Quick one while I am reviewing registrations: I saw " + product + " on your form. The skill is clearly there, the positioning is the gap. On Day 1-2 of the challenge we find the offer that makes clients say yes fast, before the packaging begins.",
+      "",
+      "Still weighing whether the challenge is for you?",
+    ].join("\n"),
+    touch3: [
+      "Hey " + name + ", Divine again.",
+      "",
+      "For freelancers the trap is being seen as the affordable option. Day 3-4 of the challenge packages your service so the price makes sense, Day 5-6 fixes the messaging so clients stop shopping around, Day 7 the sales system.",
+      "",
+      "I keep a few hotseats for people who were still deciding. Want me to hold one for you?",
+    ].join("\n"),
+    touch4: [
+      "Hey " + name + ", final check-in from Sell Out 1.0.",
+      "",
+      "The Early Bird seats at \u20A65,000 are down to the last few and the countdown closes soon. If " + product + " is the service you want booking without the haggle, lock the seat now and I will see you on Day 1.",
+      "",
+      "Reply here and I can send the payment details directly.",
+    ].join("\n"),
+  }),
+  "Beginners / Idea Stage": ({ name }) => ({
+    touch2: [
+      "Hey " + name + ", Divine here (Sell Out 1.0).",
+      "",
+      "Quick one while I am reviewing registrations: you are at the figuring-it-out stage, which is exactly where this works best. Better to find what sells before building. Day 1-2 of the challenge is devoted to exactly that search.",
+      "",
+      "Still weighing whether the challenge is for you?",
+    ].join("\n"),
+    touch3: [
+      "Hey " + name + ", Divine again.",
+      "",
+      "Most people stay stuck because they build before they know what sells. The challenge inverts that: Day 1-2 finds what to sell, Day 3-4 packages the offer, Day 5-6 the messaging, Day 7 the sales system. In that order, live.",
+      "",
+      "I keep a few hotseats for people who were still deciding. Want me to hold one for you?",
+    ].join("\n"),
+    touch4: [
+      "Hey " + name + ", final check-in from Sell Out 1.0.",
+      "",
+      "The Early Bird seats at \u20A65,000 are down to the last few and the countdown closes soon. If starting a real business this quarter is the plan, lock the seat now and I will see you on Day 1.",
+      "",
+      "Reply here and I can send the payment details directly.",
+    ].join("\n"),
+  }),
+  "Other Business": ({ name, product }) => ({
+    touch2: [
+      "Hey " + name + ", Divine here (Sell Out 1.0).",
+      "",
+      "Quick one while I am reviewing registrations: I saw " + product + " on your form. On Day 1-2 of the challenge we narrow down exactly what sells and who it is for, before we package anything. That step usually saves weeks of guessing.",
+      "",
+      "Still weighing whether the challenge is for you?",
+    ].join("\n"),
+    touch3: [
+      "Hey " + name + ", Divine again.",
+      "",
+      "Most small businesses get sales in drips because the offer and message are not clear. Day 3-4 of the challenge packages your offer, Day 5-6 gives you messaging that sells, Day 7 builds the repeatable sales system.",
+      "",
+      "I keep a few hotseats for people who were still deciding. Want me to hold one for you?",
+    ].join("\n"),
+    touch4: [
+      "Hey " + name + ", final check-in from Sell Out 1.0.",
+      "",
+      "The Early Bird seats at \u20A65,000 are down to the last few and the countdown closes soon. If growing " + product + " is this quarter's plan, lock the seat now and I will see you on Day 1.",
+      "",
+      "Reply here and I can send the payment details directly.",
+    ].join("\n"),
+  }),
+};
+
+function generateFollowUps(firstName, niche, whatSell) {
+  const name = firstName || "there";
+  const product = productFragment(whatSell, 40);
+  const tpl = followUpTemplates[niche] || followUpTemplates["Other Business"];
+  return tpl({ name, product });
+}
+
 function generateMessages(firstName, niche, challenge, whatSell, goal) {
   const name = firstName || "there";
   const product = productFragment(whatSell, 48);
@@ -468,17 +650,29 @@ function verifyMessages(enriched) {
     "we generate leads for you",
   ];
 
-  enriched.forEach((l) => {
+  const allCopy = (l) => {
+    const out = [];
     ["story", "future", "casual", "audio"].forEach((angle) => {
-      const text = (l.messages && l.messages[angle]) || "";
+      if (l.messages && l.messages[angle]) out.push([l.name + " (" + angle + ")", l.messages[angle]]);
+    });
+    (FOLLOWUP_ORDER || []).forEach((touch) => {
+      if (l.followUps && l.followUps[touch]) out.push([l.name + " (follow-up " + touch + ")", l.followUps[touch]]);
+    });
+    return out;
+  };
+
+  enriched.forEach((l) => {
+    allCopy(l).forEach(([tag, text]) => {
       if (text.includes("\u2014")) {
-        problems.push(l.name + " (" + angle + "): contains em dash");
+        problems.push(tag + ": contains em dash");
       }
       forbidden.forEach((term) => {
         if (text.toLowerCase().includes(term)) {
-          problems.push(l.name + " (" + angle + "): contains banned term \u201C" + term + "\u201D");
+          problems.push(tag + ": contains banned term \u201C" + term + "\u201D");
         }
       });
+    });
+    ["story", "future", "casual"].forEach((angle) => {
       if (l.whatsappURLs && l.whatsappURLs[angle] && !l.whatsappURLs[angle].includes("https://wa.me/")) {
         problems.push(l.name + " (" + angle + "): malformed WhatsApp URL");
       }
@@ -490,7 +684,7 @@ function verifyMessages(enriched) {
     problems.forEach((p) => console.error("  - " + p));
     process.exit(1);
   }
-  console.log("\nCopy verification passed: zero em dashes, no banned agency terms, valid WA URLs.");
+  console.log("\nCopy verification passed: outreach + follow-up copy clean, valid WA URLs.");
 }
 
 // ------------------------------------------------------------
@@ -537,6 +731,7 @@ const enriched = unique.map((r) => {
   const name = cleanName(r[1]);
   const fn = firstName(r[1]);
   const messages = generateMessages(fn, niche, pain(r), product(r), goal(r));
+  const followUps = generateFollowUps(fn, niche, product(r));
   const storyURL = phone ? whatsappURL(phone, messages.story) : "";
   const futureURL = phone ? whatsappURL(phone, messages.future) : "";
   const casualURL = phone ? whatsappURL(phone, messages.casual) : "";
@@ -547,6 +742,7 @@ const enriched = unique.map((r) => {
     challenge: pain(r), investment: budget(r), goal: goal(r),
     sells, niche, leadScore: score, tier, status: "New",
     messages,
+    followUps,
     whatsappURLs: { story: storyURL, future: futureURL, casual: casualURL },
     message: messages.story,
     whatsappURL: storyURL,
@@ -558,6 +754,29 @@ const enriched = unique.map((r) => {
 enriched.sort((a, b) => b.leadScore - a.leadScore);
 
 verifyMessages(enriched);
+
+// Optional sent-history merge: analyze_leads.mjs --progress=outreach_progress.json
+// Re-applies Contacted/In Conversation/Enrolled statuses saved in the dashboard so
+// a pipeline re-run never resets who has already been reached out to.
+const progressIdx = process.argv.indexOf("--progress");
+if (progressIdx !== -1 && process.argv[progressIdx + 1]) {
+  const progressPath = process.argv[progressIdx + 1];
+  try {
+    const progress = JSON.parse(readFileSync(progressPath, "utf8"));
+    const map = progress && progress.progress ? progress.progress : progress;
+    let applied = 0;
+    enriched.forEach((l) => {
+      const rec = map && map[l.phone];
+      if (rec && rec.status) {
+        l.status = rec.status;
+        applied++;
+      }
+    });
+    console.log("Sent-history merge: applied status to " + applied + " leads from " + progressPath);
+  } catch (err) {
+    console.error("Could not read progress file at " + progressPath + ": " + err.message);
+  }
+}
 
 // Distribution summary
 const tierCounts = { "Tier 1": 0, "Tier 2": 0, "Tier 3": 0, "Tier 4": 0 };
