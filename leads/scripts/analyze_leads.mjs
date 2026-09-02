@@ -111,28 +111,386 @@ function scoreLead(r) {
   return { score, tier };
 }
 
-function generateMessage(firstName, niche, challenge, whatSell, tier) {
+// ------------------------------------------------------------
+// Multi-copy angle engine
+// Four scope-aligned copy angles, tailored per niche.
+// Scope (never drift from this):
+//   Day 1-2: finding what actually sells + refining the opportunity
+//   Day 3-4: packaging the offer into something valuable (not cheap)
+//   Day 5-6: simple sales messaging that explains value without begging
+//   Day 7:   a practical sales system positioning for first/next ₦50k-₦200k
+// Hard rules:
+//   - Divine is a sales funnel strategist + creator. Never a "client
+//     acquisition specialist", agency, or lead gen guru.
+//   - Natural WhatsApp spacing (\n\n). Conversational. Zero em dashes (—).
+// ------------------------------------------------------------
+
+const ANGLE_ORDER = ["story", "future", "casual", "audio"];
+
+function sanitizeText(text) {
+  return String(text || "")
+    .replace(/[\u2014\u2013]/g, "-")
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"');
+}
+
+function shortFragment(text, max) {
+  const cleaned = sanitizeText(text)
+    .split(/[\n\r]+/)[0]
+    .trim();
+  if (!cleaned) return "";
+  const cap = cleaned.length > max ? cleaned.slice(0, max - 1).trimEnd() + "\u2026" : cleaned;
+  return cap;
+}
+
+function productFragment(whatSell, max) {
+  if (!whatSell) return "";
+  const first = String(whatSell).split(",")[0];
+  return shortFragment(first, max);
+}
+
+function goalRef(goal) {
+  const g = shortFragment(goal, 84);
+  if (!g || g.length < 3 || /^[.\s]+$/.test(g)) return "";
+  return " You mentioned your goal: " + g + ".";
+}
+
+// ---- Angle builders (each returns an array of paragraphs) ----
+
+const storyTemplates = {
+  "Design & Creative": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered with " + product + ". With creatives it is almost never a talent problem. The craft is solid. The struggle is quieter: great work, then crickets. Or someone argues your price down before they even see the value.",
+    "",
+    "Thing is, people do not buy mostly good work. They buy an offer that makes sense. When the offer is packaged right and the messaging shows it simply, the same work stops being 'just a design' and becomes the result they want.",
+    "",
+    "Imagine an offer that makes total sense, where people instantly get why they should buy from you instead of someone else. That is what we build during the 7-day live Sell Out Challenge sprint. Offer, positioning, and simple sales messaging, packaged together.",
+    "",
+    "Are you still stuck on that part, or has it sorted itself out?",
+  ].join("\n"),
+  "Coaching / Courses / Digital Products": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered with " + product + ". Funny thing about knowledge businesses: you know a lot, but you have never been shown how to turn it into an offer people actually reach for. So the good stuff stays inside, and the sales stay slow.",
+    "",
+    "It is not that you do not know it. It is that the offer and the message around it are not clear yet. When they are, what you know finally looks worth buying.",
+    "",
+    "Imagine an offer that makes total sense, where people instantly get why they should buy from you instead of someone else. We build that live during the 7-day Sell Out Challenge sprint. Offer first, then the positioning, then the simple sales message.",
+    "",
+    "Are you still figuring that out, or have you cracked it?",
+  ].join("\n"),
+  "Physical Products / Fashion / Beauty": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered with " + product + ". Honestly, stocking good products is the easy part. The hard part is people browsing, admiring, then quietly ghosting because your offer and your message never showed them why they should part with their money today.",
+    "",
+    "It is not the products. It is the offer and messaging around them. Get those clear and buyers stop asking 'how much' and start asking 'when can I get it'.",
+    "",
+    "Imagine an offer that makes total sense, where people instantly get why they should buy from you instead of the next vendor. We build that live in the 7-day Sell Out Challenge sprint.",
+    "",
+    "Are you still grinding on this, or is it flowing now?",
+  ].join("\n"),
+  "Food & Pastries": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered with " + product + ". There is a pattern with food businesses: the product is great, anyone who tastes it repeats, but orders still come in one or two at a time. Or you are out here discounting and 'helping' people buy instead of letting them buy.",
+    "",
+    "It is not your food. It is the offer and the way you talk about it. When your message shows the value simply, people order without you having to beg or drop the price.",
+    "",
+    "Imagine an offer that makes total sense, where people instantly get why they should buy from you instead of the next seller. That is what we build live in the 7-day Sell Out Challenge sprint.",
+    "",
+    "Are you still doing the discount dance, or have you sorted the offer side?",
+  ].join("\n"),
+  "Tech / Freelance Services": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered with " + product + ". The skill is obviously there. The struggle for freelancers is rarely delivery, it is being seen as worth it. Clients do not understand what they get, so they hesitate, or they haggle.",
+    "",
+    "It is not your skill. It is your offer and how you position it. When clients instantly see the outcome and the price makes sense, they stop shopping around.",
+    "",
+    "Imagine an offer that makes total sense, where people instantly get why they should hire you instead of anyone else. We build that live in the 7-day Sell Out Challenge sprint. Position, packaging, and message, together.",
+    "",
+    "Are you still chasing clients, or have you sorted the positioning?",
+  ].join("\n"),
+  "Beginners / Idea Stage": ({ name }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered and noticed you are still in the figuring-it-out stage. That is actually the best place to be for this. Better to get the offer right before the product exists than to build something nobody wants.",
+    "",
+    "The first step is finding what actually sells, then packaging it into an offer, then the messaging that makes it easy to say yes. In that order.",
+    "",
+    "Imagine waking up in 7 days with an offer that makes sense and knowing exactly who to show it to. That is what the Sell Out Challenge sprint does. Live, day by day.",
+    "",
+    "Are you ready to stop second guessing and just build it?",
+  ].join("\n"),
+  "Other Business": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered with " + product + ". Here is what I have seen a thousand times: the business is real, but the offer and the message are not quite there, so sales come in drips instead of a system.",
+    "",
+    "It is rarely the product that is the problem. It is the offer, the positioning, and the messaging. Fix those and the same business starts looking obvious to the right people.",
+    "",
+    "Imagine an offer that makes total sense, where people instantly get why they should buy from you instead of the next option out there. We build that live in the 7-day Sell Out Challenge sprint.",
+    "",
+    "Are you still sorting that out, or is it moving now?",
+  ].join("\n"),
+};
+
+const futureTemplates = {
+  "Design & Creative": ({ name, product, goalNote }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered around " + product + "." + goalNote,
+    "",
+    "The problem usually is not what you know or how hard you work. It is that you have never been shown how to make people want what you already have. For creatives it shows up as undercharging, or clients who never quite see the value.",
+    "",
+    "In 7 days during the Sell Out Challenge we build it live: a clear offer, strong positioning, and simple sales messaging, so the work you already do stops being the cheap option and starts being the obvious option.",
+    "",
+    "Are you still trying to figure out how to package your sales system, or have you sorted that out?",
+  ].join("\n"),
+  "Coaching / Courses / Digital Products": ({ name, product, goalNote }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered around " + product + "." + goalNote,
+    "",
+    "The problem usually is not what you know or how hard you work. It is that you have never been shown how to make people want what you already have. For coaches and creators it shows up as knowledge that never quite becomes an offer people pay for.",
+    "",
+    "In 7 days during the Sell Out Challenge we build it live: a clear offer, strong positioning, and simple sales messaging, so what you know finally becomes something people buy.",
+    "",
+    "Are you still trying to figure out how to package your sales system, or have you sorted that out?",
+  ].join("\n"),
+  "Physical Products / Fashion / Beauty": ({ name, product, goalNote }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered around " + product + "." + goalNote,
+    "",
+    "The problem usually is not what you know or how hard you work. It is that you have never been shown how to make people want what you already have. For product businesses it shows up as admiration without checkout, or buyers bargaining your price down.",
+    "",
+    "In 7 days during the Sell Out Challenge we build it live: a clear offer, strong positioning, and simple sales messaging, so your products sell without you having to talk anyone into it.",
+    "",
+    "Are you still trying to figure out how to package your sales system, or have you sorted that out?",
+  ].join("\n"),
+  "Food & Pastries": ({ name, product, goalNote }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered around " + product + "." + goalNote,
+    "",
+    "The problem usually is not what you know or how hard you work. It is that you have never been shown how to make people want what you already have. For food businesses it shows up as great reviews but thin sales, because the offer and the message are not pulling the price your food deserves.",
+    "",
+    "In 7 days during the Sell Out Challenge we build it live: a clear offer, strong positioning, and simple sales messaging, so orders come in without the begging and discounting.",
+    "",
+    "Are you still trying to figure out how to package your sales system, or have you sorted that out?",
+  ].join("\n"),
+  "Tech / Freelance Services": ({ name, product, goalNote }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered around " + product + "." + goalNote,
+    "",
+    "The problem usually is not what you know or how hard you work. It is that you have never been shown how to make people want what you already have. For freelancers it shows up as being one of many, not sure how to stand out so clients say yes fast.",
+    "",
+    "In 7 days during the Sell Out Challenge we build it live: a clear offer, strong positioning, and simple sales messaging, so you stop being the affordable option and become the option they want.",
+    "",
+    "Are you still trying to figure out how to package your sales system, or have you sorted that out?",
+  ].join("\n"),
+  "Beginners / Idea Stage": ({ name, goalNote }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw your registration and that you are still deciding what to sell." + goalNote,
+    "",
+    "The problem is usually not a lack of skill or how hard you scroll. It is that you have never been shown how to find what people will actually buy, and then make them want it.",
+    "",
+    "In 7 days during the Sell Out Challenge we build it live: you pick what actually sells, package it into a clear offer, and get strong positioning and simple sales messaging to match.",
+    "",
+    "Are you still trying to figure out how to package your sales system, or have you sorted that out?",
+  ].join("\n"),
+  "Other Business": ({ name, product, goalNote }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you registered around " + product + "." + goalNote,
+    "",
+    "The problem usually is not what you know or how hard you work. It is that you have never been shown how to make people want what you already have. For most small businesses it shows up as sales that come in drips, never as a system you can repeat.",
+    "",
+    "In 7 days during the Sell Out Challenge we build it live: a clear offer, strong positioning, and simple sales messaging, so the business stops relying on luck and starts relying on a system.",
+    "",
+    "Are you still trying to figure out how to package your sales system, or have you sorted that out?",
+  ].join("\n"),
+};
+
+const casualTemplates = {
+  "Design & Creative": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you sell " + product + ". Are you still working on clarifying your offer and messaging, or is everything running smoothly now?",
+  ].join("\n"),
+  "Coaching / Courses / Digital Products": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you sell " + product + ". Are you still working on clarifying your offer and messaging, or is everything running smoothly now?",
+  ].join("\n"),
+  "Physical Products / Fashion / Beauty": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you sell " + product + ". Are you still working on clarifying your offer and messaging, or is everything running smoothly now?",
+  ].join("\n"),
+  "Food & Pastries": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you sell " + product + ". Are you still working on clarifying your offer and messaging, or is everything running smoothly now?",
+  ].join("\n"),
+  "Tech / Freelance Services": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you sell " + product + ". Are you still working on clarifying your offer and messaging, or is everything running smoothly now?",
+  ].join("\n"),
+  "Beginners / Idea Stage": ({ name }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you are still figuring out what to sell. Are you still working on clarifying your offer and messaging, or is everything settled now?",
+  ].join("\n"),
+  "Other Business": ({ name, product }) => [
+    "Hey " + name + "! Divine here from Sell Out 1.0.",
+    "",
+    "Saw you sell " + product + ". Are you still working on clarifying your offer and messaging, or is everything running smoothly now?",
+  ].join("\n"),
+};
+
+const audioTemplates = {
+  "Design & Creative": ({ name, product, cAudio }) => [
+    "Hey " + name + ", Divine here from Sell Out 1.0!",
+    "",
+    "Saw you registered with " + product + (cAudio ? " and mentioned \u201C" + cAudio + "\u201D." : "."),
+    "",
+    "Looked at it and thought: the craft is clearly solid. The offer packaging and the messaging is the part that makes people actually buy, and that is the part most creatives never get shown.",
+    "",
+    "So I am hosting a 7-day live sprint called the Sell Out Challenge. We build your offer and sales message live, day by day.",
+    "",
+    "Let me know if you want the details!",
+  ].join("\n"),
+  "Coaching / Courses / Digital Products": ({ name, product, cAudio }) => [
+    "Hey " + name + ", Divine here from Sell Out 1.0!",
+    "",
+    "Saw you registered with " + product + (cAudio ? " and mentioned \u201C" + cAudio + "\u201D." : "."),
+    "",
+    "Looked at it and thought: you clearly know your stuff. The missing piece is packaging that knowledge into an offer people actually reach for, plus the messaging that sells it. That is what makes people buy.",
+    "",
+    "So I am hosting a 7-day live sprint called the Sell Out Challenge. We build your offer and sales message live.",
+    "",
+    "Let me know if you want the details!",
+  ].join("\n"),
+  "Physical Products / Fashion / Beauty": ({ name, product, cAudio }) => [
+    "Hey " + name + ", Divine here from Sell Out 1.0!",
+    "",
+    "Saw you registered with " + product + (cAudio ? " and mentioned \u201C" + cAudio + "\u201D." : "."),
+    "",
+    "Looked at it and thought: the products are clearly good. The offer packaging and the messaging is the part that turns admirers into buyers, and that is the part most product sellers never get shown.",
+    "",
+    "So I am hosting a 7-day live sprint called the Sell Out Challenge. We build your offer and sales message live.",
+    "",
+    "Let me know if you want the details!",
+  ].join("\n"),
+  "Food & Pastries": ({ name, product, cAudio }) => [
+    "Hey " + name + ", Divine here from Sell Out 1.0!",
+    "",
+    "Saw you registered with " + product + (cAudio ? " and mentioned \u201C" + cAudio + "\u201D." : "."),
+    "",
+    "Looked at it and thought: the food is clearly good. The offer packaging and the messaging is what makes orders come in without you having to beg or discount. That is what makes people buy.",
+    "",
+    "So I am hosting a 7-day live sprint called the Sell Out Challenge. We build your offer and sales message live.",
+    "",
+    "Let me know if you want the details!",
+  ].join("\n"),
+  "Tech / Freelance Services": ({ name, product, cAudio }) => [
+    "Hey " + name + ", Divine here from Sell Out 1.0!",
+    "",
+    "Saw you registered with " + product + (cAudio ? " and mentioned \u201C" + cAudio + "\u201D." : "."),
+    "",
+    "Looked at it and thought: the skill is clearly solid. The offer packaging and the messaging is what makes clients say yes and pay your price. Most freelancers never get shown that part.",
+    "",
+    "So I am hosting a 7-day live sprint called the Sell Out Challenge. We build your offer and sales message live.",
+    "",
+    "Let me know if you want the details!",
+  ].join("\n"),
+  "Beginners / Idea Stage": ({ name, cAudio }) => [
+    "Hey " + name + ", Divine here from Sell Out 1.0!",
+    "",
+    "Saw you registered" + (cAudio ? " and mentioned \u201C" + cAudio + "\u201D." : "."),
+    "",
+    "Looked at it and thought: for where you are now, the first job is figuring out what actually sells, then packaging it into an offer, then the messaging. In that order. That is what people who are stuck never get shown.",
+    "",
+    "So I am hosting a 7-day live sprint called the Sell Out Challenge. We figure out what to sell and build your offer and sales message live, day by day.",
+    "",
+    "Let me know if you want the details!",
+  ].join("\n"),
+  "Other Business": ({ name, product, cAudio }) => [
+    "Hey " + name + ", Divine here from Sell Out 1.0!",
+    "",
+    "Saw you registered with " + product + (cAudio ? " and mentioned \u201C" + cAudio + "\u201D." : "."),
+    "",
+    "Looked at it and thought: the business is clearly real. The offer packaging and the messaging is the part that turns browsers into buyers, and that is the part most business owners never get shown.",
+    "",
+    "So I am hosting a 7-day live sprint called the Sell Out Challenge. We build your offer and sales message live.",
+    "",
+    "Let me know if you want the details!",
+  ].join("\n"),
+};
+
+function generateMessages(firstName, niche, challenge, whatSell, goal) {
   const name = firstName || "there";
-  const challengeShort = (challenge || "").split(/[.\n]/)[0].trim();
-  const product = (whatSell || "").split(",")[0].trim();
-  const cName = '"' + challengeShort + '"';
+  const product = productFragment(whatSell, 48);
+  const cAudio = shortFragment(challenge, 72);
+  const goalNote = goalRef(goal);
 
-  const templates = {
-    "Design & Creative": "Hi " + name + "! I saw your registration for the Sell Out Challenge and noticed you're a designer whose challenge is: " + cName + ". I specialize in helping creatives like you stop undercharging and land clients who pay what you're worth. The challenge starts soon. Are you ready to join?",
-    "Coaching / Courses / Digital Products": "Hi " + name + "! I saw you registered for the Sell Out Challenge. You mentioned: " + cName + ". I help coaches and course creators turn their knowledge into offers that actually convert. The Sell Out Challenge walks you through exactly that. Interested?",
-    "Physical Products / Fashion / Beauty": "Hi " + name + "! I noticed you sell " + (product || "your products") + " and your main challenge is: " + cName + ". I help product businesses build simple sales systems that bring in consistent customers. The Sell Out Challenge covers this step by step. Want in?",
-    "Food & Pastries": "Hi " + name + "! I saw your registration. You mentioned: " + cName + ". I help food businesses get consistent orders without begging for sales. The Sell Out Challenge gives you a simple system to make that happen. Want to join?",
-    "Tech / Freelance Services": "Hi " + name + "! I saw you registered for the Sell Out Challenge. You said: " + cName + ". I help freelancers and tech service providers land clients consistently. This challenge gives you the exact framework. Are you joining?",
-    "Other Business": "Hi " + name + "! I saw your registration for the Sell Out Challenge. You mentioned: " + cName + ". This challenge is built to help you figure out exactly how to sell what you have. Want me to walk you through it?",
-    "Beginners / Idea Stage": "Hi " + name + "! I saw your registration and that you're still figuring things out. That's exactly who the Sell Out Challenge is for. You'll leave knowing exactly what to sell, who to sell to, and how. Ready to start?",
-  };
+  const ctx = { name, product, cAudio, goalNote };
+  const story = (storyTemplates[niche] || storyTemplates["Other Business"])(ctx);
+  const future = (futureTemplates[niche] || futureTemplates["Other Business"])(ctx);
+  const casual = (casualTemplates[niche] || casualTemplates["Other Business"])(ctx);
+  const audio = (audioTemplates[niche] || audioTemplates["Other Business"])(ctx);
 
-  return templates[niche] || templates["Beginners / Idea Stage"];
+  return { story, future, casual, audio };
 }
 
 function whatsappURL(phone, message) {
   const encoded = encodeURIComponent(message);
   return "https://wa.me/" + phone + "?text=" + encoded;
+}
+
+// ------------------------------------------------------------
+// Verification guards
+// ------------------------------------------------------------
+function verifyMessages(enriched) {
+  const problems = [];
+  const forbidden = [
+    "client acquisition specialist",
+    "lead generation agency",
+    "acquisition agency",
+    "lead gen guru",
+    "we generate leads for you",
+  ];
+
+  enriched.forEach((l) => {
+    ["story", "future", "casual", "audio"].forEach((angle) => {
+      const text = (l.messages && l.messages[angle]) || "";
+      if (text.includes("\u2014")) {
+        problems.push(l.name + " (" + angle + "): contains em dash");
+      }
+      forbidden.forEach((term) => {
+        if (text.toLowerCase().includes(term)) {
+          problems.push(l.name + " (" + angle + "): contains banned term \u201C" + term + "\u201D");
+        }
+      });
+      if (l.whatsappURLs && l.whatsappURLs[angle] && !l.whatsappURLs[angle].includes("https://wa.me/")) {
+        problems.push(l.name + " (" + angle + "): malformed WhatsApp URL");
+      }
+    });
+  });
+
+  if (problems.length > 0) {
+    console.error("\nCopy verification FAILED:");
+    problems.forEach((p) => console.error("  - " + p));
+    process.exit(1);
+  }
+  console.log("\nCopy verification passed: zero em dashes, no banned agency terms, valid WA URLs.");
 }
 
 // ------------------------------------------------------------
@@ -169,7 +527,7 @@ console.log("Raw rows:", data.length);
 console.log("Unique by phone:", unique.length);
 console.log("Duplicates removed:", data.length - unique.length);
 
-// Score, classify, message
+// Score, classify, messages
 const enriched = unique.map((r) => {
   const phone = normalizePhone(r[2]);
   // Determine if this lead actively sells: flag is Yes, or a real product is described
@@ -178,20 +536,28 @@ const enriched = unique.map((r) => {
   const { score, tier } = scoreLead(r);
   const name = cleanName(r[1]);
   const fn = firstName(r[1]);
-  const msg = generateMessage(fn, niche, pain(r), product(r), tier);
-  const url = phone ? whatsappURL(phone, msg) : "";
+  const messages = generateMessages(fn, niche, pain(r), product(r), goal(r));
+  const storyURL = phone ? whatsappURL(phone, messages.story) : "";
+  const futureURL = phone ? whatsappURL(phone, messages.future) : "";
+  const casualURL = phone ? whatsappURL(phone, messages.casual) : "";
 
   return {
-    name, firstName: fn, phone: phone || "", whatsappURL: url,
+    name, firstName: fn, phone: phone || "",
     email: r[3] || "", role: who_(r), whatSells: product(r) || (sells ? "Yes" : ""),
     challenge: pain(r), investment: budget(r), goal: goal(r),
-    sells, niche, leadScore: score, tier, message: msg, status: "New",
+    sells, niche, leadScore: score, tier, status: "New",
+    messages,
+    whatsappURLs: { story: storyURL, future: futureURL, casual: casualURL },
+    message: messages.story,
+    whatsappURL: storyURL,
     timestamp: r[0] || "",
   };
 });
 
 // Sort by score descending
 enriched.sort((a, b) => b.leadScore - a.leadScore);
+
+verifyMessages(enriched);
 
 // Distribution summary
 const tierCounts = { "Tier 1": 0, "Tier 2": 0, "Tier 3": 0, "Tier 4": 0 };
@@ -230,6 +596,6 @@ writeFileSync(OUTPUT_CSV, csvHeader + "\n" + csvRows.join("\n"), "utf8");
 console.log("\nWrote enriched_leads.csv:", enriched.length, "leads");
 
 // Write JS module
-const jsExport = "// Auto-generated by analyze_leads.mjs \u2014 do not edit manually\nwindow.LEADS_DATA = " + JSON.stringify(enriched, null, 2) + ";\n";
+const jsExport = "// Auto-generated by analyze_leads.mjs - do not edit manually\nwindow.LEADS_DATA = " + JSON.stringify(enriched, null, 2) + ";\n";
 writeFileSync(OUTPUT_JS, jsExport, "utf8");
 console.log("Wrote leads-data.js:", (jsExport.length / 1024).toFixed(1), "KB");

@@ -99,6 +99,57 @@
     .btn-royal:hover { background: linear-gradient(180deg, #3a6fe0, #2654B6); }
     .btn-royal:active { transform: translateY(1px); box-shadow: 0 4px 12px -6px rgba(38,84,182,0.5); }
     .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+    /* Angle switcher (global segmented control) */
+    #angle-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 3px;
+      border-radius: 10px;
+    }
+    .angle-pill-global {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #8f96ab;
+      white-space: nowrap;
+      transition: transform 0.25s cubic-bezier(.16,1,.3,1), background 0.2s ease, color 0.2s ease, box-shadow 0.25s cubic-bezier(.16,1,.3,1);
+    }
+    .angle-pill-global:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .angle-pill-global:active { transform: translateY(1px); }
+    .angle-pill-global.active {
+      background: linear-gradient(180deg, #2f63c7, #2654B6);
+      color: #fff;
+      box-shadow: 0 6px 16px -6px rgba(38,84,182,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .angle-pill-global:focus-visible { outline: 2px solid #3A6FE0; outline-offset: 2px; border-radius: 8px; }
+    /* Modal angle tabs */
+    .tab-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      color: #8f96ab;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.06);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.25s cubic-bezier(.16,1,.3,1), background 0.2s ease, color 0.2s ease;
+    }
+    .tab-pill:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .tab-pill:active { transform: translateY(1px); }
+    .tab-pill.tab-pill-active {
+      background: linear-gradient(180deg, #2f63c7, #2654B6);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 6px 16px -6px rgba(38,84,182,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .tab-pill:focus-visible { outline: 2px solid #3A6FE0; outline-offset: 2px; border-radius: 8px; }
     *:focus-visible {
       outline: 2px solid #3A6FE0;
       outline-offset: 2px;
@@ -191,6 +242,13 @@
         <option value="Follow-up">Follow-up</option>
       </select>
 
+      <div id="angle-switcher" class="glass" role="group" aria-label="Dispatch angle">
+        <button type="button" class="angle-pill-global active" data-angle="story" aria-pressed="true">🔥 Story Hook</button>
+        <button type="button" class="angle-pill-global" data-angle="future" aria-pressed="false">⚡ Future Pace</button>
+        <button type="button" class="angle-pill-global" data-angle="casual" aria-pressed="false">💬 Icebreaker</button>
+        <button type="button" class="angle-pill-global" data-angle="audio" aria-pressed="false">🎙️ Voice Note</button>
+      </div>
+
       <input id="search-input" type="text" placeholder="Search name, phone, offer..."
         class="glass rounded-lg px-4 py-2.5 text-sm font-body text-gray-300 placeholder-gray-600 bg-transparent flex-1 min-w-[200px] focus:ring-2 focus:ring-royal outline-none border-0">
 
@@ -236,6 +294,22 @@
   <script>
     const LEADS = window.LEADS_DATA || [];
     const statusKey = (phone) => "lead_status_" + phone;
+
+    // ---- Copy angles ----
+    const ANGLES = [
+      { key: "story",  label: "Story Hook",        short: "Story",   icon: "🔥" },
+      { key: "future", label: "Future Pace",       short: "Future",  icon: "⚡" },
+      { key: "casual", label: "Quick Icebreaker",  short: "Quick",   icon: "💬" },
+      { key: "audio",  label: "Voice Note Script", short: "Voice",   icon: "🎙️" },
+    ];
+    let globalAngle = "story";
+    const cardAngles = {}; // per-lead override, keyed by phone
+    const angleFor = (phone) => cardAngles[phone] || globalAngle;
+    const labelFor = (key) => (ANGLES.find(a => a.key === key) || ANGLES[0]).label;
+    function waURL(lead, angle) {
+      const text = (lead.messages && lead.messages[angle]) ? lead.messages[angle] : (lead.message || "");
+      return "https://wa.me/" + lead.phone + "?text=" + encodeURIComponent(text);
+    }
 
     // ---- Access gate ----
     const GATE_HASH = "10ae97f858eed6bb6bd8d22f9e8c58f673e4fc4bcf2b46abdc1c9b2ed95aa75f";
@@ -401,21 +475,21 @@
     });
 
     // ---- Copy message ----
-    async function copyMessage(phone) {
+    async function copyMessage(phone, angle) {
       const lead = LEADS.find(l => l.phone === phone);
       if (!lead) return;
+      const text = (angle && lead.messages && lead.messages[angle]) ? lead.messages[angle] : (lead.message || "");
       try {
-        await navigator.clipboard.writeText(lead.message);
-        flash("Message copied");
+        await navigator.clipboard.writeText(text);
       } catch (err) {
         const ta = document.createElement("textarea");
-        ta.value = lead.message;
+        ta.value = text;
         document.body.appendChild(ta);
         ta.select();
         document.execCommand("copy");
         ta.remove();
-        flash("Message copied");
       }
+      flash(angle ? labelFor(angle) + " copied" : "Message copied");
     }
 
     // ---- Toast ----
@@ -441,6 +515,62 @@
       return statusOptions.map(s => `<option value="${s}" ${l.status === s ? "selected" : ""}>${s}</option>`).join("");
     }
 
+    function renderCard(l, i) {
+      const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
+      const angle = angleFor(l.phone);
+      const preview = (l.challenge || l.whatSells || "No offer yet").replace(/\n/g, " ");
+      const anglePreview = (l.messages && l.messages[angle]) ? l.messages[angle] : (l.message || "");
+      return `
+        <div class="glass card rounded-xl p-4 animate-in" style="animation-delay:${Math.min(i * 15, 300)}ms"
+             data-card data-phone="${l.phone}"
+             onclick="openModal('${l.phone}')" tabindex="0" role="button"
+             onkeydown="if(event.key==='Enter'||event.key===' '){openModal('${l.phone}')}">
+          <div class="flex items-start justify-between gap-2 mb-3">
+            <div class="min-w-0">
+              <h3 class="text-white font-body font-semibold text-[15px] leading-tight truncate">${escapeHTML(l.name)}</h3>
+              <p class="text-gray-500 font-mono text-[11px] mt-0.5">+${l.phone}</p>
+            </div>
+            <span class="font-mono text-[10px] px-2 py-0.5 rounded-full border whitespace-nowrap ${ts.badge}">${l.tier}</span>
+          </div>
+
+          <div class="mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] text-gray-500 font-mono w-10">Score</span>
+              <div class="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+                <div class="h-full rounded-full ${ts.bar}" style="width:${l.leadScore}%"></div>
+              </div>
+              <span class="text-[11px] font-mono ${ts.text} w-7 text-right">${l.leadScore}</span>
+            </div>
+            <p class="text-[11px] text-gray-500 font-mono mt-1.5">${l.niche}</p>
+          </div>
+
+          <p class="text-xs text-gray-400 mb-2 line-clamp-2 font-body leading-relaxed">${escapeHTML(preview)}</p>
+
+          <div class="flex gap-1 mb-2" role="group" aria-label="Copy angles for ${escapeHTML(l.name)}">
+            ${ANGLES.map(a => `
+            <button type="button" data-phone="${l.phone}" data-angle="${a.key}" aria-pressed="${a.key === angle}"
+              class="angle-pill flex-1 text-[10px] font-mono rounded-md px-1 py-1 transition-colors ${a.key === angle
+                ? "bg-royal/25 text-royal-light border border-royal/40 shadow-[0_0_12px_-4px_rgba(38,84,182,0.5)]"
+                : "text-gray-500 hover:text-white hover:bg-white/5 border border-white/5"}">${a.short}</button>`).join("")}
+          </div>
+
+          <div class="mb-2.5 px-2 py-1.5 rounded-md bg-white/[0.03] border border-white/5">
+            <span class="text-[9px] font-mono uppercase tracking-wider text-royal-light/80">${angle === "audio" ? "🔊 " : ""}${labelFor(angle)} · preview</span>
+            <p class="text-[11px] text-gray-400 leading-relaxed line-clamp-2 mt-0.5 font-body">${escapeHTML(anglePreview)}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <a href="${waURL(l, angle)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"
+              class="btn-royal flex-1 text-white text-xs font-mono text-center py-2 rounded-lg transition-colors">WhatsApp · ${ANGLES.find(a => a.key === angle).short}</a>
+            <button onclick="event.stopPropagation(); copyMessage('${l.phone}','${angle}')"
+              class="btn-ghost glass px-3 py-2 rounded-lg text-[11px] font-mono text-gray-400 hover:text-white transition-colors">Copy</button>
+            <select data-phone="${l.phone}" class="status-select glass rounded-lg text-[11px] font-mono text-gray-400 bg-transparent px-2 py-2 cursor-pointer hover:text-white transition-colors">
+              ${statusSelect(l)}
+            </select>
+          </div>
+        </div>`;
+    }
+
     function renderLeads() {
       const grid = document.getElementById("leads-grid");
       const empty = document.getElementById("empty-state");
@@ -458,45 +588,7 @@
       empty.classList.remove("flex");
 
       const slice = filteredLeads.slice(0, visibleCount);
-      grid.innerHTML = slice.map((l, i) => {
-        const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
-        const preview = (l.challenge || l.whatSells || "No offer yet").replace(/\n/g, " ");
-        return `
-        <div class="glass card rounded-xl p-4 animate-in" style="animation-delay:${Math.min(i * 15, 300)}ms"
-             onclick="openModal('${l.phone}')" tabindex="0" role="button"
-             onkeydown="if(event.key==='Enter'||event.key===' '){openModal('${l.phone}')}">
-          <div class="flex items-start justify-between gap-2 mb-3">
-            <div class="min-w-0">
-              <h3 class="text-white font-body font-semibold text-[15px] leading-tight truncate">${l.name}</h3>
-              <p class="text-gray-500 font-mono text-[11px] mt-0.5">+${l.phone}</p>
-            </div>
-            <span class="font-mono text-[10px] px-2 py-0.5 rounded-full border whitespace-nowrap ${ts.badge}">${l.tier}</span>
-          </div>
-
-          <div class="mb-2.5">
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] text-gray-500 font-mono w-10">Score</span>
-              <div class="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
-                <div class="h-full rounded-full ${ts.bar}" style="width:${l.leadScore}%"></div>
-              </div>
-              <span class="text-[11px] font-mono ${ts.text} w-7 text-right">${l.leadScore}</span>
-            </div>
-            <p class="text-[11px] text-gray-500 font-mono mt-1.5">${l.niche}</p>
-          </div>
-
-          <p class="text-xs text-gray-400 mb-3 line-clamp-2 font-body leading-relaxed">${escapeHTML(preview)}</p>
-
-          <div class="flex items-center gap-2">
-            <a href="${l.whatsappURL}" target="_blank" rel="noopener" onclick="event.stopPropagation()"
-              class="btn-royal flex-1 text-white text-xs font-mono text-center py-2 rounded-lg transition-colors">WhatsApp</a>
-            <button onclick="event.stopPropagation(); copyMessage('${l.phone}')"
-              class="btn-ghost glass px-3 py-2 rounded-lg text-[11px] font-mono text-gray-400 hover:text-white transition-colors">Copy</button>
-            <select data-phone="${l.phone}" class="status-select glass rounded-lg text-[11px] font-mono text-gray-400 bg-transparent px-2 py-2 cursor-pointer hover:text-white transition-colors">
-              ${statusSelect(l)}
-            </select>
-          </div>
-        </div>`;
-      }).join("");
+      grid.innerHTML = slice.map((l, i) => renderCard(l, i)).join("");
 
       const remaining = filteredLeads.length - visibleCount;
       if (remaining > 0) {
@@ -514,6 +606,38 @@
       renderLeads();
     });
 
+    // ---- Global angle switcher ----
+    function syncAngleSwitcher() {
+      document.querySelectorAll("#angle-switcher [data-angle]").forEach(b => {
+        const on = b.dataset.angle === globalAngle;
+        b.classList.toggle("active", on);
+        b.setAttribute("aria-pressed", String(on));
+      });
+    }
+    document.getElementById("angle-switcher").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-angle]");
+      if (!btn) return;
+      globalAngle = btn.dataset.angle;
+      Object.keys(cardAngles).forEach(k => delete cardAngles[k]);
+      syncAngleSwitcher();
+      applyFilters();
+    });
+
+    // ---- Per-card angle pills ----
+    document.getElementById("leads-grid").addEventListener("click", (e) => {
+      const pill = e.target.closest(".angle-pill");
+      if (!pill) return;
+      e.stopPropagation();
+      const phone = pill.dataset.phone;
+      const angle = pill.dataset.angle;
+      cardAngles[phone] = angle;
+      const card = pill.closest("[data-card]");
+      if (card) {
+        const l = LEADS.find(x => x.phone === phone);
+        if (l) card.outerHTML = renderCard(l, 0);
+      }
+    });
+
     function escapeHTML(str) {
       return String(str).replace(/[&<>"']/g, m => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -521,58 +645,79 @@
     }
 
     // ---- Modal ----
-    function openModal(phone) {
-      const l = LEADS.find(x => x.phone === phone);
-      if (!l) return;
+    let modalAngle = "story";
+    let modalPhone = "";
+
+    function renderModal(l, angle) {
       const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
+      const tab = ANGLES.find(a => a.key === angle) || ANGLES[0];
+      const msg = (l.messages && l.messages[angle]) ? l.messages[angle] : (l.message || "");
 
       document.getElementById("modal-content").innerHTML = `
-        <div class="mb-5">
+        <div class="mb-4">
           <span class="font-mono text-[11px] ${ts.text}">${l.tier} · Score ${l.leadScore} · ${escapeHTML(l.niche)}</span>
           <h2 class="font-display text-3xl text-pearl mt-1.5 leading-tight">${escapeHTML(l.name)}</h2>
-          <p class="font-mono text-sm text-gray-500 mt-1">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}</p>
+          <p class="font-mono text-sm text-gray-500 mt-1">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}${l.role ? " · " + escapeHTML(l.role) : ""}</p>
         </div>
 
-        <div class="space-y-3.5 mb-5 text-sm font-body">
-          <div class="glass-deep rounded-lg px-3.5 py-2.5">
-            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Role</span>
-            <span class="text-gray-300">${escapeHTML(l.role || "N/A")}</span>
-          </div>
-          <div class="glass-deep rounded-lg px-3.5 py-2.5">
-            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Sells</span>
-            <span class="text-gray-300">${escapeHTML(l.whatSells || "Nothing yet")}</span>
-          </div>
-          <div class="glass-deep rounded-lg px-3.5 py-2.5">
-            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Challenge</span>
-            <span class="text-gray-300 whitespace-pre-wrap">${escapeHTML(l.challenge || "N/A")}</span>
-          </div>
-          <div class="glass-deep rounded-lg px-3.5 py-2.5">
-            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Budget</span>
-            <span class="text-gray-300">${escapeHTML(l.investment || "N/A")}</span>
-          </div>
-          <div class="glass-deep rounded-lg px-3.5 py-2.5">
-            <span class="text-[10px] text-gray-500 font-mono block mb-0.5 uppercase tracking-wider">Goal</span>
-            <span class="text-gray-300 whitespace-pre-wrap">${escapeHTML(l.goal || "N/A")}</span>
-          </div>
+        <div class="flex flex-wrap gap-1 mb-4" role="tablist" aria-label="Copy angles">
+          ${ANGLES.map(a => `
+          <button type="button" data-tab="${a.key}" role="tab" aria-selected="${a.key === angle}"
+            class="tab-pill ${a.key === angle ? "tab-pill-active" : ""}">${a.icon} ${a.label}</button>`).join("")}
         </div>
 
-        <div class="glass rounded-lg p-3.5 mb-5">
-          <div class="text-[10px] text-gray-500 font-mono mb-2 uppercase tracking-wider">WhatsApp message</div>
-          <p class="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed font-body">${escapeHTML(l.message)}</p>
+        <div class="glass rounded-xl p-4 mb-4">
+          <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[10px] text-gray-500 font-mono uppercase tracking-wider">${angle === "audio" ? "Voice note teleprompter" : "WhatsApp message"}</span>
+            ${angle === "audio" ? '<span class="text-[10px] font-mono text-gray-500 whitespace-nowrap">read as a voice note</span>' : ""}
+          </div>
+          <p class="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed font-body">${escapeHTML(msg)}</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 mb-4">
+          <div class="glass-deep rounded-lg px-2.5 py-2 min-w-0">
+            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Sells</span>
+            <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.whatSells || "Nothing yet")}</span>
+          </div>
+          <div class="glass-deep rounded-lg px-2.5 py-2 min-w-0">
+            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Budget</span>
+            <span class="text-gray-300 text-[11px] leading-relaxed">${escapeHTML(l.investment || "N/A")}</span>
+          </div>
+          <div class="glass-deep rounded-lg px-2.5 py-2 min-w-0">
+            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Goal</span>
+            <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.goal || "N/A")}</span>
+          </div>
         </div>
 
         <div class="flex gap-3">
-          <a href="${l.whatsappURL}" target="_blank" rel="noopener"
-            class="btn-royal flex-1 text-white text-sm font-mono text-center py-3 rounded-lg transition-colors">Open WhatsApp</a>
-          <button onclick="copyMessage('${l.phone}')"
-            class="btn-ghost glass px-4 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors">Copy</button>
+          <a href="${waURL(l, angle)}" target="_blank" rel="noopener"
+            class="btn-royal flex-1 text-white text-sm font-mono text-center py-3 rounded-lg transition-colors">Open WhatsApp · ${tab.label}</a>
+          <button onclick="copyMessage('${l.phone}','${angle}')"
+            class="btn-ghost glass px-4 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors">Copy ${tab.label}</button>
         </div>
       `;
+    }
+
+    function openModal(phone) {
+      const l = LEADS.find(x => x.phone === phone);
+      if (!l) return;
+      modalPhone = phone;
+      modalAngle = angleFor(l.phone);
+      renderModal(l, modalAngle);
 
       const m = document.getElementById("modal");
       m.classList.remove("hidden");
       m.classList.add("flex");
     }
+
+    document.getElementById("modal-content").addEventListener("click", (e) => {
+      const tab = e.target.closest("[data-tab]");
+      if (!tab) return;
+      const l = LEADS.find(x => x.phone === modalPhone);
+      if (!l) return;
+      modalAngle = tab.dataset.tab;
+      renderModal(l, modalAngle);
+    });
 
     function closeModal() {
       const m = document.getElementById("modal");
@@ -584,22 +729,27 @@
 
     // ---- Export CSV ----
     function exportCSV() {
-      const headers = ["Name","Phone","Email","Role","Sells","Challenge","Budget","Goal","Niche","Score","Tier","Message","Status"];
-      const rows = filteredLeads.map(l => [
-        `"${l.name.replace(/"/g,'""')}"`,
-        l.phone,
-        `"${l.email.replace(/"/g,'""')}"`,
-        `"${l.role.replace(/"/g,'""')}"`,
-        `"${l.whatSells.replace(/"/g,'""')}"`,
-        `"${l.challenge.replace(/"/g,'""')}"`,
-        `"${l.investment.replace(/"/g,'""')}"`,
-        `"${l.goal.replace(/"/g,'""')}"`,
-        `"${l.niche.replace(/"/g,'""')}"`,
-        l.leadScore,
-        `"${l.tier}"`,
-        `"${l.message.replace(/"/g,'""')}"`,
-        `"${l.status}"`
-      ]);
+      const headers = ["Name","Phone","Email","Role","Sells","Challenge","Budget","Goal","Niche","Score","Tier","Angle","Message","Status"];
+      const rows = filteredLeads.map(l => {
+        const angle = angleFor(l.phone);
+        const msg = (l.messages[angle] || l.message || "").replace(/"/g,'""');
+        return [
+          `"${l.name.replace(/"/g,'""')}"`,
+          l.phone,
+          `"${l.email.replace(/"/g,'""')}"`,
+          `"${l.role.replace(/"/g,'""')}"`,
+          `"${l.whatSells.replace(/"/g,'""')}"`,
+          `"${l.challenge.replace(/"/g,'""')}"`,
+          `"${l.investment.replace(/"/g,'""')}"`,
+          `"${l.goal.replace(/"/g,'""')}"`,
+          `"${l.niche.replace(/"/g,'""')}"`,
+          l.leadScore,
+          `"${l.tier}"`,
+          `"${labelFor(angle)}"`,
+          `"${msg}"`,
+          `"${l.status}"`
+        ];
+      });
       const csv = [headers.join(","), ...rows.map(a => a.join(","))].join("\n");
       const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
@@ -619,6 +769,7 @@
       });
       populateNiches();
       renderStats(LEADS);
+      syncAngleSwitcher();
       applyFilters();
     }
 
