@@ -396,6 +396,16 @@
         <option value="name">Sort · Name</option>
       </select>
 
+      <div class="flex items-center gap-2">
+        <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-600">Queue</span>
+        <button type="button" data-preset="vip10"
+          class="btn-ghost glass rounded-lg px-3 py-2.5 text-xs font-mono text-gray-400 hover:text-white transition-colors">VIP 10</button>
+        <button type="button" data-preset="uncontacted"
+          class="btn-ghost glass rounded-lg px-3 py-2.5 text-xs font-mono text-gray-400 hover:text-white transition-colors">Uncontacted</button>
+        <button type="button" data-preset="touch2"
+          class="btn-ghost glass rounded-lg px-3 py-2.5 text-xs font-mono text-gray-400 hover:text-white transition-colors">Due T2</button>
+      </div>
+
       <select id="turbo-limit" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Turbo queue size">
         <option value="20">Turbo · 20</option>
         <option value="50">Turbo · 50</option>
@@ -459,6 +469,9 @@
   <!-- Turbo bar -->
   <div id="turbo-bar" class="fixed bottom-5 left-1/2 z-[60] w-[min(94vw,760px)]">
     <div class="turbo-panel glass rounded-2xl p-3 sm:p-4">
+      <div class="h-1 rounded-full bg-white/[0.08] overflow-hidden mb-2.5">
+        <div id="turbo-progress-fill" class="h-full rounded-full bg-gradient-to-r from-royal to-amber" style="width:0%"></div>
+      </div>
       <div class="flex items-center gap-2 sm:gap-3">
         <button onclick="turboMove(-1)" title="Previous (←)"
           class="btn-ghost glass w-9 h-9 rounded-lg text-gray-400 hover:text-white transition-colors flex items-center justify-center">◀</button>
@@ -472,6 +485,8 @@
         </div>
         <button onclick="turboMove(1)" title="Skip (S)"
           class="btn-ghost glass px-3 h-9 rounded-lg text-xs font-mono text-gray-400 hover:text-white transition-colors whitespace-nowrap">Skip <kbd>S</kbd></button>
+        <button onclick="turboEnroll()" title="Enroll lead (E)"
+          class="btn-royal h-9 px-3 rounded-lg text-xs font-mono text-white whitespace-nowrap flex items-center gap-1.5">Enroll <kbd class="!bg-white/15 !border-transparent !text-white">E</kbd></button>
         <button onclick="turboAct()" title="Open chat + mark sent (W)"
           class="btn-amber h-9 px-3 sm:px-4 rounded-lg text-xs font-mono text-[#0B1526] whitespace-nowrap flex items-center gap-1.5">Open &amp; Mark <kbd class="!bg-[#0B1526]/20 !border-transparent !text-[#0B1526]">W</kbd></button>
         <button onclick="stopTurbo()" title="End queue (Esc)"
@@ -1536,18 +1551,40 @@
     // ---- Turbo queue ----
     let turbo = { active: false, queue: [], idx: 0 };
 
-    function startTurbo() {
-      if (filteredLeads.length === 0) { flash("No leads in the current view"); return; }
-      const limit = parseInt(document.getElementById("turbo-limit").value || "20", 10);
-      const q = limit > 0 ? filteredLeads.slice(0, limit) : filteredLeads;
-      turbo = { active: true, queue: q.map(l => l.phone), idx: 0 };
+    function turboPresetQueue(key) {
+      const presets = {
+        vip10: () => LEADS.filter(l => l.tier === "Tier 1" && !isContacted(l.phone)).slice(0, 10).map(l => l.phone),
+        uncontacted: () => LEADS.filter(l => !isContacted(l.phone)).slice(0, 20).map(l => l.phone),
+        touch2: () => LEADS.filter(l => (dueTouch(l.phone) || 0) >= 2).map(l => l.phone),
+      };
+      const build = presets[key];
+      return build ? build().filter(Boolean) : [];
+    }
+
+    function startTurbo(explicitQueue) {
+      const q = Array.isArray(explicitQueue) ? explicitQueue : null;
+      const source = q || (filteredLeads.length ? filteredLeads : null);
+      if (!source || source.length === 0) { flash("No leads in the current view"); return; }
+      let queue = q;
+      if (!queue) {
+        const limit = parseInt(document.getElementById("turbo-limit").value || "20", 10);
+        queue = (limit > 0 ? filteredLeads.slice(0, limit) : filteredLeads).map(l => l.phone);
+      }
+      turbo = { active: true, queue, idx: 0 };
       document.getElementById("turbo-start").disabled = true;
       document.getElementById("turbo-start").classList.add("opacity-40", "cursor-not-allowed");
       renderLeads();
       syncTurboBar();
       document.getElementById("turbo-bar").classList.add("open");
-      flash("Turbo queue armed · " + q.length + " leads");
+      flash("Turbo queue armed · " + queue.length + " leads");
     }
+
+    document.querySelectorAll("[data-preset]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (turbo.active) { stopTurbo(); }
+        startTurbo(turboPresetQueue(btn.dataset.preset));
+      });
+    });
 
     function stopTurbo() {
       if (!turbo.active) return;
@@ -1603,6 +1640,27 @@
       renderPipeline();
     }
 
+    function milestone(enrolled) {
+      if (enrolled % 5 !== 0 || enrolled === 0) return;
+      const realized = (enrolled * PRICE_FULL).toLocaleString();
+      flash("★ Milestone · " + enrolled + " enrolled · ₦" + realized + " realized");
+      try {
+        if (window.matchMedia && !window.matchMedia("(prefers-reduced-motion: reduce)").matches && navigator.vibrate) {
+          navigator.vibrate([60, 40, 60]);
+        }
+      } catch (e) {}
+    }
+
+    function turboEnroll() {
+      if (!turbo.active) return;
+      const lead = currentTurboLead();
+      if (!lead) { stopTurbo(); return; }
+      setStatus(lead.phone, "Enrolled");
+      const done = turbo.queue.filter(p => (progress[p] || {}).status === "Enrolled").length;
+      milestone(done);
+      advanceAfterSend();
+    }
+
     function syncTurboBar() {
       const lead = currentTurboLead();
       const posEl = document.getElementById("turbo-pos");
@@ -1611,6 +1669,8 @@
       const dots = document.getElementById("turbo-queue-dots");
       if (!lead) return;
       posEl.textContent = (turbo.idx + 1) + " / " + turbo.queue.length;
+      const fill = document.getElementById("turbo-progress-fill");
+      if (fill) fill.style.width = Math.round(((turbo.idx + 1) / turbo.queue.length) * 100) + "%";
       nameEl.textContent = lead.name;
       subEl.textContent = "+" + lead.phone + " · " + lead.niche + " · " + labelFor(angleFor(lead.phone)) +
         (isContacted(lead.phone) ? " · ⚡ already contacted" : "");
@@ -1634,7 +1694,7 @@
         if (document.getElementById("arsenal-panel").classList.contains("open")) { toggleArsenal(); return; }
       }
       if (typing) return;
-      if (e.key === "Enter" || e.key === " " || e.key.toLowerCase() === "w" || e.key.toLowerCase() === "s" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      if (e.key === "Enter" || e.key === " " || e.key.toLowerCase() === "w" || e.key.toLowerCase() === "e" || e.key.toLowerCase() === "s" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
         if (document.getElementById("confirm-modal").classList.contains("open")) return;
         if (document.getElementById("dossier-panel").classList.contains("open")) return;
         if (document.getElementById("arsenal-panel").classList.contains("open")) return;
@@ -1642,6 +1702,7 @@
         e.preventDefault();
         const k = e.key.toLowerCase();
         if (k === "w") turboAct();
+        else if (k === "e") turboEnroll();
         else if (k === "s") turboSkip();
         else if (e.key === "ArrowRight") turboMove(1);
         else if (e.key === "ArrowLeft") turboMove(-1);

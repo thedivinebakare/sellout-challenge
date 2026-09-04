@@ -283,6 +283,58 @@ try {
   }));
   assert('dossier fits 375px without horizontal overflow', mobile.panelW <= 375 && mobile.docScrollW <= 375, JSON.stringify(mobile));
 
+  await page.evaluate(() => { const c = document.querySelector('#dossier-close'); if (c) c.click(); });
+  await sleep(250);
+
+  // ---- Task 7: turbo closing engine ----
+  const presetBtns = await page.evaluate(() => document.querySelectorAll('[data-preset]').length);
+  assert('turbo has 3 preset buttons', presetBtns === 3, 'btns=' + presetBtns);
+
+  await page.evaluate(() => document.querySelector('[data-preset="vip10"]').click());
+  await sleep(350);
+  const turboState = await page.evaluate(() => ({
+    active: turbo.active,
+    open: document.getElementById('turbo-bar').classList.contains('open'),
+    qLen: turbo.queue.length,
+    fill: (document.getElementById('turbo-progress-fill') || {}).style ? document.getElementById('turbo-progress-fill').style.width : '',
+    enrolledBtn: !!document.querySelector('#turbo-bar [onclick*="turboEnroll"]'),
+  }));
+  assert('vip10 preset starts turbo', turboState.active && turboState.open && turboState.qLen > 0, JSON.stringify(turboState));
+  assert('turbo progress visible', turboState.fill !== '' && parseFloat(turboState.fill) > 0, 'fill=' + turboState.fill);
+  assert('turbo bar has Enroll button', turboState.enrolledBtn);
+
+  const firstPhone = await page.evaluate(() => turbo.queue[0]);
+  await page.keyboard.press('e');
+  await sleep(350);
+  const enrolledState = await page.evaluate((phone) => {
+    let p = {};
+    try { p = JSON.parse(localStorage.getItem('soc_progress_v1') || '{}'); } catch (e) {}
+    return { stored: (p[phone] || {}).status || '' };
+  }, firstPhone);
+  assert('E key enrolls current lead', enrolledState.stored === 'Enrolled', JSON.stringify(enrolledState));
+
+  const idxBefore = await page.evaluate(() => turbo.idx);
+  await page.keyboard.press('s');
+  await sleep(250);
+  const idxAfter = await page.evaluate(() => turbo.idx);
+  assert('S key skips forward', idxAfter === idxBefore + 1, `${idxBefore} -> ${idxAfter}`);
+
+  await page.evaluate(() => { window.open = function () { return { focus() {}, close() {} }; }; });
+  const wTarget = await page.evaluate(() => turbo.queue[turbo.idx]);
+  await page.keyboard.press('w');
+  await sleep(350);
+  const wState = await page.evaluate((phone) => {
+    let p = {};
+    try { p = JSON.parse(localStorage.getItem('soc_progress_v1') || '{}'); } catch (e) {}
+    return { stored: (p[phone] || {}).status || '', hist: (p[phone] || {}).history || [] };
+  }, wTarget);
+  assert('W key dispatches + marks contact', (wState.stored === 'Contacted' || wState.stored === 'In Conversation') && wState.hist.length >= 1, JSON.stringify(wState));
+
+  await page.keyboard.press('Escape');
+  await sleep(300);
+  const turboStopped = await page.evaluate(() => ({ active: turbo.active, open: document.getElementById('turbo-bar').classList.contains('open') }));
+  assert('Esc stops turbo', !turboStopped.active && !turboStopped.open, JSON.stringify(turboStopped));
+
   assert('no console/page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 } finally {
   await browser.close();
