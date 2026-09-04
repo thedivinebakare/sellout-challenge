@@ -335,6 +335,60 @@ try {
   const turboStopped = await page.evaluate(() => ({ active: turbo.active, open: document.getElementById('turbo-bar').classList.contains('open') }));
   assert('Esc stops turbo', !turboStopped.active && !turboStopped.open, JSON.stringify(turboStopped));
 
+  // ---- Task 8: keyboard/focus/a11y + reduced motion + contrast ----
+  const contrast = await page.evaluate(() => ({
+    stale: document.querySelectorAll('.text-gray-500, .text-gray-600').length,
+    titleColor: getComputedStyle(document.querySelector('.dossier-section-title')).color,
+    hasFocusRule: Array.from(document.styleSheets).some(s => {
+      try { return (s.ownerNode && s.ownerNode.textContent || '').includes('focus-visible'); } catch (e) { return false; }
+    }),
+  }));
+  assert('no stale low-contrast gray classes in DOM', contrast.stale === 0, 'stale=' + contrast.stale);
+  assert('dossier section title meets contrast (slate-400)', contrast.titleColor === 'rgb(148, 163, 184)', contrast.titleColor);
+  assert('focus-visible rule present', contrast.hasFocusRule);
+
+  await page.evaluate(() => {
+    const btn = document.querySelector('[data-preset="uncontacted"]');
+    btn.focus();
+    btn.click();
+  });
+  await sleep(300);
+  await page.keyboard.press('Escape');
+  await sleep(300);
+  const focusRestore = await page.evaluate(() => {
+    const a = document.activeElement;
+    return { onPreset: !!(a && a.getAttribute && a.getAttribute('data-preset')), tag: a ? a.tagName + '.' + (a.id || a.className) : 'none' };
+  });
+  assert('turbo stop restores focus to trigger', focusRestore.onPreset, focusRestore.tag);
+
+  await page.evaluate(() => {
+    const g = document.getElementById('arsenal-toggle');
+    g.focus();
+    g.click();
+  });
+  await sleep(300);
+  await page.keyboard.press('Escape');
+  await sleep(300);
+  const arsenalFocus = await page.evaluate(() => {
+    const a = document.activeElement;
+    return a && a.id === 'arsenal-toggle';
+  });
+  assert('arsenal close restores focus to trigger', arsenalFocus);
+
+  await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+  await page.evaluate(() => { const card = document.querySelector('#leads-grid [data-card]'); if (card) card.click(); });
+  await sleep(300);
+  const rm = await page.evaluate(() => {
+    const p = document.getElementById('dossier-panel');
+    const t = getComputedStyle(p).transitionDuration;
+    const opened = p.classList.contains('open');
+    return { t, opened };
+  });
+  assert('reduced-motion kills drawer animation', rm.t === '0s' && rm.opened, JSON.stringify(rm));
+  await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
+  await page.evaluate(() => { const c = document.querySelector('#dossier-close'); if (c) c.click(); });
+  await sleep(300);
+
   assert('no console/page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 } finally {
   await browser.close();

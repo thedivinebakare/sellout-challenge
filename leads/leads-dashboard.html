@@ -272,7 +272,7 @@
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.18em;
-      color: #6B7280;
+      color: #94A3B8;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -397,7 +397,7 @@
       </select>
 
       <div class="flex items-center gap-2">
-        <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-600">Queue</span>
+        <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">Queue</span>
         <button type="button" data-preset="vip10"
           class="btn-ghost glass rounded-lg px-3 py-2.5 text-xs font-mono text-gray-400 hover:text-white transition-colors">VIP 10</button>
         <button type="button" data-preset="uncontacted"
@@ -431,14 +431,14 @@
     <div id="load-more-wrap" class="hidden mt-8 flex justify-center">
       <button id="load-more-btn" class="btn-ghost glass px-6 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors flex items-center gap-2">
         <span>Load more</span>
-        <span id="load-more-count" class="text-gray-500 text-xs"></span>
+        <span id="load-more-count" class="text-slate-300 text-xs"></span>
       </button>
     </div>
 
     <!-- Empty state -->
     <div id="empty-state" class="hidden text-center py-20">
-      <div class="font-display text-2xl text-gray-500 mb-2">No leads match</div>
-      <p class="text-gray-600 text-sm font-mono">Try clearing a filter or adjusting your search.</p>
+      <div class="font-display text-2xl text-slate-300 mb-2">No leads match</div>
+      <p class="text-slate-400 text-sm font-mono">Try clearing a filter or adjusting your search.</p>
     </div>
   </div>
 
@@ -446,7 +446,7 @@
   <div id="dossier-backdrop" class="fixed inset-0 z-[65] bg-black/60 backdrop-blur-sm"></div>
   <aside id="dossier-panel" class="fixed top-0 right-0 z-[66] h-full w-[min(94vw,460px)] glass rounded-l-2xl p-5 overflow-y-auto bg-[#0a1022]">
     <button id="dossier-close" onclick="closeModal()" aria-label="Close dossier"
-      class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl leading-none w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">&times;</button>
+      class="absolute top-4 right-4 text-slate-300 hover:text-white text-2xl leading-none w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">&times;</button>
     <div id="modal-content"></div>
   </aside>
 
@@ -481,7 +481,7 @@
             <div id="turbo-queue-dots" class="hidden sm:flex gap-1 overflow-hidden flex-1"></div>
           </div>
           <p id="turbo-name" class="text-white font-body font-semibold text-sm truncate mt-0.5">No queue</p>
-          <p id="turbo-sub" class="text-gray-500 font-mono text-[11px] truncate mt-0.5"></p>
+          <p id="turbo-sub" class="text-slate-300 font-mono text-[11px] truncate mt-0.5"></p>
         </div>
         <button onclick="turboMove(1)" title="Skip (S)"
           class="btn-ghost glass px-3 h-9 rounded-lg text-xs font-mono text-gray-400 hover:text-white transition-colors whitespace-nowrap">Skip <kbd>S</kbd></button>
@@ -508,7 +508,7 @@
         <h2 class="font-display text-2xl text-pearl tracking-tight">Arsenal</h2>
       </div>
       <button onclick="toggleArsenal()" aria-label="Close arsenal"
-        class="text-gray-500 hover:text-white text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">&times;</button>
+        class="text-slate-300 hover:text-white text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">&times;</button>
     </div>
 
     <div id="arsenal-content"></div>
@@ -694,14 +694,14 @@
     }
 
     function healthOf(l) {
-      if (!l) return { icon: "●", label: "Cold", cls: "text-gray-500 border-white/15 bg-white/5" };
+      if (!l) return { icon: "●", label: "Cold", cls: "text-slate-300 border-white/15 bg-white/5" };
       if (l.status === "Enrolled") return { icon: "●", label: "Sold", cls: "text-tier3 border-tier3/30 bg-tier3/15" };
       if (l.status === "In Conversation") return { icon: "●", label: "Hot", cls: "text-tier1 border-tier1/30 bg-tier1/15" };
       const dt = dueTouch(l.phone) || 0;
       if (isContacted(l.phone) && dt >= 3) return { icon: "●", label: "Cooling", cls: "text-red-400 border-red-400/30 bg-red-400/10" };
       if (isContacted(l.phone)) return { icon: "●", label: "Warm", cls: "text-tier2 border-tier2/30 bg-tier2/15" };
       if (l.leadScore >= 70) return { icon: "●", label: "Ready", cls: "text-amber-300 border-amber-500/30 bg-amber-500/15" };
-      return { icon: "●", label: "Cold", cls: "text-gray-500 border-white/15 bg-white/5" };
+      return { icon: "●", label: "Cold", cls: "text-slate-300 border-white/15 bg-white/5" };
     }
     function healthChip(l) {
       const h = healthOf(l);
@@ -803,10 +803,10 @@
       ];
       el.innerHTML = cells.map(c => `
         <span class="inline-flex items-baseline gap-1.5 whitespace-nowrap">
-          <span class="text-gray-500 tracking-wider">${c.k}</span>
+          <span class="text-slate-300 tracking-wider">${c.k}</span>
           <span class="${c.c} font-medium">${c.v}</span>
         </span>`).join("") + `
-        <span class="ml-auto text-gray-600 hidden sm:inline">goal ₦${goal.toLocaleString()} · ${left} seat${left === 1 ? "" : "s"} left</span>`;
+        <span class="ml-auto text-slate-400 hidden sm:inline">goal ₦${goal.toLocaleString()} · ${left} seat${left === 1 ? "" : "s"} left</span>`;
     }
 
     function computeAlerts() {
@@ -862,7 +862,7 @@
 
       const gauge = `
         <div class="glass rounded-xl p-4 flex flex-col">
-          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500">Seat Conversion</div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">Seat Conversion</div>
           <div class="relative flex-1 min-h-[104px] mt-1">
             <svg viewBox="0 0 120 66" class="absolute inset-0 w-full h-full" aria-hidden="true">
               <defs>
@@ -878,10 +878,10 @@
             </svg>
             <div class="absolute inset-0 flex flex-col items-center justify-end pb-1">
               <span class="font-mono text-2xl font-semibold text-pearl leading-none">${p.enrolled}</span>
-              <span class="font-mono text-[10px] text-gray-500 mt-0.5">/ ${SEAT_TARGET} seats</span>
+              <span class="font-mono text-[10px] text-slate-300 mt-0.5">/ ${SEAT_TARGET} seats</span>
             </div>
           </div>
-          <div class="flex justify-between font-mono text-[10px] text-gray-500 mt-1">
+          <div class="flex justify-between font-mono text-[10px] text-slate-300 mt-1">
             <span>${pct}% sold</span>
             <span>${Math.max(0, SEAT_TARGET - p.enrolled)} left</span>
           </div>
@@ -890,19 +890,19 @@
       const cash = `
         <div class="glass rounded-xl p-4 flex flex-col justify-between">
           <div class="flex items-baseline justify-between gap-2">
-            <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500">Cash Realized</div>
-            <span class="font-mono text-[10px] text-gray-600">goal ₦${goalFull.toLocaleString()}</span>
+            <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">Cash Realized</div>
+            <span class="font-mono text-[10px] text-slate-400">goal ₦${goalFull.toLocaleString()}</span>
           </div>
           <div class="mt-2">
             <div class="font-mono text-2xl sm:text-3xl font-semibold text-tier3 leading-none">₦${revenue.toLocaleString()}</div>
-            <div class="font-mono text-[10px] text-gray-500 mt-1.5">enrolled revenue at ₦${PRICE_FULL.toLocaleString()}/seat</div>
+            <div class="font-mono text-[10px] text-slate-300 mt-1.5">enrolled revenue at ₦${PRICE_FULL.toLocaleString()}/seat</div>
           </div>
           <div class="mt-3">
             <div class="rv-track h-2 rounded-full overflow-hidden relative">
               <div class="rv-bar h-full rounded-full" style="width:${revPct}%"></div>
               <div class="absolute top-0 bottom-0 w-0.5 bg-amber-300/60" style="left:${couponPct}%" title="Coupon-price goal"></div>
             </div>
-            <div class="flex justify-between mt-1.5 font-mono text-[9px] text-gray-600">
+            <div class="flex justify-between mt-1.5 font-mono text-[9px] text-slate-400">
               <span>₦${goalCoupon.toLocaleString()} coupon goal</span>
               <span>₦${goalFull.toLocaleString()} full goal</span>
             </div>
@@ -911,9 +911,9 @@
 
       const priority = `
         <div class="glass rounded-xl p-4 flex flex-col">
-          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">Priority · tap to queue</div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 mb-2">Priority · tap to queue</div>
           <div id="alert-strip" class="flex flex-col gap-2 flex-1">
-            ${alerts.length ? alerts.map(alertChip).join("") : `<p class="font-mono text-[11px] text-gray-600">All quiet · nothing urgent</p>`}
+            ${alerts.length ? alerts.map(alertChip).join("") : `<p class="font-mono text-[11px] text-slate-400">All quiet · nothing urgent</p>`}
           </div>
         </div>`;
 
@@ -935,8 +935,8 @@
       const chipHtml = chips.map(c => `
         <div class="glass rounded-xl px-4 py-3.5">
           <div class="font-mono text-2xl sm:text-3xl font-semibold ${c.cls}">${c.value}</div>
-          <div class="text-[10px] text-gray-500 font-mono uppercase tracking-wider mt-1">${c.label}</div>
-          ${c.sub ? `<div class="text-[10px] font-mono text-gray-600 mt-0.5">${c.sub}</div>` : ""}
+          <div class="text-[10px] text-slate-300 font-mono uppercase tracking-wider mt-1">${c.label}</div>
+          ${c.sub ? `<div class="text-[10px] font-mono text-slate-400 mt-0.5">${c.sub}</div>` : ""}
         </div>`).join("");
 
       const revHtml = `
@@ -944,14 +944,14 @@
           <div>
             <div class="font-mono text-[11px] text-amber-300 uppercase tracking-wider">Early Bird Revenue Goal</div>
             <div class="font-mono text-xl sm:text-2xl font-semibold text-pearl mt-1">
-              ₦${revenue.toLocaleString()} <span class="text-gray-500 text-sm">/ ₦${goal.toLocaleString()}</span>
+              ₦${revenue.toLocaleString()} <span class="text-slate-300 text-sm">/ ₦${goal.toLocaleString()}</span>
             </div>
           </div>
           <div class="mt-3">
             <div class="rv-track h-2 rounded-full overflow-hidden">
               <div class="rv-bar h-full rounded-full" style="width:${pct}%"></div>
             </div>
-            <div class="flex justify-between mt-1.5 font-mono text-[10px] text-gray-500">
+            <div class="flex justify-between mt-1.5 font-mono text-[10px] text-slate-300">
               <span>${pct}% of goal</span>
               <span>${Math.max(0, SEAT_TARGET - p.enrolled)} seats left at ₦${PRICE_FULL.toLocaleString()}</span>
             </div>
@@ -986,7 +986,7 @@
         return `
         <div class="${cls}" ${clickable ? `data-tier="${s.tier}" tabindex="0" role="button" aria-label="Filter by ${s.tier}"` : ""}>
           <div class="font-mono text-2xl sm:text-3xl font-semibold ${s.cls}">${s.value}</div>
-          <div class="text-[11px] text-gray-500 font-mono uppercase tracking-wider mt-1">${s.label}</div>
+          <div class="text-[11px] text-slate-300 font-mono uppercase tracking-wider mt-1">${s.label}</div>
         </div>`;
       }).join("");
     }
@@ -1144,7 +1144,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="min-w-0">
               <h3 class="text-white font-body font-semibold text-[15px] leading-tight truncate">${escapeHTML(l.name)}</h3>
-              <p class="text-gray-500 font-mono text-[11px] mt-0.5">+${l.phone}</p>
+              <p class="text-slate-300 font-mono text-[11px] mt-0.5">+${l.phone}</p>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
               <button type="button" data-paylink data-phone="${l.phone}" aria-label="Copy seat payment link for ${escapeHTML(l.name)}"
@@ -1156,13 +1156,13 @@
 
           <div class="mb-2.5">
             <div class="flex items-center gap-2">
-              <span class="text-[11px] text-gray-500 font-mono w-10">Score</span>
+              <span class="text-[11px] text-slate-300 font-mono w-10">Score</span>
               <div class="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
                 <div class="h-full rounded-full ${ts.bar}" style="width:${l.leadScore}%"></div>
               </div>
               <span class="text-[11px] font-mono ${ts.text} w-7 text-right">${l.leadScore}</span>
             </div>
-            <p class="text-[11px] text-gray-500 font-mono mt-1.5">${l.niche}</p>
+            <p class="text-[11px] text-slate-300 font-mono mt-1.5">${l.niche}</p>
           </div>
 
           <div class="flex flex-wrap gap-1.5 mb-2.5 min-h-[22px]">
@@ -1176,7 +1176,7 @@
             <button type="button" data-phone="${l.phone}" data-angle="${a.key}" aria-pressed="${a.key === angle}"
               class="angle-pill flex-[1_1_calc(33.333%-4px)] text-[10px] font-mono rounded-md px-1 py-1.5 transition-colors ${a.key === angle
                 ? "bg-royal/25 text-royal-light border border-royal/40 shadow-[0_0_12px_-4px_rgba(38,84,182,0.5)]"
-                : "text-gray-500 hover:text-white hover:bg-white/5 border border-white/5"}">${a.short}</button>`).join("")}
+                : "text-slate-300 hover:text-white hover:bg-white/5 border border-white/5"}">${a.short}</button>`).join("")}
           </div>
 
           <div class="mb-2.5 px-2 py-1.5 rounded-md bg-white/[0.03] border border-white/5">
@@ -1193,7 +1193,7 @@
               title="Advance status to ${statusNext(l.status)}" aria-label="Advance status for ${escapeHTML(l.name)}"
               class="status-pill min-h-11 flex-none inline-flex items-center gap-1.5 glass rounded-lg px-2.5 text-[11px] font-mono cursor-pointer">
               <span class="status-label">${statusPillLabel(l.phone)}</span>
-              <span class="text-gray-600" aria-hidden="true">▾</span>
+              <span class="text-slate-400" aria-hidden="true">▾</span>
             </button>
           </div>
         </div>`;
@@ -1333,6 +1333,8 @@
     let modalPhone = "";
     let modalFollow = "";
     let lastFocused = null;
+    let turboFocused = null;
+    let arsenalFocused = null;
 
     const OBJECTION_META = [
       { key: "PMT_MONEY",     icon: "💸", label: "I don't have money right now" },
@@ -1363,16 +1365,16 @@
       notes.forEach(n => rows.push(`
         <div class="glass-deep rounded-lg px-3 py-2">
           <p class="text-[11px] text-gray-300 leading-relaxed">${escapeHTML(n.text)}</p>
-          <p class="text-[9px] font-mono text-gray-600 mt-0.5">note · ${timeAgo(n.ts)}</p>
+          <p class="text-[9px] font-mono text-slate-400 mt-0.5">note · ${timeAgo(n.ts)}</p>
         </div>`));
       hist.forEach(h => rows.push(`
         <div class="glass-deep rounded-lg px-3 py-2">
-          <p class="text-[11px] font-mono text-gray-500">Sent · ${escapeHTML(labelFor(h.angle))}</p>
-          <p class="text-[9px] font-mono text-gray-600 mt-0.5">${timeAgo(h.timestamp)}</p>
+          <p class="text-[11px] font-mono text-slate-300">Sent · ${escapeHTML(labelFor(h.angle))}</p>
+          <p class="text-[9px] font-mono text-slate-400 mt-0.5">${timeAgo(h.timestamp)}</p>
         </div>`));
       el.innerHTML = rows.length
         ? rows.join("")
-        : `<p class="text-[11px] font-mono text-gray-600">No activity yet · first touch will appear here.</p>`;
+        : `<p class="text-[11px] font-mono text-slate-400">No activity yet · first touch will appear here.</p>`;
     }
     function handleNote() {
       const input = document.getElementById("note-input");
@@ -1409,28 +1411,28 @@
           </div>
           <span class="font-mono text-[11px] ${ts.text}">${l.tier} · Score ${l.leadScore} · ${escapeHTML(l.niche)}</span>
           <h2 class="font-display text-3xl text-pearl mt-1.5 leading-tight">${escapeHTML(l.name)}</h2>
-          <p class="font-mono text-[11px] text-gray-500 mt-1 leading-relaxed">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}</p>
+          <p class="font-mono text-[11px] text-slate-300 mt-1 leading-relaxed">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}</p>
           <p class="text-[11px] text-gray-400 font-mono mt-0.5">${escapeHTML(l.role || "—")} · ${escapeHTML(agendaLine(l))}</p>
         </div>
 
         <div class="flex gap-2 mb-3">
           <div class="glass-deep rounded-lg px-2.5 py-2 flex-1 min-w-0">
-            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Sells</span>
+            <span class="text-[9px] text-slate-300 font-mono block uppercase tracking-wider">Sells</span>
             <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.whatSells || "Nothing yet")}</span>
           </div>
           <div class="glass-deep rounded-lg px-2.5 py-2 flex-1 min-w-0">
-            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Budget</span>
+            <span class="text-[9px] text-slate-300 font-mono block uppercase tracking-wider">Budget</span>
             <span class="text-gray-300 text-[11px] leading-relaxed">${escapeHTML(l.investment || "N/A")}</span>
           </div>
           <div class="glass-deep rounded-lg px-2.5 py-2 flex-1 min-w-0">
-            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Goal</span>
+            <span class="text-[9px] text-slate-300 font-mono block uppercase tracking-wider">Goal</span>
             <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.goal || "N/A")}</span>
           </div>
         </div>
 
         <div class="flex items-center gap-2 mb-4">
           <div class="flex-1 min-w-0">
-            <div class="font-mono text-[9px] text-gray-600 uppercase tracking-wider mb-1">Challenge · ${escapeHTML(l.niche)}</div>
+            <div class="font-mono text-[9px] text-slate-400 uppercase tracking-wider mb-1">Challenge · ${escapeHTML(l.niche)}</div>
             <div class="glass-deep rounded-lg px-2.5 py-1.5 text-[11px] text-gray-400 truncate">${escapeHTML(l.challenge || "offer gap unknown")}</div>
           </div>
           <a class="btn-amber flex-none text-[#0B1526] text-xs font-mono rounded-lg px-3.5 py-2.5 transition-colors flex items-center gap-1.5" href="${payLinkFor(l)}"
@@ -1450,8 +1452,8 @@
 
         <div class="glass rounded-xl p-4 mb-4">
           <div class="flex items-center justify-between gap-2 mb-2">
-            <span class="text-[10px] text-gray-500 font-mono uppercase tracking-wider">${isFollow ? "Follow-up · " + followTouchName(modalFollow) : (angle === "audio" ? "Voice note teleprompter" : "WhatsApp message")}</span>
-            ${angle === "audio" && !isFollow ? '<span class="text-[10px] font-mono text-gray-500 whitespace-nowrap">read as a voice note</span>' : ""}
+            <span class="text-[10px] text-slate-300 font-mono uppercase tracking-wider">${isFollow ? "Follow-up · " + followTouchName(modalFollow) : (angle === "audio" ? "Voice note teleprompter" : "WhatsApp message")}</span>
+            ${angle === "audio" && !isFollow ? '<span class="text-[10px] font-mono text-slate-300 whitespace-nowrap">read as a voice note</span>' : ""}
           </div>
           <p class="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed font-body">${escapeHTML(msg)}</p>
         </div>
@@ -1464,11 +1466,11 @@
         </div>
 
         <div class="flex items-center gap-2 mb-4">
-          <label for="dossier-status" class="font-mono text-[10px] uppercase tracking-wider text-gray-600">Status</label>
+          <label for="dossier-status" class="font-mono text-[10px] uppercase tracking-wider text-slate-400">Status</label>
           <select id="dossier-status" data-phone="${l.phone}" class="status-select glass rounded-lg text-[11px] font-mono text-gray-300 bg-transparent px-2 py-2 cursor-pointer hover:text-white transition-colors">
             ${statusSelect(l)}
           </select>
-          <span class="ml-auto text-[10px] font-mono text-gray-600">health · ${h.label}</span>
+          <span class="ml-auto text-[10px] font-mono text-slate-400">health · ${h.label}</span>
         </div>
 
         <div class="dossier-section-title mb-2">Objections</div>
@@ -1571,6 +1573,7 @@
         queue = (limit > 0 ? filteredLeads.slice(0, limit) : filteredLeads).map(l => l.phone);
       }
       turbo = { active: true, queue, idx: 0 };
+      turboFocused = document.activeElement;
       document.getElementById("turbo-start").disabled = true;
       document.getElementById("turbo-start").classList.add("opacity-40", "cursor-not-allowed");
       renderLeads();
@@ -1589,6 +1592,8 @@
     function stopTurbo() {
       if (!turbo.active) return;
       turbo = { active: false, queue: [], idx: 0 };
+      returnFocus(turboFocused);
+      turboFocused = null;
       document.getElementById("turbo-start").disabled = false;
       document.getElementById("turbo-start").classList.remove("opacity-40", "cursor-not-allowed");
       document.getElementById("turbo-bar").classList.remove("open");
@@ -1681,10 +1686,21 @@
 
     function scrollToTurboCard() {
       const card = document.querySelector(`[data-card][data-phone="${turbo.queue[turbo.idx]}"]`);
-      if (card) card.scrollIntoView({ block: "center", behavior: "smooth" });
+      if (card) card.scrollIntoView({ block: "center", behavior: reducedMotion() ? "auto" : "smooth" });
     }
 
     // ---- Keyboard ----
+    function returnFocus(node) {
+      if (node && document.contains(node)) { try { node.focus(); } catch (e) {} }
+    }
+    function anyOverlayOpen() {
+      return document.getElementById("confirm-modal").classList.contains("open") ||
+        document.getElementById("dossier-panel").classList.contains("open") ||
+        document.getElementById("arsenal-panel").classList.contains("open");
+    }
+    function reducedMotion() {
+      return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
     document.addEventListener("keydown", (e) => {
       const typing = e.target && (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || e.target.tagName === "TEXTAREA");
       if (e.key === "Escape") {
@@ -1695,9 +1711,7 @@
       }
       if (typing) return;
       if (e.key === "Enter" || e.key === " " || e.key.toLowerCase() === "w" || e.key.toLowerCase() === "e" || e.key.toLowerCase() === "s" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
-        if (document.getElementById("confirm-modal").classList.contains("open")) return;
-        if (document.getElementById("dossier-panel").classList.contains("open")) return;
-        if (document.getElementById("arsenal-panel").classList.contains("open")) return;
+        if (anyOverlayOpen()) return;
         if (!turbo.active) return;
         e.preventDefault();
         const k = e.key.toLowerCase();
@@ -1757,39 +1771,39 @@
         `<button class="arsenal-item glass-deep rounded-xl px-3.5 py-3" onclick="copyArsenal('${n.replace(/'/g, "\\'")}')">
           <span class="txt flex-1">
             <span class="block font-mono text-[11px] text-gray-200 truncate">“Will this work for ${n}?”</span>
-            <span class="block text-[10px] text-gray-600 font-mono mt-0.5 truncate">1-click reassurance · ${n.split(" ")[0]}</span>
+            <span class="block text-[10px] text-slate-400 font-mono mt-0.5 truncate">1-click reassurance · ${n.split(" ")[0]}</span>
           </span>
           <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
         </button>`).join("");
 
       document.getElementById("arsenal-content").innerHTML = `
         <div class="flex items-center justify-between mb-2">
-          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500">Direct Bank Transfer</div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">Direct Bank Transfer</div>
           <button onclick="editArsenal()" class="font-mono text-[10px] text-royal-light hover:text-white transition-colors">edit</button>
         </div>
         <div class="glass-deep rounded-xl p-3.5 mb-5">
           <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] font-mono">
-            <span class="text-gray-600">Bank</span><span class="text-gray-300 truncate">${c.bank}</span>
-            <span class="text-gray-600">Acct</span><span class="text-gray-300 tracking-widest">${c.account}</span>
-            <span class="text-gray-600">Name</span><span class="text-gray-300 truncate">${c.accountName}</span>
-            <span class="text-gray-600">Ref</span><span class="text-gray-300">${c.ref}</span>
-            <span class="text-gray-600">Amount</span><span class="text-amber-300">${c.amount}</span>
+            <span class="text-slate-400">Bank</span><span class="text-gray-300 truncate">${c.bank}</span>
+            <span class="text-slate-400">Acct</span><span class="text-gray-300 tracking-widest">${c.account}</span>
+            <span class="text-slate-400">Name</span><span class="text-gray-300 truncate">${c.accountName}</span>
+            <span class="text-slate-400">Ref</span><span class="text-gray-300">${c.ref}</span>
+            <span class="text-slate-400">Amount</span><span class="text-amber-300">${c.amount}</span>
           </div>
           <button onclick="copyArsenal('PMT_BANK')"
             class="btn-royal w-full mt-3 text-white text-xs font-mono py-2 rounded-lg transition-colors">Copy payment message</button>
-          <p class="text-[10px] text-gray-600 font-mono mt-2 leading-relaxed">Drops the full details, your reference and the proof instruction into one WhatsApp message.</p>
+          <p class="text-[10px] text-slate-400 font-mono mt-2 leading-relaxed">Drops the full details, your reference and the proof instruction into one WhatsApp message.</p>
         </div>
 
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">“Will this work for my niche?”</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 mb-2">“Will this work for my niche?”</div>
         <div class="flex flex-col gap-2 mb-5">${nicheRows}</div>
 
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">Objection Reframes</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 mb-2">Objection Reframes</div>
         <div class="flex flex-col gap-2 mb-5">
           ${OBJECTION_META.map(o => `
           <button class="arsenal-item glass-deep rounded-xl px-3.5 py-3" onclick="copyArsenal('${o.key}')">
             <span class="txt flex-1">
               <span class="block font-mono text-[11px] text-gray-200 truncate">${o.icon} “${escapeHTML(o.label)}”</span>
-              <span class="block text-[10px] text-gray-600 font-mono mt-0.5 truncate">1-click reframe · ${o.key.replace("PMT_", "")}</span>
+              <span class="block text-[10px] text-slate-400 font-mono mt-0.5 truncate">1-click reframe · ${o.key.replace("PMT_", "")}</span>
             </span>
             <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
           </button>`).join("")}
@@ -1837,17 +1851,17 @@
     function editArsenal() {
       const c = arsenalConfig();
       document.getElementById("arsenal-content").innerHTML = `
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-3">Edit payment details</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 mb-3">Edit payment details</div>
         <div class="flex flex-col gap-2.5 mb-4">
-          <label class="block"><span class="text-[10px] font-mono text-gray-600">Bank name</span>
+          <label class="block"><span class="text-[10px] font-mono text-slate-400">Bank name</span>
             <input id="cfg-bank" value="${escapeHTML(c.bank)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
-          <label class="block"><span class="text-[10px] font-mono text-gray-600">Account number</span>
+          <label class="block"><span class="text-[10px] font-mono text-slate-400">Account number</span>
             <input id="cfg-account" value="${escapeHTML(c.account)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
-          <label class="block"><span class="text-[10px] font-mono text-gray-600">Account name</span>
+          <label class="block"><span class="text-[10px] font-mono text-slate-400">Account name</span>
             <input id="cfg-accountName" value="${escapeHTML(c.accountName)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
-          <label class="block"><span class="text-[10px] font-mono text-gray-600">Payment reference (narration)</span>
+          <label class="block"><span class="text-[10px] font-mono text-slate-400">Payment reference (narration)</span>
             <input id="cfg-ref" value="${escapeHTML(c.ref)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
-          <label class="block"><span class="text-[10px] font-mono text-gray-600">Exact amount</span>
+          <label class="block"><span class="text-[10px] font-mono text-slate-400">Exact amount</span>
             <input id="cfg-amount" value="${escapeHTML(c.amount)}" class="mt-1 w-full glass rounded-lg px-3 py-2 text-sm font-mono text-gray-200 bg-transparent outline-none focus:ring-2 focus:ring-royal"></label>
         </div>
         <div class="flex gap-3">
@@ -1880,7 +1894,13 @@
       const backdrop = document.getElementById("arsenal-backdrop");
       const open = panel.classList.toggle("open");
       backdrop.classList.toggle("open", open);
-      if (open) renderArsenal();
+      if (open) {
+        arsenalFocused = document.activeElement;
+        renderArsenal();
+      } else {
+        returnFocus(arsenalFocused);
+        arsenalFocused = null;
+      }
       const g = document.getElementById("arsenal-glyph");
       if (g) g.textContent = open ? "✕" : "🧰";
     }
