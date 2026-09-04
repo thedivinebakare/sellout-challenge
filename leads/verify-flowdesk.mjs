@@ -389,6 +389,16 @@ try {
   await page.evaluate(() => { const c = document.querySelector('#dossier-close'); if (c) c.click(); });
   await sleep(300);
 
+  // ---- Task 9: funnel non-regression (reachability only) ----
+  for (const p of ['/', '/step-2.html', '/step-3.html', '/leads/leads-dashboard.html']) {
+    let st = -1;
+    try {
+      const r = await fetch('http://localhost:3000' + p);
+      st = r.status;
+    } catch (e) {}
+    assert('funnel reachable ' + p, st === 200, 'status=' + st);
+  }
+
   assert('no console/page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 } finally {
   await browser.close();
