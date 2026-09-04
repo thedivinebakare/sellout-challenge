@@ -215,6 +215,74 @@ try {
   const refWithout = await step2Ref('');
   assert('step-2 no-ref unchanged (fresh SOC-XXXXX)', refWithout.ok && refWithout.info.bankRef !== 'SOC-ENIOLA' && refWithout.info.bankRef.length === 9, JSON.stringify(refWithout.info));
 
+  // ---- Task 6: dossier drawer ----
+  await page.evaluate(() => {
+    const card = document.querySelector('#leads-grid [data-card]');
+    if (card) card.click();
+  });
+  await sleep(400);
+  const dossier = await page.evaluate(() => ({
+    open: document.getElementById('dossier-panel').classList.contains('open'),
+    paylink: !!document.querySelector('#modal-content [data-dossier-paylink]'),
+    objections: document.querySelectorAll('#modal-content [data-objection]').length,
+    noteInput: !!document.getElementById('note-input'),
+    phoneSel: (document.getElementById('dossier-status') || {}).dataset ? document.getElementById('dossier-status').dataset.phone : '',
+  }));
+  assert('dossier opens on card click', dossier.open);
+  assert('dossier has pay link row', dossier.paylink);
+  assert('dossier has 5 objection chips', dossier.objections === 5, 'chips=' + dossier.objections);
+  assert('dossier has note input', dossier.noteInput);
+
+  await page.evaluate((phone) => {
+    document.getElementById('note-input').value = 'Follow up re: N1 challenge on Sunday';
+    document.querySelector('#modal-content [data-note]').click();
+  }, dossier.phoneSel);
+  await sleep(200);
+  const noted = await page.evaluate((phone) => {
+    let p = {};
+    try { p = JSON.parse(localStorage.getItem('soc_progress_v1') || '{}'); } catch (e) {}
+    const list = document.getElementById('note-list');
+    return {
+      stored: ((p[phone] || {}).notes || []).map(n => n.text).join('|'),
+      list: list ? (list.textContent || '') : '',
+    };
+  }, dossier.phoneSel);
+  assert('note logged + persisted', noted.stored.includes('Follow up re: N1') && noted.list.includes('Follow up re: N1'), JSON.stringify(noted));
+
+  await page.keyboard.press('Escape');
+  await sleep(250);
+  const drawerClosed = await page.evaluate(() => !document.getElementById('dossier-panel').classList.contains('open'));
+  assert('Esc closes dossier', drawerClosed);
+
+  const cardPhone = dossier.phoneSel;
+  await page.reload({ waitUntil: 'domcontentloaded', timeout: 60000 });
+  await page.waitForSelector('#leads-grid [data-card]', { timeout: 60000 });
+  await page.evaluate(() => { const card = document.querySelector('#leads-grid [data-card]'); if (card) card.click(); });
+  await sleep(400);
+  const noteAfterReload = await page.evaluate((phone) => {
+    let p = {};
+    try { p = JSON.parse(localStorage.getItem('soc_progress_v1') || '{}'); } catch (e) {}
+    const list = document.getElementById('note-list');
+    return {
+      stored: ((p[phone] || {}).notes || []).map(n => n.text).join('|'),
+      list: list ? (list.textContent || '') : '',
+    };
+  }, cardPhone);
+  assert('note survives reload', noteAfterReload.stored.includes('Follow up re: N1') && noteAfterReload.list.includes('Follow up re: N1'), JSON.stringify(noteAfterReload));
+  await page.keyboard.press('Escape');
+
+  await page.setViewport({ width: 375, height: 844 });
+  await page.reload({ waitUntil: 'domcontentloaded', timeout: 60000 });
+  await page.waitForSelector('#leads-grid [data-card]', { timeout: 60000 });
+  await page.evaluate(() => { const card = document.querySelector('#leads-grid [data-card]'); if (card) card.click(); });
+  await sleep(400);
+  const mobile = await page.evaluate(() => ({
+    panelW: Math.round(document.getElementById('dossier-panel').getBoundingClientRect().width),
+    docScrollW: document.documentElement.scrollWidth,
+    innerW: window.innerWidth,
+  }));
+  assert('dossier fits 375px without horizontal overflow', mobile.panelW <= 375 && mobile.docScrollW <= 375, JSON.stringify(mobile));
+
   assert('no console/page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 } finally {
   await browser.close();

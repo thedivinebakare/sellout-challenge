@@ -255,6 +255,26 @@
     #confirm-modal .cm-box { transition: transform 0.35s cubic-bezier(.16,1,.3,1); transform: translateY(12px) scale(0.97); }
     #confirm-modal.open .cm-box { transform: translateY(0) scale(1); }
 
+    /* ---- Dossier drawer ---- */
+    #dossier-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #dossier-backdrop.open { opacity: 1; pointer-events: auto; }
+    #dossier-panel {
+      transform: translateX(100%);
+      transition: transform 0.45s cubic-bezier(.16,1,.3,1);
+    }
+    #dossier-panel.open { transform: translateX(0); }
+    .dossier-section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #6B7280;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
       .card:hover { transform: none; }
@@ -412,15 +432,13 @@
     </div>
   </div>
 
-  <!-- Lead Modal -->
-  <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
-    <div class="glass relative rounded-2xl max-w-lg w-full p-6 max-h-[85vh] overflow-y-auto animate-in">
-      <button onclick="closeModal()" aria-label="Close"
-        class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">&times;</button>
-      <div id="modal-content"></div>
-    </div>
-  </div>
+  <!-- Dossier drawer -->
+  <div id="dossier-backdrop" class="fixed inset-0 z-[65] bg-black/60 backdrop-blur-sm"></div>
+  <aside id="dossier-panel" class="fixed top-0 right-0 z-[66] h-full w-[min(94vw,460px)] glass rounded-l-2xl p-5 overflow-y-auto bg-[#0a1022]">
+    <button id="dossier-close" onclick="closeModal()" aria-label="Close dossier"
+      class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl leading-none w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">&times;</button>
+    <div id="modal-content"></div>
+  </aside>
 
   <!-- Confirm modal -->
   <div id="confirm-modal" class="fixed inset-0 z-[70] flex items-center justify-center p-4">
@@ -507,6 +525,7 @@
     const SEAT_TARGET = 50;
     const PRICE_FULL = 10000;
     const PRICE_COUPON = 7500;
+    const CASH_GOAL = SEAT_TARGET * PRICE_FULL;
 
     let globalAngle = "story";
     const cardAngles = {};
@@ -889,7 +908,7 @@
     function renderPipeline() {
       const p = pipelineCounts();
       const revenue = p.enrolled * PRICE_FULL;
-      const goal = SEAT_TARGET * PRICE_FULL;
+      const goal = CASH_GOAL;
       const pct = Math.min(100, Math.round((revenue / goal) * 100));
       const chips = [
         { label: "Total Leads", value: p.total, cls: "text-pearl", sub: "" },
@@ -1294,10 +1313,19 @@
       }[m]));
     }
 
-    // ---- Modal ----
+    // ---- Dossier drawer ----
     let modalAngle = "story";
     let modalPhone = "";
     let modalFollow = "";
+    let lastFocused = null;
+
+    const OBJECTION_META = [
+      { key: "PMT_MONEY",     icon: "💸", label: "I don't have money right now" },
+      { key: "PMT_THINK",     icon: "🤔", label: "Let me think / not sure yet" },
+      { key: "PMT_LIVE",      icon: "📆", label: "My schedule is unpredictable" },
+      { key: "PMT_INSTAL",    icon: "🧾", label: "Can I pay in installments?" },
+      { key: "PMT_RECORDING", icon: "🎬", label: "What if I miss live classes?" },
+    ];
 
     function modalMessage(l, angle, follow) {
       if (follow) return l.followUps && l.followUps[follow] ? l.followUps[follow] : "";
@@ -1307,6 +1335,45 @@
       if (follow) { const f = FOLLOWUPS.find(x => x.key === follow); return f ? f.short : follow; }
       return labelFor(angle);
     }
+    function agendaLine(l) {
+      if (l.calls && l.calls[0]) return l.calls[0].agenda ? l.calls[0].agenda : "call scheduled";
+      return "No call yet · WhatsApp lane";
+    }
+    function renderAudit(rec) {
+      const el = document.getElementById("note-list");
+      if (!el) return;
+      const notes = (rec && Array.isArray(rec.notes) ? rec.notes : []).slice().reverse();
+      const hist = (rec && Array.isArray(rec.history) ? rec.history : []).slice().reverse();
+      const rows = [];
+      notes.forEach(n => rows.push(`
+        <div class="glass-deep rounded-lg px-3 py-2">
+          <p class="text-[11px] text-gray-300 leading-relaxed">${escapeHTML(n.text)}</p>
+          <p class="text-[9px] font-mono text-gray-600 mt-0.5">note · ${timeAgo(n.ts)}</p>
+        </div>`));
+      hist.forEach(h => rows.push(`
+        <div class="glass-deep rounded-lg px-3 py-2">
+          <p class="text-[11px] font-mono text-gray-500">Sent · ${escapeHTML(labelFor(h.angle))}</p>
+          <p class="text-[9px] font-mono text-gray-600 mt-0.5">${timeAgo(h.timestamp)}</p>
+        </div>`));
+      el.innerHTML = rows.length
+        ? rows.join("")
+        : `<p class="text-[11px] font-mono text-gray-600">No activity yet · first touch will appear here.</p>`;
+    }
+    function handleNote() {
+      const input = document.getElementById("note-input");
+      if (!input) return;
+      const text = input.value.trim();
+      if (!text) return;
+      const rec = progress[modalPhone] || { history: [] };
+      if (!Array.isArray(rec.notes)) rec.notes = [];
+      rec.notes.push({ text, ts: Date.now() });
+      progress[modalPhone] = rec;
+      saveProgress();
+      renderAudit(rec);
+      input.value = "";
+      input.focus();
+      flash("Note logged");
+    }
 
     function renderModal(l, angle) {
       const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
@@ -1315,12 +1382,44 @@
       const label = modalLabel(angle, modalFollow);
       const isFollow = !!modalFollow;
       const copyLabel = isFollow ? (FOLLOWUPS.find(f => f.key === modalFollow) || {}).label : tab.label;
+      const rec = progress[l.phone];
+      const h = healthOf(l);
 
       document.getElementById("modal-content").innerHTML = `
         <div class="mb-4">
+          <div class="flex items-center gap-2 mb-2">
+            <button data-dossier-back class="btn-ghost glass w-9 h-9 rounded-lg text-gray-400 hover:text-white transition-colors" aria-label="Close dossier">←</button>
+            <span class="dossier-section-title flex-1">Dossier</span>
+            <span class="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full border ${h.cls}">${h.icon}${h.label}</span>
+          </div>
           <span class="font-mono text-[11px] ${ts.text}">${l.tier} · Score ${l.leadScore} · ${escapeHTML(l.niche)}</span>
           <h2 class="font-display text-3xl text-pearl mt-1.5 leading-tight">${escapeHTML(l.name)}</h2>
-          <p class="font-mono text-sm text-gray-500 mt-1">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}${l.role ? " · " + escapeHTML(l.role) : ""}</p>
+          <p class="font-mono text-[11px] text-gray-500 mt-1 leading-relaxed">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}</p>
+          <p class="text-[11px] text-gray-400 font-mono mt-0.5">${escapeHTML(l.role || "—")} · ${escapeHTML(agendaLine(l))}</p>
+        </div>
+
+        <div class="flex gap-2 mb-3">
+          <div class="glass-deep rounded-lg px-2.5 py-2 flex-1 min-w-0">
+            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Sells</span>
+            <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.whatSells || "Nothing yet")}</span>
+          </div>
+          <div class="glass-deep rounded-lg px-2.5 py-2 flex-1 min-w-0">
+            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Budget</span>
+            <span class="text-gray-300 text-[11px] leading-relaxed">${escapeHTML(l.investment || "N/A")}</span>
+          </div>
+          <div class="glass-deep rounded-lg px-2.5 py-2 flex-1 min-w-0">
+            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Goal</span>
+            <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.goal || "N/A")}</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 mb-4">
+          <div class="flex-1 min-w-0">
+            <div class="font-mono text-[9px] text-gray-600 uppercase tracking-wider mb-1">Challenge · ${escapeHTML(l.niche)}</div>
+            <div class="glass-deep rounded-lg px-2.5 py-1.5 text-[11px] text-gray-400 truncate">${escapeHTML(l.challenge || "offer gap unknown")}</div>
+          </div>
+          <a class="btn-amber flex-none text-[#0B1526] text-xs font-mono rounded-lg px-3.5 py-2.5 transition-colors flex items-center gap-1.5" href="${payLinkFor(l)}"
+            data-dossier-paylink target="_blank" rel="noopener">Pay link ↗</a>
         </div>
 
         <div class="flex flex-wrap gap-1 mb-1" role="tablist" aria-label="Copy angles">
@@ -1342,28 +1441,36 @@
           <p class="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed font-body">${escapeHTML(msg)}</p>
         </div>
 
-        <div class="grid grid-cols-3 gap-2 mb-4">
-          <div class="glass-deep rounded-lg px-2.5 py-2 min-w-0">
-            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Sells</span>
-            <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.whatSells || "Nothing yet")}</span>
-          </div>
-          <div class="glass-deep rounded-lg px-2.5 py-2 min-w-0">
-            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Budget</span>
-            <span class="text-gray-300 text-[11px] leading-relaxed">${escapeHTML(l.investment || "N/A")}</span>
-          </div>
-          <div class="glass-deep rounded-lg px-2.5 py-2 min-w-0">
-            <span class="text-[9px] text-gray-500 font-mono block uppercase tracking-wider">Goal</span>
-            <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.goal || "N/A")}</span>
-          </div>
-        </div>
-
-        <div class="flex gap-3">
+        <div class="flex gap-3 mb-4">
           <a href="${waURLText(l.phone, msg)}" target="_blank" rel="noopener"
             class="btn-royal flex-1 text-white text-sm font-mono text-center py-3 rounded-lg transition-colors">Open WhatsApp · ${label}</a>
           <button onclick="copyModal()"
             class="btn-ghost glass px-4 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors">Copy ${isFollow ? copyLabel : tab.label}</button>
         </div>
+
+        <div class="flex items-center gap-2 mb-4">
+          <label for="dossier-status" class="font-mono text-[10px] uppercase tracking-wider text-gray-600">Status</label>
+          <select id="dossier-status" data-phone="${l.phone}" class="status-select glass rounded-lg text-[11px] font-mono text-gray-300 bg-transparent px-2 py-2 cursor-pointer hover:text-white transition-colors">
+            ${statusSelect(l)}
+          </select>
+          <span class="ml-auto text-[10px] font-mono text-gray-600">health · ${h.label}</span>
+        </div>
+
+        <div class="dossier-section-title mb-2">Objections</div>
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          ${OBJECTION_META.map(o => `
+          <button type="button" data-objection="${o.key}" class="tab-pill">${o.icon} ${escapeHTML(o.label)}</button>`).join("")}
+        </div>
+
+        <div class="dossier-section-title mb-2">Notes & audit</div>
+        <div id="note-list" class="flex flex-col gap-2 mb-3"></div>
+        <div class="flex gap-2 mb-1">
+          <input id="note-input" type="text" placeholder="Log a note…"
+            class="flex-1 glass rounded-lg px-3 py-2.5 text-sm font-mono text-gray-200 placeholder-gray-600 bg-transparent outline-none focus:ring-2 focus:ring-royal">
+          <button type="button" data-note class="btn-royal px-4 py-2.5 rounded-lg text-xs font-mono text-white transition-colors">Add</button>
+        </div>
       `;
+      renderAudit(rec);
     }
 
     function followTouchName(key) { const f = FOLLOWUPS.find(x => x.key === key); return f ? f.short : key; }
@@ -1381,23 +1488,35 @@
     function openModal(phone) {
       const l = findLead(phone);
       if (!l) return;
+      lastFocused = document.activeElement;
       modalPhone = phone;
       modalAngle = angleFor(l.phone);
       modalFollow = "";
       renderModal(l, modalAngle);
-      const m = document.getElementById("modal");
-      m.classList.remove("hidden");
-      m.classList.add("flex");
+      const p = document.getElementById("dossier-panel");
+      const b = document.getElementById("dossier-backdrop");
+      p.classList.add("open");
+      b.classList.add("open");
+      const c = document.getElementById("dossier-close");
+      if (c) c.focus();
     }
 
     document.getElementById("modal-content").addEventListener("click", (e) => {
+      const note = e.target.closest("[data-note]");
+      if (note) { e.stopPropagation(); handleNote(); return; }
+      const obj = e.target.closest("[data-objection]");
+      if (obj) { e.stopPropagation(); copyArsenal(obj.dataset.objection); return; }
+      const back = e.target.closest("[data-dossier-back]");
+      if (back) { e.stopPropagation(); closeModal(); return; }
+      const pay = e.target.closest("[data-dossier-paylink]");
+      if (pay) { const l = findLead(modalPhone); if (l) copyText(payLinkFor(l), "Seat link"); return; }
       const tab = e.target.closest("[data-tab]");
       if (!tab) return;
       const l = findLead(modalPhone);
       if (!l) return;
       if (tab.dataset.kind === "follow") {
         modalFollow = tab.dataset.tab;
-        modalAngle = globalAngle; // keep an angle for the copy fallback
+        modalAngle = globalAngle;
       } else {
         modalAngle = tab.dataset.tab;
         modalFollow = "";
@@ -1406,9 +1525,12 @@
     });
 
     function closeModal() {
-      const m = document.getElementById("modal");
-      m.classList.add("hidden");
-      m.classList.remove("flex");
+      const p = document.getElementById("dossier-panel");
+      const b = document.getElementById("dossier-backdrop");
+      p.classList.remove("open");
+      b.classList.remove("open");
+      if (lastFocused && document.contains(lastFocused)) lastFocused.focus();
+      lastFocused = null;
     }
 
     // ---- Turbo queue ----
@@ -1508,15 +1630,14 @@
       if (e.key === "Escape") {
         if (document.getElementById("confirm-modal").classList.contains("open")) { closeConfirm(); return; }
         if (turbo.active) { stopTurbo(); return; }
+        if (document.getElementById("dossier-panel").classList.contains("open")) { closeModal(); return; }
         if (document.getElementById("arsenal-panel").classList.contains("open")) { toggleArsenal(); return; }
-        closeModal();
-        return;
       }
       if (typing) return;
       if (e.key === "Enter" || e.key === " " || e.key.toLowerCase() === "w" || e.key.toLowerCase() === "s" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
         if (document.getElementById("confirm-modal").classList.contains("open")) return;
+        if (document.getElementById("dossier-panel").classList.contains("open")) return;
         if (document.getElementById("arsenal-panel").classList.contains("open")) return;
-        if (!document.getElementById("modal").classList.contains("hidden")) return;
         if (!turbo.active) return;
         e.preventDefault();
         const k = e.key.toLowerCase();
@@ -1601,23 +1722,17 @@
         <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">“Will this work for my niche?”</div>
         <div class="flex flex-col gap-2 mb-5">${nicheRows}</div>
 
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">Money Objection</div>
-        <button class="arsenal-item glass-deep rounded-xl px-3.5 py-3 mb-5" onclick="copyArsenal('PMT_MONEY')">
-          <span class="txt flex-1">
-            <span class="block font-mono text-[11px] text-gray-200">“I don't have money right now”</span>
-            <span class="block text-[10px] text-gray-600 font-mono mt-0.5 truncate">value reframe · ₦5,000 vs guesswork</span>
-          </span>
-          <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
-        </button>
-
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">Missed Live Classes</div>
-        <button class="arsenal-item glass-deep rounded-xl px-3.5 py-3 mb-5" onclick="copyArsenal('PMT_RECORDING')">
-          <span class="txt flex-1">
-            <span class="block font-mono text-[11px] text-gray-200">“What if I miss live classes?”</span>
-            <span class="block text-[10px] text-gray-600 font-mono mt-0.5 truncate">recordings · Telegram · workbook</span>
-          </span>
-          <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
-        </button>
+        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">Objection Reframes</div>
+        <div class="flex flex-col gap-2 mb-5">
+          ${OBJECTION_META.map(o => `
+          <button class="arsenal-item glass-deep rounded-xl px-3.5 py-3" onclick="copyArsenal('${o.key}')">
+            <span class="txt flex-1">
+              <span class="block font-mono text-[11px] text-gray-200 truncate">${o.icon} “${escapeHTML(o.label)}”</span>
+              <span class="block text-[10px] text-gray-600 font-mono mt-0.5 truncate">1-click reframe · ${o.key.replace("PMT_", "")}</span>
+            </span>
+            <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
+          </button>`).join("")}
+        </div>
       `;
     }
 
@@ -1632,14 +1747,28 @@
         "",
         "You also get the daily assignment workbooks and my feedback teardowns, and the community stays open for your questions.",
       ].join("\n"),
+      PMT_THINK: [
+        "I get it. Thinking time is fair — just make sure it ends in a decision instead of fading out.",
+        "",
+        "The early-bird price and the SELLOUT25 code won't last, but I can hold your seat for the next 24h. Does that give you the space you need?",
+      ].join("\n"),
+      PMT_LIVE: [
+        "Fair. Here's how it works even with an unpredictable schedule: every session is recorded in HD and dropped into the private Telegram community the same day, so you catch up in your own window.",
+        "",
+        "The daily workbooks and my feedback teardowns stay open for the full 7 days either way.",
+      ].join("\n"),
+      PMT_INSTAL: [
+        "No installments on this one — it's a limited cohort at a single price: ₦10,000, or ₦7,500 with SELLOUT25.",
+        "",
+        "If that's the real blocker, tell me where you'd invest it instead — because if it's not here, I'd rather you decide that than stall.",
+      ].join("\n"),
     };
 
     function copyArsenal(key) {
       let text = "";
       if (key === "PMT_BANK") text = bankDetailsMessage();
-      else if (key === "PMT_MONEY") text = ARSENAL_COPY.PMT_MONEY;
-      else if (key === "PMT_RECORDING") text = ARSENAL_COPY.PMT_RECORDING;
       else if (NICHE_REASSURANCE[key]) text = NICHE_REASSURANCE[key];
+      else if (ARSENAL_COPY[key]) text = ARSENAL_COPY[key];
       if (!text) return;
       copyText(text, "Arsenal");
     }
@@ -1695,6 +1824,7 @@
       if (g) g.textContent = open ? "✕" : "🧰";
     }
     document.getElementById("arsenal-backdrop").addEventListener("click", toggleArsenal);
+    document.getElementById("dossier-backdrop").addEventListener("click", closeModal);
 
     // ---- Export / Import progress ----
     function exportProgress() {
