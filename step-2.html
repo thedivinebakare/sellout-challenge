@@ -613,13 +613,23 @@
       // === BANK REFERENCE ===
       function getBankRef() {
         try {
+          var refParam = new URLSearchParams(window.location.search).get('ref');
+          if (refParam) {
+            var ref = refParam.trim().toUpperCase().replace(/\s+/g, '');
+            if (ref) {
+              sessionStorage.setItem('soc_bank_ref', ref);
+              return ref;
+            }
+          }
           var existing = sessionStorage.getItem('soc_bank_ref');
           if (existing) return existing;
-          var ref = 'SOC-' + Math.random().toString(36).slice(2, 7).toUpperCase();
-          sessionStorage.setItem('soc_bank_ref', ref);
-          return ref;
+          var ref2 = 'SOC-' + Math.random().toString(36).slice(2, 7).toUpperCase();
+          sessionStorage.setItem('soc_bank_ref', ref2);
+          return ref2;
         } catch (e) {
-          return 'SOC-' + Date.now().toString(36).toUpperCase();
+          var urlRef;
+          try { urlRef = new URLSearchParams(window.location.search).get('ref'); } catch (err) {}
+          return urlRef || 'SOC-' + Date.now().toString(36).toUpperCase();
         }
       }
 

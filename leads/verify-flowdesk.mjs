@@ -182,6 +182,39 @@ try {
   assert('card shows 6 angle pills', Math.abs(tokenInfo.perAngle - 6) < 0.01, 'per card=' + tokenInfo.perAngle.toFixed(2));
   assert('pay link copy button on cards', tokenInfo.payLinkBtns > 0, 'btns=' + tokenInfo.payLinkBtns);
 
+  // ---- Task 5: step-2 personal reference from ?ref= ----
+  async function step2Ref(query) {
+    const pg = await browser.newPage();
+    await pg.setViewport({ width: 1280, height: 800 });
+    const errs = [];
+    pg.on('console', (m) => {
+      if (m.type() !== 'error') return;
+      if (/Failed to load resource/.test(m.text()) && /ERR_FAILED/.test(m.text())) return;
+      errs.push(m.text());
+    });
+    pg.on('pageerror', (e) => errs.push(String(e)));
+    await pg.setRequestInterception(true);
+    pg.on('request', (req) => {
+      if (/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(req.url())) req.abort();
+      else req.continue();
+    });
+    await pg.goto(BASE + '/step-2.html' + (query || ''), { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await sleep(600);
+    const info = await pg.evaluate(() => ({
+      bankRef: ((document.getElementById('bank-ref') || {}).textContent || '').trim(),
+      instructionsRef: ((document.getElementById('instructions-ref') || {}).textContent || '').trim(),
+      total: ((document.getElementById('bank-amount') || {}).textContent || '').trim(),
+    }));
+    const ok = await pg.evaluate(() => /^SOC-[A-Z0-9]+$/.test(((document.getElementById('bank-ref') || {}).textContent || '').trim()));
+    await pg.close();
+    return { info, ok };
+  }
+
+  const refWith = await step2Ref('?ref=SOC-ENIOLA');
+  assert('step-2 displays ?ref= reference', refWith.ok && refWith.info.bankRef === 'SOC-ENIOLA' && refWith.info.instructionsRef === 'SOC-ENIOLA', JSON.stringify(refWith.info));
+  const refWithout = await step2Ref('');
+  assert('step-2 no-ref unchanged (fresh SOC-XXXXX)', refWithout.ok && refWithout.info.bankRef !== 'SOC-ENIOLA' && refWithout.info.bankRef.length === 9, JSON.stringify(refWithout.info));
+
   assert('no console/page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 } finally {
   await browser.close();
