@@ -158,6 +158,30 @@ try {
     assert('status survives reload', true, 'no pill found (skipped)');
   }
 
+  // ---- Task 4: tokenized angles + personal pay links ----
+  const tokenInfo = await page.evaluate(() => {
+    const sample = LEADS[0];
+    const digits = String(sample.phone || '').replace(/\D/g, '');
+    return {
+      angleCount: ANGLES.length,
+      payRef: payRef(sample),
+      payLink: payLinkFor(sample),
+      origin: location.origin,
+      urgent: composeToken(sample, 'urgent'),
+      objection: composeToken(sample, 'objection'),
+      perAngle: document.querySelectorAll('#leads-grid [data-card] .angle-pill').length / Math.max(1, document.querySelectorAll('#leads-grid [data-card]').length),
+      payLinkBtns: document.querySelectorAll('#leads-grid [data-paylink]').length,
+      expectedRef: 'SOC-' + digits.slice(-5),
+    };
+  });
+  assert('ANGLES has 6 entries', tokenInfo.angleCount === 6, 'count=' + tokenInfo.angleCount);
+  assert('payRef format matches SOC-<last5>', tokenInfo.payRef === tokenInfo.expectedRef, `${tokenInfo.payRef} vs ${tokenInfo.expectedRef}`);
+  assert('pay link shape', tokenInfo.payLink.startsWith(tokenInfo.origin + '/step-2.html?ref=SOC-'), tokenInfo.payLink);
+  assert('urgent token composed', tokenInfo.urgent.includes('SELLOUT25') && tokenInfo.urgent.includes(tokenInfo.expectedRef) && tokenInfo.urgent.includes('10,000'), 'len=' + tokenInfo.urgent.length);
+  assert('objection token composed', tokenInfo.objection.includes('SELLOUT25') && tokenInfo.objection.includes('7,500'), 'len=' + tokenInfo.objection.length);
+  assert('card shows 6 angle pills', Math.abs(tokenInfo.perAngle - 6) < 0.01, 'per card=' + tokenInfo.perAngle.toFixed(2));
+  assert('pay link copy button on cards', tokenInfo.payLinkBtns > 0, 'btns=' + tokenInfo.payLinkBtns);
+
   assert('no console/page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 } finally {
   await browser.close();

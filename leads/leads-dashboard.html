@@ -486,10 +486,12 @@
 
     // ---- Copy angles ----
     const ANGLES = [
-      { key: "story",  label: "Story Hook",        short: "Story",   icon: "🔥" },
-      { key: "future", label: "Future Pace",       short: "Future",  icon: "⚡" },
-      { key: "casual", label: "Quick Icebreaker",  short: "Quick",   icon: "💬" },
-      { key: "audio",  label: "Voice Note Script", short: "Voice",   icon: "🎙️" },
+      { key: "story",     label: "Story Hook",        short: "Story",   icon: "🔥" },
+      { key: "future",    label: "Future Pace",       short: "Future",  icon: "⚡" },
+      { key: "casual",    label: "Quick Icebreaker",  short: "Quick",   icon: "💬" },
+      { key: "audio",     label: "Voice Note Script", short: "Voice",   icon: "🎙️" },
+      { key: "urgent",    label: "Urgent Proof",      short: "Urgent",  icon: "⏰" },
+      { key: "objection", label: "Objection Breaker", short: "Object",  icon: "🛡️" },
     ];
     const FOLLOWUPS = [
       { key: "touch2", short: "Touch 2", label: "Touch 2 · 24h · value check-in" },
@@ -510,9 +512,44 @@
     const cardAngles = {};
     const angleFor = (phone) => cardAngles[phone] || globalAngle;
     const labelFor = (key) => (ANGLES.find(a => a.key === key) || ANGLES[0]).label;
-    const msgFor = (lead, angle) => (lead.messages && lead.messages[angle])
-      ? lead.messages[angle]
-      : (lead.followUps && lead.followUps[angle]) ? lead.followUps[angle] : (lead.message || "");
+
+    function payRef(lead) {
+      const digits = String(lead.phone || "").replace(/\D/g, "");
+      return digits ? "SOC-" + digits.slice(-5) : "SOC-XXXXX";
+    }
+    function payLinkFor(lead) {
+      return location.origin + "/step-2.html?ref=" + encodeURIComponent(payRef(lead));
+    }
+    function composeToken(lead, angle) {
+      const f = (lead.firstName || (lead.name || "").split(" ")[0] || "there");
+      if (angle === "urgent") {
+        const enrolled = LEADS.filter(l => l.status === "Enrolled").length;
+        const left = Math.max(0, SEAT_TARGET - enrolled);
+        return [
+          `${f}, I cap this cohort at ${SEAT_TARGET} seats — ${left} ${left === 1 ? "is" : "are"} left.`,
+          `Early-bird is ₦${PRICE_FULL.toLocaleString()}, or ₦${PRICE_COUPON.toLocaleString()} with code SELLOUT25.`,
+          `The moment you pay, your personal reference (${payRef(lead)}) locks your seat so there are no mix-ups. Want the payment details?`,
+        ].join("\n\n");
+      }
+      if (angle === "objection") {
+        const worry = lead.challenge || "is this for my stage?";
+        const budgetLine = lead.investment && /\d/.test(String(lead.investment))
+          ? ` You already told me you'd be investing around that range.`
+          : "";
+        return [
+          `${f}, real talk on "${worry}": a challenge only works if you actually build — so the 7 days build with you. Offer (Day 1–2), packaging (Day 3–4), messaging (Day 5–6), sales system (Day 7).`,
+          `For ${lead.goal ? "your " + lead.goal : "your next paid launch"}, that's the entire gap, not half a program.${budgetLine}`,
+          `With SELLOUT25 it's ₦${PRICE_COUPON.toLocaleString()} — less than one bad pricing decision. Want the payment details?`,
+        ].join("\n\n");
+      }
+      return "";
+    }
+    const msgFor = (lead, angle) => {
+      if (angle === "urgent" || angle === "objection") return composeToken(lead, angle);
+      return (lead.messages && lead.messages[angle])
+        ? lead.messages[angle]
+        : (lead.followUps && lead.followUps[angle]) ? lead.followUps[angle] : (lead.message || "");
+    };
     function waURL(lead, angle) { return waURLText(lead.phone, msgFor(lead, angle)); }
     function waURLText(phone, text) { return "https://wa.me/" + phone + "?text=" + encodeURIComponent(text || ""); }
     const findLead = (phone) => LEADS.find(x => x.phone === phone);
@@ -1075,7 +1112,12 @@
               <h3 class="text-white font-body font-semibold text-[15px] leading-tight truncate">${escapeHTML(l.name)}</h3>
               <p class="text-gray-500 font-mono text-[11px] mt-0.5">+${l.phone}</p>
             </div>
-            <span class="font-mono text-[10px] px-2 py-0.5 rounded-full border whitespace-nowrap ${ts.badge}">${l.tier}</span>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" data-paylink data-phone="${l.phone}" aria-label="Copy seat payment link for ${escapeHTML(l.name)}"
+                title="Copy personal seat link"
+                class="btn-ghost glass rounded-lg w-11 h-11 flex items-center justify-center text-[13px] text-royal-light hover:text-white transition-colors">🔗</button>
+              <span class="font-mono text-[10px] px-2 py-0.5 rounded-full border whitespace-nowrap ${ts.badge}">${l.tier}</span>
+            </div>
           </div>
 
           <div class="mb-2.5">
@@ -1095,10 +1137,10 @@
 
           <p class="text-xs text-gray-400 mb-2 line-clamp-2 font-body leading-relaxed">${escapeHTML(preview)}</p>
 
-          <div class="flex gap-1 mb-2" role="group" aria-label="Copy angles for ${escapeHTML(l.name)}">
+          <div class="flex flex-wrap gap-1 mb-2" role="group" aria-label="Copy angles for ${escapeHTML(l.name)}">
             ${ANGLES.map(a => `
             <button type="button" data-phone="${l.phone}" data-angle="${a.key}" aria-pressed="${a.key === angle}"
-              class="angle-pill flex-1 text-[10px] font-mono rounded-md px-1 py-1 transition-colors ${a.key === angle
+              class="angle-pill flex-[1_1_calc(33.333%-4px)] text-[10px] font-mono rounded-md px-1 py-1.5 transition-colors ${a.key === angle
                 ? "bg-royal/25 text-royal-light border border-royal/40 shadow-[0_0_12px_-4px_rgba(38,84,182,0.5)]"
                 : "text-gray-500 hover:text-white hover:bg-white/5 border border-white/5"}">${a.short}</button>`).join("")}
           </div>
@@ -1190,6 +1232,16 @@
         const l = findLead(phone);
         if (l) card.outerHTML = renderCard(l, 0);
       }
+    });
+
+    // ---- Personal pay link copy ----
+    document.getElementById("leads-grid").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-paylink]");
+      if (!btn) return;
+      e.stopPropagation();
+      const lead = findLead(btn.dataset.phone);
+      if (!lead) return;
+      copyText(payLinkFor(lead), "Seat link");
     });
 
     // ---- Lead health status advance ----
