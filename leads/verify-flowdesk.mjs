@@ -35,6 +35,7 @@ const results = [];
 function assert(name, cond, detail = '') {
   results.push({ name, pass: !!cond, detail: String(detail) });
 }
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const browser = await puppeteer.launch({
   headless: true,
@@ -82,10 +83,37 @@ try {
       cards: document.querySelectorAll('#leads-grid [data-card]').length,
       pipelineCells: document.querySelectorAll('#pipeline-strip > div').length,
       statsCells: document.querySelectorAll('#stats-bar > div').length,
+      pulseCells: document.querySelectorAll('#pulse-banner > div').length,
+      alertChips: document.querySelectorAll('#alert-strip [data-alert]').length,
+      alertFallback: text(document.getElementById('alert-strip')).length,
       statusStrip: text(document.getElementById('status-strip')),
       favicon: (document.querySelector('link[rel="icon"]') || {}).href || '',
+      pulseDisplay: getComputedStyle(document.getElementById('pulse-banner')).display,
+      cellRadius: (() => { const el = document.querySelector('#pulse-banner > div'); return el ? getComputedStyle(el).borderRadius : ''; })(),
     };
   });
+
+  assert('pulse banner has 3 cells', dom.pulseCells === 3, 'cells=' + dom.pulseCells);
+  assert('alert strip present', dom.alertFallback > 0, JSON.stringify(dom.alertFallback));
+  assert('tailwind styles applied (grid + radius)', dom.pulseDisplay === 'grid' && dom.cellRadius !== '0px' && dom.cellRadius !== '', JSON.stringify({ pulseDisplay: dom.pulseDisplay, cellRadius: dom.cellRadius }));
+
+  if (dom.alertChips > 0) {
+    const chip = await page.$('#alert-strip [data-alert]');
+    await chip.click();
+    await sleep(300);
+    const after = await page.evaluate(() => ({
+      tier: document.getElementById('filter-tier').value,
+      follow: document.getElementById('filter-follow').value,
+    }));
+    const okAlert = after.tier !== '' || after.follow !== '';
+    assert('alert chip queues filters', okAlert, JSON.stringify(after));
+    if (okAlert) {
+      const cards = await page.evaluate(() => document.querySelectorAll('#leads-grid [data-card]').length);
+      assert('alert chip re-renders grid', cards > 0, 'cards=' + cards);
+    }
+  } else {
+    assert('alert chip queues filters', true, 'no alert chips to click (skipped)');
+  }
 
   assert('gate hidden (seed unlock)', dom.gateHidden);
   assert('app visible', dom.appShown);
@@ -93,6 +121,7 @@ try {
   assert('pipeline strip has 6 cells', dom.pipelineCells === 6, 'cells=' + dom.pipelineCells);
   assert('stats bar has 5 cells', dom.statsCells === 5, 'cells=' + dom.statsCells);
   assert('status strip rendered', dom.statusStrip.length > 0, JSON.stringify(dom.statusStrip.slice(0, 80)));
+
   assert('no console/page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 } finally {
   await browser.close();

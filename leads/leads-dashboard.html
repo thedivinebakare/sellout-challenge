@@ -318,6 +318,9 @@
     <!-- Pipeline + Revenue Goal -->
     <div id="pipeline-strip" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mb-4"></div>
 
+    <!-- Executive Pulse -->
+    <div id="pulse-banner" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4" aria-label="Executive pulse"></div>
+
     <!-- Stats Bar -->
     <div id="stats-bar" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8"></div>
 
@@ -694,6 +697,117 @@
         <span class="ml-auto text-gray-600 hidden sm:inline">goal ₦${goal.toLocaleString()} · ${left} seat${left === 1 ? "" : "s"} left</span>`;
     }
 
+    function computeAlerts() {
+      const alerts = [];
+      const enrolled = LEADS.filter(l => l.status === "Enrolled").length;
+      if (enrolled >= SEAT_TARGET) {
+        alerts.push({ icon: "🎉", label: "Cohort full · revenue goal hit", set: {}, done: true, priority: 0 });
+      }
+      const vipUn = LEADS.filter(l => l.tier === "Tier 1" && !isContacted(l.phone)).length;
+      if (vipUn > 0) {
+        alerts.push({ icon: "🔥", label: `${vipUn} VIP lead${vipUn === 1 ? "" : "s"} unopened`, set: { tier: "Tier 1", status: "", follow: "uncontacted" }, priority: 1 });
+      }
+      const t3 = LEADS.filter(l => (dueTouch(l.phone) || 0) >= 3).length;
+      if (t3 > 0) {
+        alerts.push({ icon: "⏳", label: `${t3} touch-3+ due`, set: { tier: "", status: "", follow: "touch3" }, priority: 2 });
+      }
+      const vipCooling = LEADS.filter(l => {
+        if (l.tier !== "Tier 1") return false;
+        const rec = progress[l.phone];
+        return rec && touchedStatus.includes(rec.status) && rec.status !== "Enrolled" && rec.lastAt && (Date.now() - rec.lastAt) >= 24 * 3600e3;
+      }).length;
+      if (vipCooling > 0) {
+        alerts.push({ icon: "🧊", label: `${vipCooling} VIP conversation${vipCooling === 1 ? "" : "s"} cooling`, set: { tier: "Tier 1", status: "Contacted", follow: "" }, priority: 3 });
+      }
+      return alerts.sort((a, b) => a.priority - b.priority).slice(0, 3);
+    }
+
+    function alertChip(a) {
+      const base = "w-full text-left font-mono text-[11px] px-3 py-2 rounded-lg border transition-colors";
+      const cls = a.done
+        ? "border-tier3/30 bg-tier3/10 text-tier3 cursor-default"
+        : a.priority === 1
+          ? "border-tier1/40 bg-tier1/10 text-tier1 hover:bg-tier1/20"
+          : a.priority === 2
+            ? "border-royal/40 bg-royal/15 text-royal-light hover:bg-royal/25"
+            : "border-tier2/40 bg-tier2/10 text-tier2 hover:bg-tier2/20";
+      const attr = a.done
+        ? "aria-disabled='true'"
+        : `data-alert='${JSON.stringify(a.set).replace(/"/g, "&quot;")}'`;
+      return `<button type="button" ${attr} class="${base} ${cls}">${a.icon} ${a.label}</button>`;
+    }
+
+    function renderPulse() {
+      const p = pipelineCounts();
+      const pct = Math.min(100, Math.round((p.enrolled / SEAT_TARGET) * 100));
+      const revenue = p.enrolled * PRICE_FULL;
+      const goalFull = SEAT_TARGET * PRICE_FULL;
+      const goalCoupon = SEAT_TARGET * PRICE_COUPON;
+      const couponPct = Math.round((goalCoupon / goalFull) * 100);
+      const revPct = Math.min(100, Math.round((revenue / goalFull) * 100));
+      const alerts = computeAlerts();
+      const ARC = Math.round(Math.PI * 48 * 100) / 100;
+
+      const gauge = `
+        <div class="glass rounded-xl p-4 flex flex-col">
+          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500">Seat Conversion</div>
+          <div class="relative flex-1 min-h-[104px] mt-1">
+            <svg viewBox="0 0 120 66" class="absolute inset-0 w-full h-full" aria-hidden="true">
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#2654B6"></stop>
+                  <stop offset="100%" stop-color="#F5A623"></stop>
+                </linearGradient>
+              </defs>
+              <path d="M 12 58 A 46 46 0 0 1 108 58" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9" stroke-linecap="round"></path>
+              <path d="M 12 58 A 46 46 0 0 1 108 58" fill="none" stroke="url(#gaugeGrad)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${ARC}" stroke-dashoffset="${ARC * (1 - pct / 100)}"></path>
+              <circle cx="108" cy="58" r="4.5" fill="#F5A623"></circle>
+              <circle cx="12" cy="58" r="3.5" fill="rgba(255,255,255,0.18)"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-end pb-1">
+              <span class="font-mono text-2xl font-semibold text-pearl leading-none">${p.enrolled}</span>
+              <span class="font-mono text-[10px] text-gray-500 mt-0.5">/ ${SEAT_TARGET} seats</span>
+            </div>
+          </div>
+          <div class="flex justify-between font-mono text-[10px] text-gray-500 mt-1">
+            <span>${pct}% sold</span>
+            <span>${Math.max(0, SEAT_TARGET - p.enrolled)} left</span>
+          </div>
+        </div>`;
+
+      const cash = `
+        <div class="glass rounded-xl p-4 flex flex-col justify-between">
+          <div class="flex items-baseline justify-between gap-2">
+            <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500">Cash Realized</div>
+            <span class="font-mono text-[10px] text-gray-600">goal ₦${goalFull.toLocaleString()}</span>
+          </div>
+          <div class="mt-2">
+            <div class="font-mono text-2xl sm:text-3xl font-semibold text-tier3 leading-none">₦${revenue.toLocaleString()}</div>
+            <div class="font-mono text-[10px] text-gray-500 mt-1.5">enrolled revenue at ₦${PRICE_FULL.toLocaleString()}/seat</div>
+          </div>
+          <div class="mt-3">
+            <div class="rv-track h-2 rounded-full overflow-hidden relative">
+              <div class="rv-bar h-full rounded-full" style="width:${revPct}%"></div>
+              <div class="absolute top-0 bottom-0 w-0.5 bg-amber-300/60" style="left:${couponPct}%" title="Coupon-price goal"></div>
+            </div>
+            <div class="flex justify-between mt-1.5 font-mono text-[9px] text-gray-600">
+              <span>₦${goalCoupon.toLocaleString()} coupon goal</span>
+              <span>₦${goalFull.toLocaleString()} full goal</span>
+            </div>
+          </div>
+        </div>`;
+
+      const priority = `
+        <div class="glass rounded-xl p-4 flex flex-col">
+          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-gray-500 mb-2">Priority · tap to queue</div>
+          <div id="alert-strip" class="flex flex-col gap-2 flex-1">
+            ${alerts.length ? alerts.map(alertChip).join("") : `<p class="font-mono text-[11px] text-gray-600">All quiet · nothing urgent</p>`}
+          </div>
+        </div>`;
+
+      document.getElementById("pulse-banner").innerHTML = gauge + cash + priority;
+    }
+
     function renderPipeline() {
       const p = pipelineCounts();
       const revenue = p.enrolled * PRICE_FULL;
@@ -734,6 +848,7 @@
 
       document.getElementById("pipeline-strip").innerHTML = chipHtml + revHtml;
       renderStatusStrip();
+      renderPulse();
     }
 
     // ---- Stats (tiers) ----
@@ -831,6 +946,21 @@
       else { tierFilter.value = tier; }
       renderStats();
       applyFilters();
+    });
+
+    // ---- Pulse alert chips ----
+    document.getElementById("pulse-banner").addEventListener("click", (e) => {
+      const chip = e.target.closest("[data-alert]");
+      if (!chip) return;
+      let a;
+      try { a = JSON.parse(chip.dataset.alert); } catch (err) { return; }
+      if (!a || typeof a !== "object") return;
+      document.getElementById("filter-tier").value = a.tier || "";
+      document.getElementById("filter-status").value = a.status || "";
+      document.getElementById("filter-follow").value = a.follow || "";
+      renderStats();
+      applyFilters();
+      flash((chip.textContent || "").trim() + " queued");
     });
 
     // ---- Status change ----
