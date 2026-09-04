@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sell Out Challenge · Outreach Command Center</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232654B6'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='bold' fill='%23FBFCF8' text-anchor='middle'%3ESO%3C/text%3E%3C/svg%3E">
+  <title>FlowDesk · Revenue & Outreach Command</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232654B6'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='bold' fill='%23FBFCF8' text-anchor='middle'%3EFD%3C/text%3E%3C/svg%3E">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -279,21 +279,26 @@
   <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
     <!-- Header -->
     <header class="mb-8">
-      <div class="flex items-center gap-3 mb-3">
-        <span class="relative flex h-2.5 w-2.5">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
-        </span>
-        <span class="font-mono text-[11px] uppercase tracking-[0.2em] text-gray-500">Live Command Center</span>
-      </div>
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 class="font-display text-4xl sm:text-5xl text-pearl tracking-tight leading-none">
-            Outreach <span class="italic text-royal-light">command center</span>
-          </h1>
-          <p class="text-gray-400 mt-2 text-sm sm:text-base font-body max-w-xl leading-relaxed">
-            Scored, deduplicated and niche-classified leads from the Sell Out Challenge registration funnel. One-click WhatsApp dispatch, turbo queue, follow-up radar.
-          </p>
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <span class="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-royal-light to-royal-deep shadow-[0_10px_28px_-10px_rgba(38,84,182,0.7),inset_0_1px_0_rgba(255,255,255,0.22)]">
+            <span class="font-mono text-[13px] font-semibold tracking-tight text-pearl">FD</span>
+          </span>
+          <div>
+            <p class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-royal-light">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+              </span>
+              FlowDesk · Live Command Center
+            </p>
+            <h1 class="font-display text-3xl sm:text-4xl text-pearl tracking-tight leading-none mt-1.5">
+              Outreach <span class="italic text-royal-light">command</span>
+            </h1>
+            <p class="text-gray-400 mt-2 text-sm font-body max-w-xl leading-relaxed">
+              Scored, deduplicated and niche-classified leads from the Sell Out Challenge registration funnel. One-click WhatsApp dispatch, turbo queue, follow-up radar.
+            </p>
+          </div>
         </div>
         <div class="flex items-center gap-2">
           <button onclick="exportProgress()"
@@ -307,6 +312,7 @@
           </a>
         </div>
       </div>
+      <div id="status-strip" class="glass rounded-xl px-4 py-2.5 mt-5 flex flex-wrap items-center gap-x-5 gap-y-1.5 font-mono text-[11px]"></div>
     </header>
 
     <!-- Pipeline + Revenue Goal -->
@@ -486,6 +492,11 @@
     const PROGRESS_KEY = "soc_progress_v1";
     const ARSENAL_KEY = "soc_arsenal_v1";
 
+    const BRAND = "FlowDesk";
+    const SEAT_TARGET = 50;
+    const PRICE_FULL = 10000;
+    const PRICE_COUPON = 7500;
+
     let globalAngle = "story";
     const cardAngles = {};
     const angleFor = (phone) => cardAngles[phone] || globalAngle;
@@ -659,12 +670,34 @@
       return { total: LEADS.length, contacted, inConv, enrolled, due };
     }
 
+    function renderStatusStrip() {
+      const el = document.getElementById("status-strip");
+      if (!el) return;
+      const p = pipelineCounts();
+      const sent = p.contacted + p.inConv + p.enrolled;
+      const revenue = p.enrolled * PRICE_FULL;
+      const goal = SEAT_TARGET * PRICE_FULL;
+      const left = Math.max(0, SEAT_TARGET - p.enrolled);
+      const cells = [
+        { k: "SEAT", v: "₦" + PRICE_FULL.toLocaleString(), c: "text-pearl" },
+        { k: "COUPON", v: "₦" + PRICE_COUPON.toLocaleString(), c: "text-pearl" },
+        { k: "ENROLLED", v: p.enrolled + "/" + SEAT_TARGET, c: "text-amber-300" },
+        { k: "REVENUE", v: "₦" + revenue.toLocaleString(), c: "text-tier3" },
+        { k: "PIPELINE", v: sent + " sent · " + p.inConv + " live · " + p.due + " due", c: "text-royal-light" },
+        { k: "REF", v: "SOC-XXXXX", c: "text-gray-400" },
+      ];
+      el.innerHTML = cells.map(c => `
+        <span class="inline-flex items-baseline gap-1.5 whitespace-nowrap">
+          <span class="text-gray-500 tracking-wider">${c.k}</span>
+          <span class="${c.c} font-medium">${c.v}</span>
+        </span>`).join("") + `
+        <span class="ml-auto text-gray-600 hidden sm:inline">goal ₦${goal.toLocaleString()} · ${left} seat${left === 1 ? "" : "s"} left</span>`;
+    }
+
     function renderPipeline() {
       const p = pipelineCounts();
-      const SEAT_TARGET = 50;
-      const PRICE = 5000;
-      const revenue = p.enrolled * PRICE;
-      const goal = SEAT_TARGET * PRICE;
+      const revenue = p.enrolled * PRICE_FULL;
+      const goal = SEAT_TARGET * PRICE_FULL;
       const pct = Math.min(100, Math.round((revenue / goal) * 100));
       const chips = [
         { label: "Total Leads", value: p.total, cls: "text-pearl", sub: "" },
@@ -694,12 +727,13 @@
             </div>
             <div class="flex justify-between mt-1.5 font-mono text-[10px] text-gray-500">
               <span>${pct}% of goal</span>
-              <span>${Math.max(0, SEAT_TARGET - p.enrolled)} seats left at ₦${PRICE.toLocaleString()}</span>
+              <span>${Math.max(0, SEAT_TARGET - p.enrolled)} seats left at ₦${PRICE_FULL.toLocaleString()}</span>
             </div>
           </div>
         </div>`;
 
       document.getElementById("pipeline-strip").innerHTML = chipHtml + revHtml;
+      renderStatusStrip();
     }
 
     // ---- Stats (tiers) ----
