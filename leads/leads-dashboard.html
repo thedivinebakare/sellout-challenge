@@ -17,7 +17,11 @@
             'royal-deep': '#16357F',
             'royal-light': '#3A6FE0',
             pearl: '#FBFCF8',
-            surface: '#070B16',
+            surface: '#050811',
+            obsidian: '#050811',
+            obsidian2: '#0C1324',
+            emerald: '#10B981',
+            'emerald-hi': '#34D399',
             tier1: '#F5A623',
             tier2: '#4A9EFF',
             tier3: '#34D399',
@@ -41,7 +45,7 @@
     .status-pill:active { transform: translateY(2px) scale(0.98); }
     .status-pill:focus-visible { outline: 2px solid #3A6FE0; outline-offset: 2px; }
     body {
-      background: #070B16;
+      background: #050811;
       font-family: 'Inter', sans-serif;
       color: #d7dbe6;
       min-height: 100vh;
@@ -53,10 +57,10 @@
       inset: 0;
       z-index: -2;
       background:
-        radial-gradient(60% 50% at 15% 0%, rgba(38,84,182,0.18), transparent 60%),
-        radial-gradient(50% 40% at 85% 15%, rgba(58,111,224,0.10), transparent 60%),
-        radial-gradient(40% 40% at 50% 100%, rgba(38,84,182,0.12), transparent 60%),
-        #070B16;
+        radial-gradient(52% 46% at 12% 0%, rgba(38,84,182,0.20), transparent 60%),
+        radial-gradient(44% 38% at 86% 12%, rgba(16,185,129,0.09), transparent 62%),
+        radial-gradient(42% 40% at 50% 102%, rgba(38,84,182,0.14), transparent 62%),
+        #050811;
     }
     body::after {
       content: "";
@@ -68,7 +72,7 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
     .glass {
-      background: rgba(255,255,255,0.04);
+      background: rgba(12, 19, 36, 0.68);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255,255,255,0.06);
@@ -77,15 +81,15 @@
       background: rgba(255,255,255,0.02);
       border: 1px solid rgba(255,255,255,0.05);
     }
-    .card:hover {
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.12);
-      transform: translateY(-2px);
-      box-shadow: 0 20px 40px -18px rgba(38,84,182,0.35);
-    }
     .card {
       transition: transform 0.35s cubic-bezier(.16,1,.3,1), box-shadow 0.35s cubic-bezier(.16,1,.3,1), background 0.2s ease, border-color 0.2s ease;
       cursor: pointer;
+    }
+    .card:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-3px);
+      box-shadow: 0 24px 48px -20px rgba(38,84,182,0.4);
     }
     select, input {
       -webkit-appearance: none;
@@ -111,6 +115,53 @@
     }
     .btn-amber:hover { background: linear-gradient(180deg, #ffc56b, #F5A623); }
     .btn-amber:active { transform: translateY(1px); box-shadow: 0 4px 12px -6px rgba(245,166,35,0.5); }
+    .btn-wa {
+      background: linear-gradient(180deg, #1cd497, #10B981);
+      box-shadow: 0 8px 20px -8px rgba(16,185,129,0.55), inset 0 1px 0 rgba(255,255,255,0.25);
+      color: #04231a;
+    }
+    .btn-wa:hover { background: linear-gradient(180deg, #2ce0a3, #12c68d); }
+    .btn-wa:active { transform: translateY(1px); box-shadow: 0 4px 12px -6px rgba(16,185,129,0.5); }
+    .btn-wa:focus-visible { outline: 2px solid #34D399; outline-offset: 2px; }
+
+    /* ---- Quick / dock pills ---- */
+    .pill-quick {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      color: #94A3B8;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.08);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.25s cubic-bezier(.16,1,.3,1), background 0.2s ease, color 0.2s ease, box-shadow 0.25s cubic-bezier(.16,1,.3,1);
+    }
+    .pill-quick:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .pill-quick:active { transform: translateY(1px); }
+    .pill-quick.active {
+      background: linear-gradient(180deg, #2f63c7, #2654B6);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 6px 16px -6px rgba(38,84,182,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    .pill-quick:focus-visible { outline: 2px solid #3A6FE0; outline-offset: 2px; }
+    .view-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      color: #94A3B8;
+      background: transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.25s cubic-bezier(.16,1,.3,1), background 0.2s ease, color 0.2s ease;
+    }
+    .view-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .view-btn.active { color: #fff; background: rgba(255,255,255,0.1); }
+    .view-btn:focus-visible { outline: 2px solid #3A6FE0; outline-offset: 2px; }
+
+    /* ---- Angle switcher ---- */
     #angle-switcher {
       display: flex;
       flex-wrap: wrap;
@@ -141,12 +192,13 @@
       box-shadow: 0 6px 16px -6px rgba(38,84,182,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
     }
     .angle-pill-global:focus-visible { outline: 2px solid #3A6FE0; outline-offset: 2px; border-radius: 8px; }
+
     .tab-pill {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       padding: 7px 10px;
       border-radius: 8px;
-      color: #8f96ab;
+      color: #94A3B8;
       background: transparent;
       border: 1px solid rgba(255,255,255,0.06);
       cursor: pointer;
@@ -182,64 +234,30 @@
     }
     .animate-in { animation: fadeUp 0.4s cubic-bezier(.16,1,.3,1) forwards; }
     .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
-    /* ---- Turbo bar ---- */
-    #turbo-bar {
-      transition: transform 0.45s cubic-bezier(.16,1,.3,1), opacity 0.35s ease;
-      transform: translate(-50%, 140%);
-    }
-    #turbo-bar.open { transform: translate(-50%, 0); }
-    .turbo-panel {
-      box-shadow:
-        0 24px 60px -20px rgba(245,166,35,0.28),
-        0 10px 40px -12px rgba(0,0,0,0.7),
-        inset 0 1px 0 rgba(255,255,255,0.08);
-    }
-    .turbo-card-active {
-      box-shadow: 0 0 0 2px rgba(245,166,35,0.9), 0 20px 40px -18px rgba(245,166,35,0.4);
-      transform: translateY(-2px);
-    }
-    kbd {
+    .avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      line-height: 1;
-      padding: 3px 5px;
-      border-radius: 5px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: #ffd28a;
-      white-space: nowrap;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(150deg, rgba(38,84,182,0.38), rgba(12,19,36,0.7));
+      flex-shrink: 0;
     }
-    .dot-queue {
-      transition: opacity 0.2s ease;
-    }
-    #turbo-bar.open ~ #arsenal-toggle { bottom: 6.5rem; }
 
-    /* ---- Arsenal drawer ---- */
-    #arsenal-backdrop {
-      opacity: 0;
+    /* ---- HUD ---- */
+    .hud-card { position: relative; overflow: hidden; }
+    .hud-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      background:
+        radial-gradient(60% 80% at 100% 0%, rgba(38,84,182,0.12), transparent 60%),
+        radial-gradient(50% 60% at 0% 100%, rgba(255,255,255,0.03), transparent 55%);
     }
-    #arsenal-backdrop.open { opacity: 1; pointer-events: auto; }
-    #arsenal-panel {
-      transform: translateX(100%);
-      transition: transform 0.45s cubic-bezier(.16,1,.3,1);
-    }
-    #arsenal-panel.open { transform: translateX(0); }
-    .arsenal-item {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-    }
-    .arsenal-item .txt { min-width: 0; }
-    .arsenal-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
-    .arsenal-item:active { transform: translateY(1px); }
-    .arsenal-item { transition: transform 0.2s cubic-bezier(.16,1,.3,1), background 0.2s ease, border-color 0.2s ease; }
+    .hud-card > * { position: relative; }
 
     /* ---- Revenue bar ---- */
     .rv-bar { background: linear-gradient(90deg, #F5A623, #ffb84d); box-shadow: 0 0 18px -4px rgba(245,166,35,0.7); }
@@ -275,6 +293,121 @@
       color: #94A3B8;
     }
 
+    /* ---- Arsenal drawer ---- */
+    #arsenal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #arsenal-backdrop.open { opacity: 1; pointer-events: auto; }
+    #arsenal-panel {
+      transform: translateX(100%);
+      transition: transform 0.45s cubic-bezier(.16,1,.3,1);
+    }
+    #arsenal-panel.open { transform: translateX(0); }
+    .arsenal-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(.16,1,.3,1), background 0.2s ease, border-color 0.2s ease;
+    }
+    .arsenal-item .txt { min-width: 0; }
+    .arsenal-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+    .arsenal-item:active { transform: translateY(1px); }
+
+    /* ---- Popovers ---- */
+    #filters-popover,
+    #actions-popover {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px) scale(0.98);
+      transition: transform 0.3s cubic-bezier(.16,1,.3,1), opacity 0.25s ease;
+    }
+    #filters-popover.open,
+    #actions-popover.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+    #filters-backdrop,
+    #actions-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    #filters-backdrop.open,
+    #actions-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    /* ---- Zen turbo overlay ---- */
+    #zen-overlay {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #zen-overlay.open { opacity: 1; pointer-events: auto; }
+    #zen-card {
+      transform: translateY(18px) scale(0.97);
+      transition: transform 0.45s cubic-bezier(.16,1,.3,1);
+    }
+    #zen-overlay.open #zen-card { transform: translateY(0) scale(1); }
+    .zen-angle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 7px 9px;
+      border-radius: 8px;
+      color: #94A3B8;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.07);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.2s cubic-bezier(.16,1,.3,1), background 0.2s ease, color 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .zen-angle:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .zen-angle:active { transform: translateY(1px); }
+    .zen-angle.active {
+      background: linear-gradient(180deg, #2f63c7, #2654B6);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 6px 16px -6px rgba(38,84,182,0.6);
+    }
+    kbd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      line-height: 1;
+      padding: 3px 5px;
+      border-radius: 5px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #ffd28a;
+      white-space: nowrap;
+    }
+    .turbo-card-active {
+      box-shadow: 0 0 0 2px rgba(245,166,35,0.9), 0 20px 40px -18px rgba(245,166,35,0.4);
+      transform: translateY(-2px);
+    }
+
+    /* ---- Table view ---- */
+    #leads-table-wrap { border-collapse: separate; border-spacing: 0; }
+    #leads-table tr {
+      transition: background 0.15s ease;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    #leads-table tr:hover { background: rgba(255,255,255,0.04); }
+    #leads-table th {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #94A3B8;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    #leads-table td { padding: 11px 14px; }
+
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
       .card:hover { transform: none; }
@@ -293,143 +426,262 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A6FE0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
       <h2 class="font-display text-2xl text-pearl mb-1 tracking-tight">Restricted access</h2>
-      <p class="text-sm text-gray-400 font-body mb-5 leading-relaxed">This command center contains private participant data. Enter the access code to continue.</p>
+      <p class="text-sm text-slate-300 font-body mb-5 leading-relaxed">This command center contains private participant data. Enter the access code to continue.</p>
       <label for="gate-pass" class="sr-only">Access code</label>
       <input id="gate-pass" type="password" placeholder="Access code"
-        class="w-full glass rounded-lg px-4 py-3 text-sm font-mono text-pearl placeholder-gray-600 bg-transparent outline-none focus:ring-2 focus:ring-royal">
+        class="w-full glass rounded-lg px-4 py-3 text-sm font-mono text-pearl placeholder-slate-400 bg-transparent outline-none focus:ring-2 focus:ring-royal">
       <p id="gate-error" class="hidden text-red-400 text-xs font-mono mt-2"></p>
       <button type="submit" class="btn-royal w-full mt-4 text-white text-sm font-mono py-3 rounded-lg transition-colors">Unlock command center</button>
     </form>
   </div>
 
-  <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
-    <!-- Header -->
-    <header class="mb-8">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3.5">
-          <span class="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-royal-light to-royal-deep shadow-[0_10px_28px_-10px_rgba(38,84,182,0.7),inset_0_1px_0_rgba(255,255,255,0.22)]">
-            <span class="font-mono text-[13px] font-semibold tracking-tight text-pearl">FD</span>
+  <!-- Pill navbar -->
+  <header class="sticky top-0 z-40 px-4 sm:px-6 pt-3 sm:pt-4">
+    <div class="max-w-[1400px] mx-auto">
+      <nav class="glass rounded-2xl px-4 py-2.5 flex items-center gap-3 sm:gap-4" aria-label="Primary">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-royal-light to-royal-deep shadow-[0_10px_24px_-10px_rgba(38,84,182,0.7),inset_0_1px_0_rgba(255,255,255,0.22)]">
+            <span class="font-mono text-[11px] font-semibold tracking-tight text-pearl">FD</span>
           </span>
-          <div>
-            <p class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-royal-light">
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-              </span>
-              FlowDesk · Live Command Center
-            </p>
-            <h1 class="font-display text-3xl sm:text-4xl text-pearl tracking-tight leading-none mt-1.5">
-              Outreach <span class="italic text-royal-light">command</span>
-            </h1>
-            <p class="text-gray-400 mt-2 text-sm font-body max-w-xl leading-relaxed">
-              Scored, deduplicated and niche-classified leads from the Sell Out Challenge registration funnel. One-click WhatsApp dispatch, turbo queue, follow-up radar.
-            </p>
+          <div class="min-w-0">
+            <p class="font-display text-lg text-pearl leading-none tracking-tight">FlowDesk <span class="italic text-royal-light">command</span></p>
+            <p id="cohort-pulse" class="font-mono text-[9px] uppercase tracking-[0.22em] text-slate-400 mt-0.5 truncate">cohort 01 · live</p>
           </div>
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="exportProgress()"
-            class="btn-ghost glass rounded-lg px-4 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors">↧ Export</button>
-          <button onclick="document.getElementById('import-file').click()"
-            class="btn-ghost glass rounded-lg px-4 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors">↥ Import</button>
-          <input id="import-file" type="file" accept="application/json,.json" class="hidden">
+
+        <span class="hidden md:inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-emerald-hi bg-emerald/10 border border-emerald/25 rounded-full px-2.5 py-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-hi shadow-[0_0_8px_rgba(52,211,153,0.9)]"></span>
+          Live
+        </span>
+
+        <div class="ml-auto flex items-center gap-1.5">
           <a href="/" target="_blank" rel="noopener"
-            class="btn-ghost glass rounded-lg px-4 py-2 text-xs font-mono text-gray-400 hover:text-white transition-colors">
-            View live funnel →
+            class="hidden sm:inline-flex btn-ghost glass rounded-lg px-3.5 py-2 text-xs font-mono text-slate-300 hover:text-white transition-colors">
+            Funnel ↗
           </a>
+          <button id="actions-toggle" aria-haspopup="menu" aria-expanded="false"
+            class="btn-ghost glass rounded-lg px-3.5 py-2 text-xs font-mono text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
+            Actions <span class="text-slate-400" aria-hidden="true">▾</span>
+          </button>
+          <button id="arsenal-quick" onclick="toggleArsenal()" aria-label="Open arsenal"
+            class="btn-amber rounded-lg w-9 h-9 text-[#0B1526] text-sm flex items-center justify-center transition-transform active:scale-95">🧰</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div id="app" class="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+
+    <!-- Unified Executive HUD -->
+    <section id="hud" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5" aria-label="Executive pulse">
+      <div class="hud-card glass rounded-2xl p-5" aria-label="Revenue realization">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">Revenue Realization</span>
+          <span class="font-mono text-[9px] text-slate-400">confirmed · enrolled seats</span>
+        </div>
+        <div class="font-mono text-3xl sm:text-4xl font-semibold text-pearl leading-none"><span id="hud-revenue">₦0</span></div>
+        <div class="flex items-baseline gap-2 mt-2">
+          <span id="hud-rev-pct" class="font-mono text-[11px] text-amber-300">0%</span>
+          <span id="hud-rev-goal" class="font-mono text-[10px] text-slate-400">of ₦500,000 goal</span>
+        </div>
+        <div class="rv-track h-1.5 rounded-full overflow-hidden relative mt-3">
+          <div id="hud-rev-fill" class="rv-bar h-full rounded-full" style="width:0%"></div>
+          <div id="hud-coupon-marker" class="absolute top-0 bottom-0 w-0.5 bg-amber-300/60" style="left:75%" title="Coupon-price goal"></div>
+        </div>
+        <p id="hud-rev-sub" class="font-mono text-[10px] text-slate-300 mt-2">0 seats remaining at ₦10,000</p>
+      </div>
+
+      <div class="hud-card glass rounded-2xl p-5" aria-label="Conversion velocity">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">Conversion Velocity</span>
+          <span class="font-mono text-[9px] text-slate-400">enrolled / contacted</span>
+        </div>
+        <div class="font-mono text-3xl sm:text-4xl font-semibold text-royal-light leading-none"><span id="hud-conv">0%</span></div>
+        <p id="hud-conv-sub" class="font-mono text-[10px] text-slate-300 mt-2">0 enrolled · 0 contacted</p>
+        <div class="rv-track h-1.5 rounded-full overflow-hidden mt-3">
+          <div id="hud-conv-fill" class="h-full rounded-full bg-gradient-to-r from-royal-light to-tier3" style="width:0%"></div>
         </div>
       </div>
-      <div id="status-strip" class="glass rounded-xl px-4 py-2.5 mt-5 flex flex-wrap items-center gap-x-5 gap-y-1.5 font-mono text-[11px]"></div>
-    </header>
 
-    <!-- Pipeline + Revenue Goal -->
-    <div id="pipeline-strip" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mb-4"></div>
+      <div class="hud-card glass rounded-2xl p-5" aria-label="Urgent action queue">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">Urgent Queue</span>
+          <span class="font-mono text-[9px] text-slate-400">tap alert → queue</span>
+        </div>
+        <div class="font-mono text-3xl sm:text-4xl font-semibold text-amber-300 leading-none"><span id="hud-urgent">0</span></div>
+        <p id="hud-urgent-sub" class="font-mono text-[10px] text-slate-300 mt-2">nothing cooling today</p>
+        <div id="alert-strip" class="flex flex-col gap-1.5 mt-3"></div>
+      </div>
+    </section>
 
-    <!-- Executive Pulse -->
-    <div id="pulse-banner" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4" aria-label="Executive pulse"></div>
+    <!-- Command dock -->
+    <div class="glass rounded-2xl p-3.5 mb-6" role="search">
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="flex-1 min-w-[200px]">
+          <input id="search-input" type="text" placeholder="Search name, phone, offer…"
+            class="w-full glass rounded-xl px-4 py-2.5 text-sm font-body text-gray-200 placeholder-slate-400 bg-transparent focus:ring-2 focus:ring-royal outline-none border-0">
+        </div>
 
-    <!-- Stats Bar -->
-    <div id="stats-bar" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8"></div>
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button type="button" data-quick="all" class="pill-quick active">All</button>
+          <button type="button" data-quick="vip" class="pill-quick">🔥 VIP</button>
+          <button type="button" data-quick="warm" class="pill-quick">⚡ Warm</button>
+          <button type="button" data-quick="new" class="pill-quick">🆕 Uncontacted</button>
+          <button type="button" data-quick="due" class="pill-quick">⏳ Due T2</button>
+        </div>
 
-    <!-- Filters -->
-    <div class="flex flex-wrap items-center gap-3 mb-6">
-      <select id="filter-tier" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors">
-        <option value="">All Tiers</option>
-        <option value="Tier 1">🔥 Tier 1 · VIP</option>
-        <option value="Tier 2">⚡ Tier 2 · Warm</option>
-        <option value="Tier 3">🌱 Tier 3 · Nurture</option>
-        <option value="Tier 4">Tier 4 · Cold</option>
-      </select>
+        <button id="filters-toggle" aria-haspopup="true" aria-expanded="false"
+          class="btn-ghost glass rounded-xl px-3.5 py-2.5 text-xs font-mono text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">Filters <span class="text-slate-400" aria-hidden="true">▾</span></button>
 
-      <select id="filter-niche" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors">
-        <option value="">All Niches</option>
-      </select>
-
-      <select id="filter-status" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors">
-        <option value="">All Statuses</option>
-        <option value="New">New</option>
-        <option value="Contacted">Contacted</option>
-        <option value="In Conversation">In Conversation</option>
-        <option value="Enrolled">Enrolled</option>
-        <option value="Follow-up">Follow-up</option>
-      </select>
-
-      <select id="filter-follow" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Follow-up radar">
-        <option value="">All Leads</option>
-        <option value="uncontacted">🆕 Uncontacted only</option>
-        <option value="touch2">⏳ Due · Touch 2</option>
-        <option value="touch3">⏳ Due · Touch 3</option>
-        <option value="touch4">⏳ Due · Touch 4</option>
-      </select>
-
-      <div id="angle-switcher" class="glass" role="group" aria-label="Dispatch angle">
-        <button type="button" class="angle-pill-global active" data-angle="story" aria-pressed="true">🔥 Story Hook</button>
-        <button type="button" class="angle-pill-global" data-angle="future" aria-pressed="false">⚡ Future Pace</button>
-        <button type="button" class="angle-pill-global" data-angle="casual" aria-pressed="false">💬 Icebreaker</button>
-        <button type="button" class="angle-pill-global" data-angle="audio" aria-pressed="false">🎙️ Voice Note</button>
+        <div class="flex items-center gap-1.5" role="group" aria-label="View mode">
+          <button type="button" data-view="cards" class="view-btn active">▦ Cards</button>
+          <button type="button" data-view="table" class="view-btn">☰ Table</button>
+        </div>
       </div>
 
-      <input id="search-input" type="text" placeholder="Search name, phone, offer..."
-        class="glass rounded-lg px-4 py-2.5 text-sm font-body text-gray-300 placeholder-gray-600 bg-transparent flex-1 min-w-[200px] focus:ring-2 focus:ring-royal outline-none border-0">
+      <div class="flex flex-wrap items-center gap-2 mt-2.5">
+        <div id="angle-switcher" class="glass rounded-xl" role="group" aria-label="Dispatch angle">
+          <button type="button" class="angle-pill-global active" data-angle="story" aria-pressed="true">🔥 Story</button>
+          <button type="button" class="angle-pill-global" data-angle="future" aria-pressed="false">⚡ Future</button>
+          <button type="button" class="angle-pill-global" data-angle="casual" aria-pressed="false">💬 Quick</button>
+          <button type="button" class="angle-pill-global" data-angle="audio" aria-pressed="false">🎙️ Voice</button>
+          <button type="button" class="angle-pill-global" data-angle="urgent" aria-pressed="false">⏰ Urgent</button>
+          <button type="button" class="angle-pill-global" data-angle="objection" aria-pressed="false">🛡️ Object</button>
+        </div>
 
-      <select id="sort-select" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Sort leads">
-        <option value="score">Sort · Score</option>
-        <option value="name">Sort · Name</option>
-      </select>
+        <div class="flex items-center gap-1.5">
+          <button type="button" data-preset="vip10" class="btn-ghost glass rounded-lg px-3 py-2 text-xs font-mono text-slate-300 hover:text-white transition-colors">VIP 10</button>
+          <button type="button" data-preset="uncontacted" class="btn-ghost glass rounded-lg px-3 py-2 text-xs font-mono text-slate-300 hover:text-white transition-colors">New 20</button>
+          <button type="button" data-preset="touch2" class="btn-ghost glass rounded-lg px-3 py-2 text-xs font-mono text-slate-300 hover:text-white transition-colors">Due T2</button>
+        </div>
 
-      <div class="flex items-center gap-2">
-        <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-400">Queue</span>
-        <button type="button" data-preset="vip10"
-          class="btn-ghost glass rounded-lg px-3 py-2.5 text-xs font-mono text-gray-400 hover:text-white transition-colors">VIP 10</button>
-        <button type="button" data-preset="uncontacted"
-          class="btn-ghost glass rounded-lg px-3 py-2.5 text-xs font-mono text-gray-400 hover:text-white transition-colors">Uncontacted</button>
-        <button type="button" data-preset="touch2"
-          class="btn-ghost glass rounded-lg px-3 py-2.5 text-xs font-mono text-gray-400 hover:text-white transition-colors">Due T2</button>
+        <button onclick="startTurbo()" id="turbo-start"
+          class="btn-amber text-[#0B1526] rounded-xl px-4 py-2 text-sm font-mono transition-colors">
+          Zen Run
+        </button>
       </div>
 
-      <select id="turbo-limit" class="filter-select glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-300 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Turbo queue size">
-        <option value="20">Turbo · 20</option>
-        <option value="50">Turbo · 50</option>
-        <option value="100">Turbo · 100</option>
-        <option value="0">Turbo · All</option>
-      </select>
-
-      <button onclick="startTurbo()" id="turbo-start"
-        class="btn-amber text-[#0B1526] rounded-lg px-4 py-2.5 text-sm font-mono transition-colors">
-        🚀 Start Turbo
-      </button>
-
-      <button onclick="exportCSV()"
-        class="btn-ghost glass rounded-lg px-4 py-2.5 text-sm font-mono text-royal-light hover:text-white transition-colors">
-        Export CSV
-      </button>
+      <p id="angle-preview" class="font-mono text-[10px] text-slate-400 mt-2 px-0.5 truncate"></p>
     </div>
 
-    <!-- Lead Cards -->
-    <div id="leads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    <!-- Filters popover -->
+    <div id="filters-backdrop" class="fixed inset-0 z-[52] bg-black/40"></div>
+    <div id="filters-popover" class="fixed top-[86px] right-4 sm:right-8 z-[53] w-[min(92vw,420px)] glass rounded-2xl p-4 sm:p-5">
+      <div class="flex items-center justify-between mb-3">
+        <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300">Filter view</span>
+        <button class="text-slate-300 hover:text-white text-lg leading-none w-7 h-7 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors" onclick="closeFilters()" aria-label="Close filters">&times;</button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <label class="block">
+          <span class="text-[10px] font-mono text-slate-400 block mb-1">Tier</span>
+          <select id="filter-tier" class="filter-select w-full glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-200 bg-transparent cursor-pointer hover:bg-white/5 transition-colors">
+            <option value="">All Tiers</option>
+            <option value="Tier 1">🔥 Tier 1 · VIP</option>
+            <option value="Tier 2">⚡ Tier 2 · Warm</option>
+            <option value="Tier 3">🌱 Tier 3 · Nurture</option>
+            <option value="Tier 4">Tier 4 · Cold</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="text-[10px] font-mono text-slate-400 block mb-1">Status</span>
+          <select id="filter-status" class="filter-select w-full glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-200 bg-transparent cursor-pointer hover:bg-white/5 transition-colors">
+            <option value="">All Statuses</option>
+            <option value="New">New</option>
+            <option value="Contacted">Contacted</option>
+            <option value="In Conversation">In Conversation</option>
+            <option value="Enrolled">Enrolled</option>
+            <option value="Follow-up">Follow-up</option>
+          </select>
+        </label>
+        <label class="block sm:col-span-2">
+          <span class="text-[10px] font-mono text-slate-400 block mb-1">Niche</span>
+          <select id="filter-niche" class="filter-select w-full glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-200 bg-transparent cursor-pointer hover:bg-white/5 transition-colors">
+            <option value="">All Niches</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="text-[10px] font-mono text-slate-400 block mb-1">Follow-up radar</span>
+          <select id="filter-follow" class="filter-select w-full glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-200 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Follow-up radar">
+            <option value="">All Leads</option>
+            <option value="uncontacted">🆕 Uncontacted only</option>
+            <option value="touch2">⏳ Due · Touch 2</option>
+            <option value="touch3">⏳ Due · Touch 3</option>
+            <option value="touch4">⏳ Due · Touch 4</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="text-[10px] font-mono text-slate-400 block mb-1">Sort</span>
+          <select id="sort-select" class="filter-select w-full glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-200 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Sort leads">
+            <option value="score">Score</option>
+            <option value="name">Name</option>
+          </select>
+        </label>
+        <label class="block sm:col-span-2">
+          <span class="text-[10px] font-mono text-slate-400 block mb-1">Zen queue size</span>
+          <select id="turbo-limit" class="filter-select w-full glass rounded-lg pl-3 pr-9 py-2.5 text-sm font-mono text-gray-200 bg-transparent cursor-pointer hover:bg-white/5 transition-colors" aria-label="Zen queue size">
+            <option value="20">20 leads</option>
+            <option value="50">50 leads</option>
+            <option value="100">100 leads</option>
+            <option value="0">All leads</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <!-- Actions popover -->
+    <div id="actions-backdrop" class="fixed inset-0 z-[54] bg-black/40"></div>
+    <div id="actions-popover" class="fixed top-[86px] right-4 sm:right-8 z-[55] w-[min(92vw,280px)] glass rounded-2xl p-2.5" role="menu" aria-label="Actions">
+      <button role="menuitem" onclick="exportProgress()" class="arsenal-item glass-deep rounded-xl px-3.5 py-2.5 mb-1.5">
+        <span class="txt flex-1 text-left">
+          <span class="block font-mono text-[12px] text-gray-200">↧ Export progress</span>
+          <span class="block text-[10px] text-slate-400 font-mono mt-0.5">JSON · status & notes</span>
+        </span>
+      </button>
+      <button role="menuitem" onclick="document.getElementById('import-file').click()" class="arsenal-item glass-deep rounded-xl px-3.5 py-2.5 mb-1.5">
+        <span class="txt flex-1 text-left">
+          <span class="block font-mono text-[12px] text-gray-200">↥ Import progress</span>
+          <span class="block text-[10px] text-slate-400 font-mono mt-0.5">merge a JSON backup</span>
+        </span>
+      </button>
+      <button role="menuitem" onclick="exportCSV()" class="arsenal-item glass-deep rounded-xl px-3.5 py-2.5 mb-1.5">
+        <span class="txt flex-1 text-left">
+          <span class="block font-mono text-[12px] text-gray-200">⇩ Export CSV</span>
+          <span class="block text-[10px] text-slate-400 font-mono mt-0.5">current view · enriched</span>
+        </span>
+      </button>
+      <button role="menuitem" onclick="toggleArsenal()" class="arsenal-item glass-deep rounded-xl px-3.5 py-2.5">
+        <span class="txt flex-1 text-left">
+          <span class="block font-mono text-[12px] text-gray-200">🧰 Arsenal</span>
+          <span class="block text-[10px] text-slate-400 font-mono mt-0.5">objections · payment kit</span>
+        </span>
+      </button>
+    </div>
+    <input id="import-file" type="file" accept="application/json,.json" class="hidden">
+
+    <!-- Lead cards -->
+    <div id="leads-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" aria-label="Lead cards"></div>
+
+    <!-- Lead table (compact) -->
+    <div id="leads-table-wrap" class="hidden glass rounded-2xl overflow-hidden" aria-label="Lead table">
+      <table class="w-full">
+        <thead>
+          <tr>
+            <th class="text-left">Lead</th>
+            <th class="text-left hidden md:table-cell">Tier</th>
+            <th class="text-left hidden lg:table-cell">Niche</th>
+            <th class="text-left hidden sm:table-cell">Obstacle</th>
+            <th class="text-right hidden sm:table-cell">Score</th>
+            <th class="text-left">Status</th>
+            <th class="text-right">WA</th>
+          </tr>
+        </thead>
+        <tbody id="leads-table"></tbody>
+      </table>
+    </div>
 
     <!-- Load more -->
     <div id="load-more-wrap" class="hidden mt-8 flex justify-center">
-      <button id="load-more-btn" class="btn-ghost glass px-6 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors flex items-center gap-2">
+      <button id="load-more-btn" class="btn-ghost glass px-6 py-3 rounded-lg text-sm font-mono text-gray-200 hover:text-white transition-colors flex items-center gap-2">
         <span>Load more</span>
         <span id="load-more-count" class="text-slate-300 text-xs"></span>
       </button>
@@ -438,16 +690,67 @@
     <!-- Empty state -->
     <div id="empty-state" class="hidden text-center py-20">
       <div class="font-display text-2xl text-slate-300 mb-2">No leads match</div>
-      <p class="text-slate-400 text-sm font-mono">Try clearing a filter or adjusting your search.</p>
+      <p class="text-slate-300 text-sm font-mono">Try clearing a filter or adjusting your search.</p>
+    </div>
+  </div>
+
+  <!-- Zen speed-run overlay -->
+  <div id="zen-overlay" class="fixed inset-0 z-[64] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-[#04060d]/92 backdrop-blur-xl"></div>
+    <div id="zen-card" class="relative w-[min(94vw,720px)] glass rounded-3xl p-5 sm:p-8">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="h-1 flex-1 rounded-full bg-white/[0.08] overflow-hidden">
+          <div id="zen-progress-fill" class="h-full rounded-full bg-gradient-to-r from-royal to-amber" style="width:0%"></div>
+        </div>
+        <span id="zen-pos" class="font-mono text-[11px] text-amber-300 whitespace-nowrap">1 / 1</span>
+        <button onclick="stopTurbo()" title="End queue (Esc)" aria-label="End queue"
+          class="btn-ghost glass w-9 h-9 rounded-lg text-slate-300 hover:text-white transition-colors flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="flex items-center gap-4 mb-4">
+        <span id="zen-avatar" class="avatar w-14 h-14 text-lg text-pearl"></span>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2">
+            <h2 id="zen-name" class="font-display text-2xl sm:text-3xl text-pearl leading-tight truncate">No queue</h2>
+            <span id="zen-tier" class="font-mono text-[10px] px-2 py-0.5 rounded-full border bg-royal/15 text-royal-light border-royal/30 hidden sm:inline-flex">Tier</span>
+          </div>
+          <p id="zen-sub" class="font-mono text-[11px] text-slate-300 mt-0.5 truncate"></p>
+        </div>
+        <button onclick="turboMove(-1)" title="Previous (←)" aria-label="Previous"
+          class="btn-ghost glass w-10 h-10 rounded-lg text-slate-300 hover:text-white transition-colors flex items-center justify-center">◀</button>
+        <button onclick="turboMove(1)" title="Next (→)" aria-label="Next"
+          class="btn-ghost glass w-10 h-10 rounded-lg text-slate-300 hover:text-white transition-colors flex items-center justify-center">▶</button>
+      </div>
+
+      <p id="zen-challenge" class="text-sm text-slate-300 font-body leading-relaxed mb-4"></p>
+
+      <div class="glass-deep rounded-2xl p-4 mb-4">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <span id="zen-msg-label" class="text-[10px] text-slate-300 font-mono uppercase tracking-wider"></span>
+        </div>
+        <p id="zen-msg" class="text-sm text-gray-200 whitespace-pre-wrap leading-relaxed font-body max-h-44 overflow-y-auto"></p>
+      </div>
+
+      <div class="flex flex-wrap gap-1.5 mb-5" id="zen-angles" role="group" aria-label="Dispatch angle for current lead"></div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="turboAct()" class="btn-wa flex-1 min-w-[150px] text-xs font-mono font-semibold py-3 rounded-xl transition-transform active:scale-[0.98] flex items-center justify-center gap-1.5">Open &amp; Mark <kbd class="!bg-[#04231a]/20 !border-transparent !text-[#04231a]">W</kbd></button>
+        <button onclick="turboEnroll()" class="btn-royal flex-1 min-w-[120px] text-white text-xs font-mono py-3 rounded-xl transition-transform active:scale-[0.98] flex items-center justify-center gap-1.5">Enroll <kbd class="!bg-white/15 !border-transparent !text-white">E</kbd></button>
+        <button onclick="turboSkip()" class="btn-ghost glass flex-1 min-w-[100px] text-slate-300 hover:text-white text-xs font-mono py-3 rounded-xl transition-colors flex items-center justify-center gap-1.5">Skip <kbd>S</kbd></button>
+      </div>
+
+      <p class="font-mono text-[9px] uppercase tracking-[0.18em] text-slate-400 mt-4 text-center">
+        <kbd>1–6</kbd> angle · <kbd>W</kbd> send · <kbd>E</kbd> enroll · <kbd>S</kbd> skip · <kbd>←</kbd><kbd>→</kbd> nav · <kbd>Esc</kbd> end
+      </p>
     </div>
   </div>
 
   <!-- Dossier drawer -->
   <div id="dossier-backdrop" class="fixed inset-0 z-[65] bg-black/60 backdrop-blur-sm"></div>
-  <aside id="dossier-panel" class="fixed top-0 right-0 z-[66] h-full w-[min(94vw,460px)] glass rounded-l-2xl p-5 overflow-y-auto bg-[#0a1022]">
+  <aside id="dossier-panel" class="fixed top-0 right-0 z-[66] h-full w-[min(94vw,520px)] glass rounded-l-2xl overflow-y-auto">
     <button id="dossier-close" onclick="closeModal()" aria-label="Close dossier"
-      class="absolute top-4 right-4 text-slate-300 hover:text-white text-2xl leading-none w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors">&times;</button>
-    <div id="modal-content"></div>
+      class="absolute top-4 right-4 text-slate-300 hover:text-white text-2xl leading-none w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors z-[1]">&times;</button>
+    <div id="modal-content" class="p-5 sm:p-6"></div>
   </aside>
 
   <!-- Confirm modal -->
@@ -458,46 +761,17 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
       </div>
       <h3 id="confirm-title" class="font-display text-2xl text-pearl mb-1 tracking-tight">Already contacted</h3>
-      <p id="confirm-body" class="text-sm text-gray-400 font-body leading-relaxed mb-5"></p>
+      <p id="confirm-body" class="text-sm text-slate-300 font-body leading-relaxed mb-5"></p>
       <div class="flex gap-3">
-        <button id="confirm-no" class="btn-ghost glass flex-1 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors">Cancel</button>
+        <button id="confirm-no" class="btn-ghost glass flex-1 py-3 rounded-lg text-sm font-mono text-gray-200 hover:text-white transition-colors">Cancel</button>
         <button id="confirm-yes" class="btn-amber flex-1 py-3 rounded-lg text-sm font-mono text-[#0B1526] transition-colors">Proceed</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Turbo bar -->
-  <div id="turbo-bar" class="fixed bottom-5 left-1/2 z-[60] w-[min(94vw,760px)]">
-    <div class="turbo-panel glass rounded-2xl p-3 sm:p-4">
-      <div class="h-1 rounded-full bg-white/[0.08] overflow-hidden mb-2.5">
-        <div id="turbo-progress-fill" class="h-full rounded-full bg-gradient-to-r from-royal to-amber" style="width:0%"></div>
-      </div>
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="turboMove(-1)" title="Previous (←)"
-          class="btn-ghost glass w-9 h-9 rounded-lg text-gray-400 hover:text-white transition-colors flex items-center justify-center">◀</button>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2">
-            <span id="turbo-pos" class="font-mono text-[11px] text-amber-300 whitespace-nowrap">1 / 1</span>
-            <div id="turbo-queue-dots" class="hidden sm:flex gap-1 overflow-hidden flex-1"></div>
-          </div>
-          <p id="turbo-name" class="text-white font-body font-semibold text-sm truncate mt-0.5">No queue</p>
-          <p id="turbo-sub" class="text-slate-300 font-mono text-[11px] truncate mt-0.5"></p>
-        </div>
-        <button onclick="turboMove(1)" title="Skip (S)"
-          class="btn-ghost glass px-3 h-9 rounded-lg text-xs font-mono text-gray-400 hover:text-white transition-colors whitespace-nowrap">Skip <kbd>S</kbd></button>
-        <button onclick="turboEnroll()" title="Enroll lead (E)"
-          class="btn-royal h-9 px-3 rounded-lg text-xs font-mono text-white whitespace-nowrap flex items-center gap-1.5">Enroll <kbd class="!bg-white/15 !border-transparent !text-white">E</kbd></button>
-        <button onclick="turboAct()" title="Open chat + mark sent (W)"
-          class="btn-amber h-9 px-3 sm:px-4 rounded-lg text-xs font-mono text-[#0B1526] whitespace-nowrap flex items-center gap-1.5">Open &amp; Mark <kbd class="!bg-[#0B1526]/20 !border-transparent !text-[#0B1526]">W</kbd></button>
-        <button onclick="stopTurbo()" title="End queue (Esc)"
-          class="btn-ghost glass w-9 h-9 rounded-lg text-gray-400 hover:text-white transition-colors flex items-center justify-center">✕</button>
       </div>
     </div>
   </div>
 
   <!-- Arsenal drawer -->
   <button id="arsenal-toggle" onclick="toggleArsenal()" aria-label="Open arsenal"
-    class="fixed bottom-5 right-5 z-40 btn-amber w-12 h-12 rounded-2xl text-[#0B1526] text-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95">
+    class="fixed bottom-5 right-5 z-[58] btn-amber w-12 h-12 rounded-2xl text-[#0B1526] text-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 hidden">
     <span id="arsenal-glyph">🧰</span>
   </button>
   <div id="arsenal-backdrop" class="fixed inset-0 z-[55] bg-black/60 backdrop-blur-sm"></div>
@@ -546,6 +820,10 @@
     const cardAngles = {};
     const angleFor = (phone) => cardAngles[phone] || globalAngle;
     const labelFor = (key) => (ANGLES.find(a => a.key === key) || ANGLES[0]).label;
+
+    function initials(name) {
+      return String(name || "?").trim().split(/\s+/).map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
+    }
 
     function payRef(lead) {
       const digits = String(lead.phone || "").replace(/\D/g, "");
@@ -597,7 +875,6 @@
         const raw = localStorage.getItem(PROGRESS_KEY);
         if (raw) progress = JSON.parse(raw) || {};
       } catch (e) { progress = {}; }
-      // migrate legacy per-phone status keys
       if (Object.keys(progress).length === 0) {
         let migrated = false;
         for (let i = 0; i < localStorage.length; i++) {
@@ -703,10 +980,6 @@
       if (l.leadScore >= 70) return { icon: "●", label: "Ready", cls: "text-amber-300 border-amber-500/30 bg-amber-500/15" };
       return { icon: "●", label: "Cold", cls: "text-slate-300 border-white/15 bg-white/5" };
     }
-    function healthChip(l) {
-      const h = healthOf(l);
-      return `<span class="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full border ${h.cls}" title="Lead health">${h.icon}${h.label}</span>`;
-    }
 
     const STATUS_CHAIN = ["New", "Contacted", "In Conversation", "Enrolled"];
     function statusNext(status) {
@@ -763,10 +1036,10 @@
 
     // ---- Tier / helpers ----
     const tierStyles = {
-      "Tier 1": { badge: "bg-tier1/15 text-tier1 border-tier1/30", bar: "bg-tier1", text: "text-tier1" },
-      "Tier 2": { badge: "bg-tier2/15 text-tier2 border-tier2/30", bar: "bg-tier2", text: "text-tier2" },
-      "Tier 3": { badge: "bg-tier3/15 text-tier3 border-tier3/30", bar: "bg-tier3", text: "text-tier3" },
-      "Tier 4": { badge: "bg-tier4/15 text-tier4 border-tier4/30", bar: "bg-tier4", text: "text-tier4" },
+      "Tier 1": { badge: "bg-tier1/15 text-tier1 border-tier1/30", dot: "bg-tier1", bar: "bg-tier1", text: "text-tier1" },
+      "Tier 2": { badge: "bg-tier2/15 text-tier2 border-tier2/30", dot: "bg-tier2", bar: "bg-tier2", text: "text-tier2" },
+      "Tier 3": { badge: "bg-tier3/15 text-tier3 border-tier3/30", dot: "bg-tier3", bar: "bg-tier3", text: "text-tier3" },
+      "Tier 4": { badge: "bg-tier4/15 text-tier4 border-tier4/30", dot: "bg-tier4", bar: "bg-tier4", text: "text-tier4" },
     };
     const statusOptions = ["New", "Contacted", "In Conversation", "Enrolled", "Follow-up"];
 
@@ -783,30 +1056,6 @@
         if (dueTouch(l.phone)) due++;
       });
       return { total: LEADS.length, contacted, inConv, enrolled, due };
-    }
-
-    function renderStatusStrip() {
-      const el = document.getElementById("status-strip");
-      if (!el) return;
-      const p = pipelineCounts();
-      const sent = p.contacted + p.inConv + p.enrolled;
-      const revenue = p.enrolled * PRICE_FULL;
-      const goal = SEAT_TARGET * PRICE_FULL;
-      const left = Math.max(0, SEAT_TARGET - p.enrolled);
-      const cells = [
-        { k: "SEAT", v: "₦" + PRICE_FULL.toLocaleString(), c: "text-pearl" },
-        { k: "COUPON", v: "₦" + PRICE_COUPON.toLocaleString(), c: "text-pearl" },
-        { k: "ENROLLED", v: p.enrolled + "/" + SEAT_TARGET, c: "text-amber-300" },
-        { k: "REVENUE", v: "₦" + revenue.toLocaleString(), c: "text-tier3" },
-        { k: "PIPELINE", v: sent + " sent · " + p.inConv + " live · " + p.due + " due", c: "text-royal-light" },
-        { k: "REF", v: "SOC-XXXXX", c: "text-gray-400" },
-      ];
-      el.innerHTML = cells.map(c => `
-        <span class="inline-flex items-baseline gap-1.5 whitespace-nowrap">
-          <span class="text-slate-300 tracking-wider">${c.k}</span>
-          <span class="${c.c} font-medium">${c.v}</span>
-        </span>`).join("") + `
-        <span class="ml-auto text-slate-400 hidden sm:inline">goal ₦${goal.toLocaleString()} · ${left} seat${left === 1 ? "" : "s"} left</span>`;
     }
 
     function computeAlerts() {
@@ -835,7 +1084,7 @@
     }
 
     function alertChip(a) {
-      const base = "w-full text-left font-mono text-[11px] px-3 py-2 rounded-lg border transition-colors";
+      const base = "w-full text-left font-mono text-[10px] px-3 py-1.5 rounded-lg border transition-colors";
       const cls = a.done
         ? "border-tier3/30 bg-tier3/10 text-tier3 cursor-default"
         : a.priority === 1
@@ -849,147 +1098,44 @@
       return `<button type="button" ${attr} class="${base} ${cls}">${a.icon} ${a.label}</button>`;
     }
 
-    function renderPulse() {
-      const p = pipelineCounts();
-      const pct = Math.min(100, Math.round((p.enrolled / SEAT_TARGET) * 100));
-      const revenue = p.enrolled * PRICE_FULL;
-      const goalFull = SEAT_TARGET * PRICE_FULL;
-      const goalCoupon = SEAT_TARGET * PRICE_COUPON;
-      const couponPct = Math.round((goalCoupon / goalFull) * 100);
-      const revPct = Math.min(100, Math.round((revenue / goalFull) * 100));
-      const alerts = computeAlerts();
-      const ARC = Math.round(Math.PI * 48 * 100) / 100;
-
-      const gauge = `
-        <div class="glass rounded-xl p-4 flex flex-col">
-          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">Seat Conversion</div>
-          <div class="relative flex-1 min-h-[104px] mt-1">
-            <svg viewBox="0 0 120 66" class="absolute inset-0 w-full h-full" aria-hidden="true">
-              <defs>
-                <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#2654B6"></stop>
-                  <stop offset="100%" stop-color="#F5A623"></stop>
-                </linearGradient>
-              </defs>
-              <path d="M 12 58 A 46 46 0 0 1 108 58" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9" stroke-linecap="round"></path>
-              <path d="M 12 58 A 46 46 0 0 1 108 58" fill="none" stroke="url(#gaugeGrad)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${ARC}" stroke-dashoffset="${ARC * (1 - pct / 100)}"></path>
-              <circle cx="108" cy="58" r="4.5" fill="#F5A623"></circle>
-              <circle cx="12" cy="58" r="3.5" fill="rgba(255,255,255,0.18)"></circle>
-            </svg>
-            <div class="absolute inset-0 flex flex-col items-center justify-end pb-1">
-              <span class="font-mono text-2xl font-semibold text-pearl leading-none">${p.enrolled}</span>
-              <span class="font-mono text-[10px] text-slate-300 mt-0.5">/ ${SEAT_TARGET} seats</span>
-            </div>
-          </div>
-          <div class="flex justify-between font-mono text-[10px] text-slate-300 mt-1">
-            <span>${pct}% sold</span>
-            <span>${Math.max(0, SEAT_TARGET - p.enrolled)} left</span>
-          </div>
-        </div>`;
-
-      const cash = `
-        <div class="glass rounded-xl p-4 flex flex-col justify-between">
-          <div class="flex items-baseline justify-between gap-2">
-            <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300">Cash Realized</div>
-            <span class="font-mono text-[10px] text-slate-400">goal ₦${goalFull.toLocaleString()}</span>
-          </div>
-          <div class="mt-2">
-            <div class="font-mono text-2xl sm:text-3xl font-semibold text-tier3 leading-none">₦${revenue.toLocaleString()}</div>
-            <div class="font-mono text-[10px] text-slate-300 mt-1.5">enrolled revenue at ₦${PRICE_FULL.toLocaleString()}/seat</div>
-          </div>
-          <div class="mt-3">
-            <div class="rv-track h-2 rounded-full overflow-hidden relative">
-              <div class="rv-bar h-full rounded-full" style="width:${revPct}%"></div>
-              <div class="absolute top-0 bottom-0 w-0.5 bg-amber-300/60" style="left:${couponPct}%" title="Coupon-price goal"></div>
-            </div>
-            <div class="flex justify-between mt-1.5 font-mono text-[9px] text-slate-400">
-              <span>₦${goalCoupon.toLocaleString()} coupon goal</span>
-              <span>₦${goalFull.toLocaleString()} full goal</span>
-            </div>
-          </div>
-        </div>`;
-
-      const priority = `
-        <div class="glass rounded-xl p-4 flex flex-col">
-          <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 mb-2">Priority · tap to queue</div>
-          <div id="alert-strip" class="flex flex-col gap-2 flex-1">
-            ${alerts.length ? alerts.map(alertChip).join("") : `<p class="font-mono text-[11px] text-slate-400">All quiet · nothing urgent</p>`}
-          </div>
-        </div>`;
-
-      document.getElementById("pulse-banner").innerHTML = gauge + cash + priority;
-    }
-
-    function renderPipeline() {
+    // ---- Unified Executive HUD ----
+    function renderHUD() {
       const p = pipelineCounts();
       const revenue = p.enrolled * PRICE_FULL;
       const goal = CASH_GOAL;
-      const pct = Math.min(100, Math.round((revenue / goal) * 100));
-      const chips = [
-        { label: "Total Leads", value: p.total, cls: "text-pearl", sub: "" },
-        { label: "Contacted", value: p.contacted + p.inConv + p.enrolled, cls: "text-royal-light", sub: "sent lanes" },
-        { label: "In Conversat.", value: p.inConv, cls: "text-tier2", sub: "live chats" },
-        { label: "Enrolled", value: p.enrolled, cls: "text-tier3", sub: "" + p.enrolled + "/" + SEAT_TARGET + " seats" },
-        { label: "Follow-ups due", value: p.due, cls: "text-tier1", sub: "radar hits" },
-      ];
-      const chipHtml = chips.map(c => `
-        <div class="glass rounded-xl px-4 py-3.5">
-          <div class="font-mono text-2xl sm:text-3xl font-semibold ${c.cls}">${c.value}</div>
-          <div class="text-[10px] text-slate-300 font-mono uppercase tracking-wider mt-1">${c.label}</div>
-          ${c.sub ? `<div class="text-[10px] font-mono text-slate-400 mt-0.5">${c.sub}</div>` : ""}
-        </div>`).join("");
+      const revPct = Math.min(100, Math.round((revenue / goal) * 100));
+      const contacts = p.contacted + p.inConv + p.enrolled;
+      const conv = contacts ? Math.round((p.enrolled / contacts) * 100) : 0;
+      const couponPct = Math.round(((SEAT_TARGET * PRICE_COUPON) / goal) * 100);
+      const left = Math.max(0, SEAT_TARGET - p.enrolled);
+      const urgent = LEADS.filter(l => (l.tier === "Tier 1" && !isContacted(l.phone)) || (dueTouch(l.phone) || 0) >= 3).length;
+      const alerts = computeAlerts();
+      const setText = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
 
-      const revHtml = `
-        <div class="glass rounded-xl px-4 py-3.5 flex flex-col justify-between col-span-2 min-w-0">
-          <div>
-            <div class="font-mono text-[11px] text-amber-300 uppercase tracking-wider">Early Bird Revenue Goal</div>
-            <div class="font-mono text-xl sm:text-2xl font-semibold text-pearl mt-1">
-              ₦${revenue.toLocaleString()} <span class="text-slate-300 text-sm">/ ₦${goal.toLocaleString()}</span>
-            </div>
-          </div>
-          <div class="mt-3">
-            <div class="rv-track h-2 rounded-full overflow-hidden">
-              <div class="rv-bar h-full rounded-full" style="width:${pct}%"></div>
-            </div>
-            <div class="flex justify-between mt-1.5 font-mono text-[10px] text-slate-300">
-              <span>${pct}% of goal</span>
-              <span>${Math.max(0, SEAT_TARGET - p.enrolled)} seats left at ₦${PRICE_FULL.toLocaleString()}</span>
-            </div>
-          </div>
-        </div>`;
+      setText("hud-revenue", "₦" + revenue.toLocaleString());
+      setText("hud-rev-pct", revPct + "%");
+      setText("hud-rev-goal", "of ₦" + goal.toLocaleString() + " goal");
+      setText("hud-rev-sub", left + " seat" + (left === 1 ? " remaining at" : "s remaining at") + " ₦" + PRICE_FULL.toLocaleString());
+      const fill = document.getElementById("hud-rev-fill");
+      if (fill) fill.style.width = revPct + "%";
+      const marker = document.getElementById("hud-coupon-marker");
+      if (marker) marker.style.left = Math.min(100, couponPct) + "%";
 
-      document.getElementById("pipeline-strip").innerHTML = chipHtml + revHtml;
-      renderStatusStrip();
-      renderPulse();
+      setText("hud-conv", conv + "%");
+      setText("hud-conv-sub", p.enrolled + " enrolled · " + contacts + " contacted");
+      const cfill = document.getElementById("hud-conv-fill");
+      if (cfill) cfill.style.width = conv + "%";
+
+      setText("hud-urgent", urgent);
+      setText("hud-urgent-sub", urgent === 0 ? "nothing cooling today" : urgent + (urgent === 1 ? " lead" : " leads") + " need attention now");
+      const strip = document.getElementById("alert-strip");
+      if (strip) strip.innerHTML = alerts.length ? alerts.map(alertChip).join("") : `<p class="font-mono text-[10px] text-slate-400">All quiet · nothing urgent</p>`;
+
+      const pulse = document.getElementById("cohort-pulse");
+      if (pulse) pulse.textContent = "Cohort 01 · " + p.enrolled + "/" + SEAT_TARGET + " seated";
     }
-
-    // ---- Stats (tiers) ----
-    function renderStats() {
-      const tiers = { "Tier 1": 0, "Tier 2": 0, "Tier 3": 0, "Tier 4": 0 };
-      LEADS.forEach(l => { if (tiers[l.tier] !== undefined) tiers[l.tier]++; });
-      const stats = [
-        { label: "Total Leads", value: LEADS.length, cls: "text-pearl", tier: "" },
-        { label: "🔥 Tier 1 · VIP", value: tiers["Tier 1"], cls: "text-tier1", tier: "Tier 1" },
-        { label: "⚡ Tier 2 · Warm", value: tiers["Tier 2"], cls: "text-tier2", tier: "Tier 2" },
-        { label: "🌱 Tier 3 · Nurture", value: tiers["Tier 3"], cls: "text-tier3", tier: "Tier 3" },
-        { label: "Tier 4 · Cold", value: tiers["Tier 4"], cls: "text-tier4", tier: "Tier 4" },
-      ];
-      const activeTier = document.getElementById("filter-tier").value;
-      document.getElementById("stats-bar").innerHTML = stats.map(s => {
-        const clickable = s.tier !== "";
-        const isActive = s.tier !== "" && s.tier === activeTier;
-        const cls = [
-          "glass rounded-xl px-4 py-4 animate-in",
-          clickable ? "cursor-pointer transition-colors hover:bg-white/5 focus-visible:ring-2 focus-visible:ring-royal outline-none" : "",
-          isActive ? "ring-2 ring-royal/60" : "",
-        ].filter(Boolean).join(" ");
-        return `
-        <div class="${cls}" ${clickable ? `data-tier="${s.tier}" tabindex="0" role="button" aria-label="Filter by ${s.tier}"` : ""}>
-          <div class="font-mono text-2xl sm:text-3xl font-semibold ${s.cls}">${s.value}</div>
-          <div class="text-[11px] text-slate-300 font-mono uppercase tracking-wider mt-1">${s.label}</div>
-        </div>`;
-      }).join("");
-    }
+    function renderPipeline() { renderHUD(); }
+    function renderStats() { renderHUD(); }
 
     // ---- Niches ----
     function populateNiches() {
@@ -1003,9 +1149,46 @@
     }
 
     // ---- Filtering ----
+    const QUICK_PILLS = [
+      { id: "all",  label: "All",          set: { tier: "", status: "", follow: "" } },
+      { id: "vip",  label: "🔥 VIP",       set: { tier: "Tier 1", status: "", follow: "" } },
+      { id: "warm", label: "⚡ Warm",       set: { tier: "", status: "In Conversation", follow: "" } },
+      { id: "new",  label: "🆕 Uncontacted", set: { tier: "", status: "", follow: "uncontacted" } },
+      { id: "due",  label: "⏳ Due T2",     set: { tier: "", status: "", follow: "touch2" } },
+    ];
+    function currentFilterSet() {
+      return {
+        tier: document.getElementById("filter-tier").value,
+        status: document.getElementById("filter-status").value,
+        follow: document.getElementById("filter-follow").value,
+      };
+    }
+    function syncQuickPills() {
+      const cur = JSON.stringify(currentFilterSet());
+      document.querySelectorAll("[data-quick]").forEach(b => {
+        const pill = QUICK_PILLS.find(q => q.id === b.dataset.quick);
+        const on = pill && JSON.stringify(pill.set) === cur;
+        b.classList.toggle("active", !!on);
+        b.setAttribute("aria-pressed", String(!!on));
+      });
+    }
+    function applyQuickPill(id) {
+      const pill = QUICK_PILLS.find(q => q.id === id);
+      if (!pill) return;
+      document.getElementById("filter-tier").value = pill.set.tier;
+      document.getElementById("filter-status").value = pill.set.status;
+      document.getElementById("filter-follow").value = pill.set.follow;
+      syncQuickPills();
+      applyFilters();
+    }
+    document.querySelectorAll("[data-quick]").forEach(b => {
+      b.addEventListener("click", () => applyQuickPill(b.dataset.quick));
+    });
+
     let filteredLeads = [...LEADS];
     const PAGE_SIZE = 48;
     let visibleCount = PAGE_SIZE;
+    let viewMode = "cards";
 
     function applyFilters() {
       const tier = document.getElementById("filter-tier").value;
@@ -1038,30 +1221,20 @@
       visibleCount = PAGE_SIZE;
 
       if (turbo.active) stopTurbo();
+      syncQuickPills();
       renderLeads();
       renderPipeline();
     }
 
     document.getElementById("sort-select").addEventListener("change", applyFilters);
-    document.getElementById("filter-tier").addEventListener("change", () => { renderStats(); applyFilters(); });
+    document.getElementById("filter-tier").addEventListener("change", () => { renderHUD(); applyFilters(); });
     document.getElementById("filter-niche").addEventListener("change", applyFilters);
     document.getElementById("filter-status").addEventListener("change", applyFilters);
     document.getElementById("filter-follow").addEventListener("change", applyFilters);
-    document.getElementById("search-input").addEventListener("input", applyFilters);
+    document.getElementById("search-input").addEventListener("input", () => { syncQuickPills(); applyFilters(); });
 
-    document.getElementById("stats-bar").addEventListener("click", (e) => {
-      const card = e.target.closest("[data-tier]");
-      if (!card) return;
-      const tierFilter = document.getElementById("filter-tier");
-      const tier = card.dataset.tier;
-      if (tierFilter.value === tier) { tierFilter.value = ""; }
-      else { tierFilter.value = tier; }
-      renderStats();
-      applyFilters();
-    });
-
-    // ---- Pulse alert chips ----
-    document.getElementById("pulse-banner").addEventListener("click", (e) => {
+    // ---- HUD alert chips: tap to queue ----
+    document.getElementById("hud").addEventListener("click", (e) => {
       const chip = e.target.closest("[data-alert]");
       if (!chip) return;
       let a;
@@ -1070,7 +1243,7 @@
       document.getElementById("filter-tier").value = a.tier || "";
       document.getElementById("filter-status").value = a.status || "";
       document.getElementById("filter-follow").value = a.follow || "";
-      renderStats();
+      renderHUD();
       applyFilters();
       flash((chip.textContent || "").trim() + " queued");
     });
@@ -1133,65 +1306,43 @@
     function renderCard(l, i) {
       const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
       const angle = angleFor(l.phone);
-      const preview = (l.challenge || l.whatSells || "No offer yet").replace(/\n/g, " ");
-      const anglePreview = msgFor(l, angle);
+      const obstacle = (l.challenge || l.whatSells || "No offer yet").replace(/\n/g, " ").trim();
       const active = turbo.active && turbo.queue[turbo.idx] === l.phone;
+      const h = healthOf(l);
       return `
-        <div class="glass card rounded-xl p-4 animate-in ${active ? "turbo-card-active" : ""}" style="animation-delay:${Math.min(i * 15, 300)}ms"
+        <div class="glass card rounded-2xl p-4 animate-in ${active ? "turbo-card-active" : ""}" style="animation-delay:${Math.min(i * 15, 300)}ms"
              data-card data-phone="${l.phone}"
-             onclick="if(!event.target.closest('a[data-wa]'))openModal('${l.phone}')" tabindex="0" role="button"
-             onkeydown="if(event.key==='Enter'||event.key===' '){openModal('${l.phone}')}">
-          <div class="flex items-start justify-between gap-2 mb-3">
-            <div class="min-w-0">
-              <h3 class="text-white font-body font-semibold text-[15px] leading-tight truncate">${escapeHTML(l.name)}</h3>
-              <p class="text-slate-300 font-mono text-[11px] mt-0.5">+${l.phone}</p>
-            </div>
-            <div class="flex items-center gap-1.5 shrink-0">
-              <button type="button" data-paylink data-phone="${l.phone}" aria-label="Copy seat payment link for ${escapeHTML(l.name)}"
-                title="Copy personal seat link"
-                class="btn-ghost glass rounded-lg w-11 h-11 flex items-center justify-center text-[13px] text-royal-light hover:text-white transition-colors">🔗</button>
-              <span class="font-mono text-[10px] px-2 py-0.5 rounded-full border whitespace-nowrap ${ts.badge}">${l.tier}</span>
-            </div>
-          </div>
-
-          <div class="mb-2.5">
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] text-slate-300 font-mono w-10">Score</span>
-              <div class="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
-                <div class="h-full rounded-full ${ts.bar}" style="width:${l.leadScore}%"></div>
+             onclick="if(event.target.closest('a[data-wa]')||event.target.closest('[data-health-advance]'))return;openModal('${l.phone}')" tabindex="0" role="button"
+             aria-label="Open dossier for ${escapeHTML(l.name)}"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('${l.phone}')}">
+          <div class="flex items-center gap-3">
+            <span class="avatar w-10 h-10 text-[11px] ${ts.text}">${initials(l.name)}</span>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full ${ts.dot}" aria-hidden="true"></span>
+                <h3 class="text-white font-body font-semibold text-[15px] leading-tight truncate">${escapeHTML(l.name)}</h3>
               </div>
-              <span class="text-[11px] font-mono ${ts.text} w-7 text-right">${l.leadScore}</span>
+              <p class="text-slate-300 font-mono text-[11px] mt-0.5 truncate">+${l.phone} · ${escapeHTML(l.niche)}</p>
             </div>
-            <p class="text-[11px] text-slate-300 font-mono mt-1.5">${l.niche}</p>
+            <span class="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full border ${h.cls} shrink-0">${h.icon}${h.label}</span>
           </div>
 
-          <div class="flex flex-wrap gap-1.5 mb-2.5 min-h-[22px]">
-            ${statusBadge(l)}${healthChip(l)}${dueChip(l)}
-          </div>
+          <p class="text-xs text-slate-300 mb-3.5 mt-3.5 line-clamp-2 font-body leading-relaxed">${escapeHTML(obstacle)}</p>
 
-          <p class="text-xs text-gray-400 mb-2 line-clamp-2 font-body leading-relaxed">${escapeHTML(preview)}</p>
-
-          <div class="flex flex-wrap gap-1 mb-2" role="group" aria-label="Copy angles for ${escapeHTML(l.name)}">
-            ${ANGLES.map(a => `
-            <button type="button" data-phone="${l.phone}" data-angle="${a.key}" aria-pressed="${a.key === angle}"
-              class="angle-pill flex-[1_1_calc(33.333%-4px)] text-[10px] font-mono rounded-md px-1 py-1.5 transition-colors ${a.key === angle
-                ? "bg-royal/25 text-royal-light border border-royal/40 shadow-[0_0_12px_-4px_rgba(38,84,182,0.5)]"
-                : "text-slate-300 hover:text-white hover:bg-white/5 border border-white/5"}">${a.short}</button>`).join("")}
-          </div>
-
-          <div class="mb-2.5 px-2 py-1.5 rounded-md bg-white/[0.03] border border-white/5">
-            <span class="text-[9px] font-mono uppercase tracking-wider text-royal-light/80">${angle === "audio" ? "🔊 " : ""}${labelFor(angle)} · preview</span>
-            <p class="text-[11px] text-gray-400 leading-relaxed line-clamp-2 mt-0.5 font-body">${escapeHTML(anglePreview)}</p>
+          <div class="flex items-center gap-2 mb-3.5">
+            <span class="text-[10px] text-slate-300 font-mono w-9 shrink-0">Score</span>
+            <div class="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+              <div class="h-full rounded-full ${ts.bar}" style="width:${l.leadScore}%"></div>
+            </div>
+            <span class="text-[11px] font-mono ${ts.text} w-7 text-right">${l.leadScore}</span>
           </div>
 
           <div class="flex items-center gap-2">
-            <a href="${waURL(l, angle)}" data-wa data-phone="${l.phone}" target="_blank" rel="noopener"
-              class="btn-royal flex-1 text-white text-xs font-mono text-center py-2 rounded-lg transition-colors">WhatsApp · ${ANGLES.find(a => a.key === angle).short}</a>
-            <button onclick="event.stopPropagation(); copyMessage('${l.phone}','${angle}')"
-              class="btn-ghost glass px-3 h-11 rounded-lg text-[11px] font-mono text-gray-400 hover:text-white transition-colors">Copy</button>
+            <a href="${waURL(l, angle)}" data-wa data-phone="${l.phone}" target="_blank" rel="noopener" aria-label="Open WhatsApp for ${escapeHTML(l.name)}"
+              class="btn-wa flex-1 text-xs font-mono font-semibold text-center py-2.5 rounded-xl transition-transform active:scale-[0.98]">WhatsApp</a>
             <button type="button" data-health-advance data-phone="${l.phone}"
               title="Advance status to ${statusNext(l.status)}" aria-label="Advance status for ${escapeHTML(l.name)}"
-              class="status-pill min-h-11 flex-none inline-flex items-center gap-1.5 glass rounded-lg px-2.5 text-[11px] font-mono cursor-pointer">
+              class="status-pill min-h-11 flex-none inline-flex items-center gap-1.5 glass rounded-xl px-2.5 text-[11px] font-mono cursor-pointer">
               <span class="status-label">${statusPillLabel(l.phone)}</span>
               <span class="text-slate-400" aria-hidden="true">▾</span>
             </button>
@@ -1199,36 +1350,98 @@
         </div>`;
     }
 
+    function renderRow(l) {
+      const ts = tierStyles[l.tier] || tierStyles["Tier 4"];
+      const angle = angleFor(l.phone);
+      const obstacle = (l.challenge || l.whatSells || "—").replace(/\n/g, " ").trim();
+      return `
+        <tr data-card data-phone="${l.phone}" tabindex="0" role="button" aria-label="Open dossier for ${escapeHTML(l.name)}"
+            onclick="if(event.target.closest('a[data-wa]')||event.target.closest('[data-health-advance]'))return;openModal('${l.phone}')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('${l.phone}')}">
+          <td>
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="avatar w-8 h-8 text-[10px] ${ts.text}">${initials(l.name)}</span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full ${ts.dot}" aria-hidden="true"></span>
+                  <span class="text-white font-body font-medium text-sm truncate">${escapeHTML(l.name)}</span>
+                </div>
+                <span class="font-mono text-[10px] text-slate-400">+${l.phone}</span>
+              </div>
+            </div>
+          </td>
+          <td class="hidden md:table-cell"><span class="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full border ${ts.badge}">${l.tier}</span></td>
+          <td class="hidden lg:table-cell font-mono text-[11px] text-slate-300">${escapeHTML(l.niche)}</td>
+          <td class="hidden sm:table-cell text-xs text-slate-300 line-clamp-1 max-w-[260px]">${escapeHTML(obstacle)}</td>
+          <td class="hidden sm:table-cell text-right font-mono text-[11px] ${ts.text}">${l.leadScore}</td>
+          <td>
+            <button type="button" data-health-advance data-phone="${l.phone}"
+              title="Advance status to ${statusNext(l.status)}" aria-label="Advance status for ${escapeHTML(l.name)}"
+              class="status-pill inline-flex items-center gap-1.5 glass rounded-lg px-2 py-1.5 text-[11px] font-mono cursor-pointer">
+              <span class="status-label">${statusPillLabel(l.phone)}</span>
+              <span class="text-slate-400" aria-hidden="true">▾</span>
+            </button>
+          </td>
+          <td class="text-right">
+            <a href="${waURL(l, angle)}" data-wa data-phone="${l.phone}" target="_blank" rel="noopener" aria-label="Open WhatsApp for ${escapeHTML(l.name)}"
+              class="btn-wa inline-block text-[11px] font-mono font-semibold text-center px-3 py-1.5 rounded-lg transition-transform active:scale-[0.98]">WhatsApp</a>
+          </td>
+        </tr>`;
+    }
+
+    function setViewMode(v) {
+      viewMode = v;
+      document.querySelectorAll("[data-view]").forEach(b => {
+        const on = b.dataset.view === v;
+        b.classList.toggle("active", on);
+        b.setAttribute("aria-pressed", String(on));
+      });
+      const grid = document.getElementById("leads-grid");
+      const wrap = document.getElementById("leads-table-wrap");
+      grid.classList.toggle("hidden", v !== "cards");
+      wrap.classList.toggle("hidden", v !== "table");
+      visibleCount = PAGE_SIZE;
+      renderLeads();
+    }
+    document.querySelectorAll("[data-view]").forEach(b => {
+      b.addEventListener("click", () => { if (viewMode !== b.dataset.view) setViewMode(b.dataset.view); });
+    });
+
     function renderLeads() {
       const grid = document.getElementById("leads-grid");
+      const wrap = document.getElementById("leads-table-wrap");
+      const tbody = document.getElementById("leads-table");
       const empty = document.getElementById("empty-state");
-      const wrap = document.getElementById("load-more-wrap");
+      const w = document.getElementById("load-more-wrap");
       const countEl = document.getElementById("load-more-count");
 
       const source = turbo.active ? turbo.queue.map(findLead).filter(Boolean) : filteredLeads;
 
       if (source.length === 0) {
         grid.innerHTML = "";
+        tbody.innerHTML = "";
         empty.classList.remove("hidden");
         empty.classList.add("flex", "flex-col");
-        wrap.classList.add("hidden");
+        w.classList.add("hidden");
         return;
       }
       empty.classList.add("hidden");
       empty.classList.remove("flex");
 
       const list = turbo.active ? source : source.slice(0, visibleCount);
-      grid.innerHTML = list.map((l, i) => renderCard(l, i)).join("");
+      const html = list.map((l, i) => viewMode === "table" ? renderRow(l, i) : renderCard(l, i)).join("");
+      if (viewMode === "table") tbody.innerHTML = html;
+      else grid.innerHTML = html;
 
-      if (turbo.active) { wrap.classList.add("hidden"); return; }
+      if (turbo.active) { w.classList.add("hidden"); return; }
       const remaining = source.length - visibleCount;
       if (remaining > 0) {
-        wrap.classList.remove("hidden");
-        wrap.classList.add("flex");
+        w.classList.remove("hidden");
+        w.classList.add("flex");
         countEl.textContent = `+${remaining} of ${source.length}`;
       } else {
-        wrap.classList.add("hidden");
-        wrap.classList.remove("flex");
+        w.classList.add("hidden");
+        w.classList.remove("flex");
       }
     }
 
@@ -1237,13 +1450,23 @@
       renderLeads();
     });
 
-    // ---- Global angle switcher ----
+    // ---- Global angle switcher + preview ----
+    function updateAnglePreview() {
+      const el = document.getElementById("angle-preview");
+      if (!el) return;
+      const lead = filteredLeads[0] || LEADS[0];
+      const a = ANGLES.find(x => x.key === globalAngle) || ANGLES[0];
+      if (!lead) { el.textContent = a.icon + " " + a.label; return; }
+      const txt = (msgFor(lead, globalAngle) || "").replace(/\s+/g, " ").trim();
+      el.textContent = a.icon + " " + a.label + " — " + txt.slice(0, 110) + (txt.length > 110 ? "…" : "");
+    }
     function syncAngleSwitcher() {
       document.querySelectorAll("#angle-switcher [data-angle]").forEach(b => {
         const on = b.dataset.angle === globalAngle;
         b.classList.toggle("active", on);
         b.setAttribute("aria-pressed", String(on));
       });
+      updateAnglePreview();
     }
     document.getElementById("angle-switcher").addEventListener("click", (e) => {
       const btn = e.target.closest("[data-angle]");
@@ -1254,38 +1477,29 @@
       applyFilters();
     });
 
-    // ---- Per-card angle pills ----
-    document.getElementById("leads-grid").addEventListener("click", (e) => {
-      const pill = e.target.closest(".angle-pill");
-      if (!pill) return;
-      e.stopPropagation();
-      const phone = pill.dataset.phone;
-      cardAngles[phone] = pill.dataset.angle;
-      const card = pill.closest("[data-card]");
-      if (card) {
-        const l = findLead(phone);
-        if (l) card.outerHTML = renderCard(l, 0);
+    // ---- Grid/table delegation: WhatsApp + status advance ----
+    const LEAD_GRID_HANDLERS = (e) => {
+      const wa = e.target.closest("a[data-wa]");
+      if (wa) {
+        e.preventDefault();
+        e.stopPropagation();
+        const phone = wa.dataset.phone;
+        const angle = angleFor(phone);
+        const lead = findLead(phone);
+        if (!lead) return;
+        const openIt = () => { window.open(waURL(lead, angle), "_blank"); markContact(phone, angle); renderLeads(); renderPipeline(); };
+        if (isContacted(phone)) confirmDuplicate(lead, angle, openIt);
+        else openIt();
+        return;
       }
-    });
-
-    // ---- Personal pay link copy ----
-    document.getElementById("leads-grid").addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-paylink]");
-      if (!btn) return;
-      e.stopPropagation();
-      const lead = findLead(btn.dataset.phone);
-      if (!lead) return;
-      copyText(payLinkFor(lead), "Seat link");
-    });
-
-    // ---- Lead health status advance ----
-    document.getElementById("leads-grid").addEventListener("click", (e) => {
       const pill = e.target.closest("[data-health-advance]");
-      if (!pill) return;
-      e.stopPropagation();
-      if (e.target.closest("a[data-wa]")) return;
-      advanceStatus(pill.dataset.phone);
-    });
+      if (pill) {
+        e.stopPropagation();
+        advanceStatus(pill.dataset.phone);
+      }
+    };
+    document.getElementById("leads-grid").addEventListener("click", LEAD_GRID_HANDLERS);
+    document.getElementById("leads-table").addEventListener("click", LEAD_GRID_HANDLERS);
 
     // ---- One-click WhatsApp with duplicate guard ----
     function confirmDuplicate(lead, angle, onYes) {
@@ -1304,20 +1518,6 @@
     }
     let confirmYesCallback = null;
 
-    document.getElementById("leads-grid").addEventListener("click", (e) => {
-      const wa = e.target.closest("a[data-wa]");
-      if (!wa) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const phone = wa.dataset.phone;
-      const angle = angleFor(phone);
-      const lead = findLead(phone);
-      if (!lead) return;
-      const openIt = () => { window.open(waURL(lead, angle), "_blank"); markContact(phone, angle); renderLeads(); renderPipeline(); };
-      if (isContacted(phone)) confirmDuplicate(lead, angle, openIt);
-      else openIt();
-    });
-
     document.getElementById("confirm-no").addEventListener("click", closeConfirm);
     document.getElementById("confirm-yes").addEventListener("click", () => { if (confirmYesCallback) confirmYesCallback(); closeConfirm(); });
     document.getElementById("confirm-backdrop").addEventListener("click", closeConfirm);
@@ -1327,6 +1527,38 @@
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
       }[m]));
     }
+
+    // ---- Filters / Actions popovers ----
+    function openFilters() {
+      document.getElementById("filters-popover").classList.add("open");
+      document.getElementById("filters-backdrop").classList.add("open");
+      document.getElementById("filters-toggle").setAttribute("aria-expanded", "true");
+    }
+    function closeFilters() {
+      document.getElementById("filters-popover").classList.remove("open");
+      document.getElementById("filters-backdrop").classList.remove("open");
+      document.getElementById("filters-toggle").setAttribute("aria-expanded", "false");
+    }
+    document.getElementById("filters-toggle").addEventListener("click", () => {
+      const open = !document.getElementById("filters-popover").classList.contains("open");
+      if (open) openFilters(); else closeFilters();
+    });
+    document.getElementById("filters-backdrop").addEventListener("click", closeFilters);
+
+    function openActions() {
+      document.getElementById("actions-popover").classList.add("open");
+      document.getElementById("actions-backdrop").classList.add("open");
+      document.getElementById("actions-toggle").setAttribute("aria-expanded", "true");
+    }
+    function closeActions() {
+      document.getElementById("actions-popover").classList.remove("open");
+      document.getElementById("actions-backdrop").classList.remove("open");
+      document.getElementById("actions-toggle").setAttribute("aria-expanded", "false");
+    }
+    document.getElementById("actions-toggle").addEventListener("click", () => {
+      const open = !document.getElementById("actions-popover").classList.contains("open");
+      if (open) openActions(); else closeActions();
+    });
 
     // ---- Dossier drawer ----
     let modalAngle = "story";
@@ -1364,7 +1596,7 @@
       const rows = [];
       notes.forEach(n => rows.push(`
         <div class="glass-deep rounded-lg px-3 py-2">
-          <p class="text-[11px] text-gray-300 leading-relaxed">${escapeHTML(n.text)}</p>
+          <p class="text-[11px] text-gray-200 leading-relaxed">${escapeHTML(n.text)}</p>
           <p class="text-[9px] font-mono text-slate-400 mt-0.5">note · ${timeAgo(n.ts)}</p>
         </div>`));
       hist.forEach(h => rows.push(`
@@ -1403,40 +1635,42 @@
       const h = healthOf(l);
 
       document.getElementById("modal-content").innerHTML = `
-        <div class="mb-4">
-          <div class="flex items-center gap-2 mb-2">
-            <button data-dossier-back class="btn-ghost glass w-9 h-9 rounded-lg text-gray-400 hover:text-white transition-colors" aria-label="Close dossier">←</button>
-            <span class="dossier-section-title flex-1">Dossier</span>
-            <span class="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full border ${h.cls}">${h.icon}${h.label}</span>
+        <div class="flex items-center gap-4 mb-4">
+          <span class="avatar w-14 h-14 text-lg ${ts.text}">${initials(l.name)}</span>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2">
+              <button data-dossier-back class="btn-ghost glass w-9 h-9 rounded-lg text-slate-300 hover:text-white transition-colors" aria-label="Close dossier">←</button>
+              <span class="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full border ${h.cls}">${h.icon}${h.label}</span>
+            </div>
+            <h2 class="font-display text-3xl text-pearl mt-2 leading-tight">${escapeHTML(l.name)}</h2>
+            <p class="text-[10px] font-mono ${ts.text} mt-1">${l.tier} · Score ${l.leadScore} · ${escapeHTML(l.niche)}</p>
+            <p class="font-mono text-[11px] text-slate-300 mt-1 leading-relaxed">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}</p>
+            <p class="text-[11px] text-slate-400 font-mono mt-0.5">${escapeHTML(l.role || "—")} · ${escapeHTML(agendaLine(l))}</p>
           </div>
-          <span class="font-mono text-[11px] ${ts.text}">${l.tier} · Score ${l.leadScore} · ${escapeHTML(l.niche)}</span>
-          <h2 class="font-display text-3xl text-pearl mt-1.5 leading-tight">${escapeHTML(l.name)}</h2>
-          <p class="font-mono text-[11px] text-slate-300 mt-1 leading-relaxed">+${l.phone}${l.email ? " · " + escapeHTML(l.email) : ""}</p>
-          <p class="text-[11px] text-gray-400 font-mono mt-0.5">${escapeHTML(l.role || "—")} · ${escapeHTML(agendaLine(l))}</p>
         </div>
 
-        <div class="flex gap-2 mb-3">
+        <div class="flex flex-col sm:flex-row gap-2 mb-4">
           <div class="glass-deep rounded-lg px-2.5 py-2 flex-1 min-w-0">
             <span class="text-[9px] text-slate-300 font-mono block uppercase tracking-wider">Sells</span>
-            <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.whatSells || "Nothing yet")}</span>
+            <span class="text-gray-200 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.whatSells || "Nothing yet")}</span>
           </div>
           <div class="glass-deep rounded-lg px-2.5 py-2 flex-1 min-w-0">
             <span class="text-[9px] text-slate-300 font-mono block uppercase tracking-wider">Budget</span>
-            <span class="text-gray-300 text-[11px] leading-relaxed">${escapeHTML(l.investment || "N/A")}</span>
+            <span class="text-gray-200 text-[11px] leading-relaxed">${escapeHTML(l.investment || "N/A")}</span>
           </div>
           <div class="glass-deep rounded-lg px-2.5 py-2 flex-1 min-w-0">
             <span class="text-[9px] text-slate-300 font-mono block uppercase tracking-wider">Goal</span>
-            <span class="text-gray-300 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.goal || "N/A")}</span>
+            <span class="text-gray-200 text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.goal || "N/A")}</span>
           </div>
         </div>
 
         <div class="flex items-center gap-2 mb-4">
           <div class="flex-1 min-w-0">
             <div class="font-mono text-[9px] text-slate-400 uppercase tracking-wider mb-1">Challenge · ${escapeHTML(l.niche)}</div>
-            <div class="glass-deep rounded-lg px-2.5 py-1.5 text-[11px] text-gray-400 truncate">${escapeHTML(l.challenge || "offer gap unknown")}</div>
+            <div class="glass-deep rounded-lg px-2.5 py-1.5 text-[11px] text-base-slate-400 truncate">${escapeHTML(l.challenge || "offer gap unknown")}</div>
           </div>
           <a class="btn-amber flex-none text-[#0B1526] text-xs font-mono rounded-lg px-3.5 py-2.5 transition-colors flex items-center gap-1.5" href="${payLinkFor(l)}"
-            data-dossier-paylink target="_blank" rel="noopener">Pay link ↗</a>
+            data-dossier-paylink data-phone="${l.phone}" target="_blank" rel="noopener">${payRef(l)} · copy ↗</a>
         </div>
 
         <div class="flex flex-wrap gap-1 mb-1" role="tablist" aria-label="Copy angles">
@@ -1460,14 +1694,14 @@
 
         <div class="flex gap-3 mb-4">
           <a href="${waURLText(l.phone, msg)}" target="_blank" rel="noopener"
-            class="btn-royal flex-1 text-white text-sm font-mono text-center py-3 rounded-lg transition-colors">Open WhatsApp · ${label}</a>
+            class="btn-wa flex-1 text-white text-sm font-mono text-center py-3 rounded-xl transition-transform active:scale-[0.98]">Open WhatsApp · ${label}</a>
           <button onclick="copyModal()"
-            class="btn-ghost glass px-4 py-3 rounded-lg text-sm font-mono text-gray-300 hover:text-white transition-colors">Copy ${isFollow ? copyLabel : tab.label}</button>
+            class="btn-ghost glass px-4 py-3 rounded-lg text-sm font-mono text-gray-200 hover:text-white transition-colors">Copy ${isFollow ? copyLabel : tab.label}</button>
         </div>
 
         <div class="flex items-center gap-2 mb-4">
           <label for="dossier-status" class="font-mono text-[10px] uppercase tracking-wider text-slate-400">Status</label>
-          <select id="dossier-status" data-phone="${l.phone}" class="status-select glass rounded-lg text-[11px] font-mono text-gray-300 bg-transparent px-2 py-2 cursor-pointer hover:text-white transition-colors">
+          <select id="dossier-status" data-phone="${l.phone}" class="status-select glass rounded-lg text-[11px] font-mono text-gray-200 bg-transparent px-2 py-2 cursor-pointer hover:text-white transition-colors">
             ${statusSelect(l)}
           </select>
           <span class="ml-auto text-[10px] font-mono text-slate-400">health · ${h.label}</span>
@@ -1483,7 +1717,7 @@
         <div id="note-list" class="flex flex-col gap-2 mb-3"></div>
         <div class="flex gap-2 mb-1">
           <input id="note-input" type="text" placeholder="Log a note…"
-            class="flex-1 glass rounded-lg px-3 py-2.5 text-sm font-mono text-gray-200 placeholder-gray-600 bg-transparent outline-none focus:ring-2 focus:ring-royal">
+            class="flex-1 glass rounded-lg px-3 py-2.5 text-sm font-mono text-gray-200 placeholder-slate-400 bg-transparent outline-none focus:ring-2 focus:ring-royal">
           <button type="button" data-note class="btn-royal px-4 py-2.5 rounded-lg text-xs font-mono text-white transition-colors">Add</button>
         </div>
       `;
@@ -1526,7 +1760,7 @@
       const back = e.target.closest("[data-dossier-back]");
       if (back) { e.stopPropagation(); closeModal(); return; }
       const pay = e.target.closest("[data-dossier-paylink]");
-      if (pay) { const l = findLead(modalPhone); if (l) copyText(payLinkFor(l), "Seat link"); return; }
+      if (pay) { e.stopPropagation(); const l = findLead(modalPhone); if (l) copyText(payLinkFor(l), "Seat link"); return; }
       const tab = e.target.closest("[data-tab]");
       if (!tab) return;
       const l = findLead(modalPhone);
@@ -1550,7 +1784,7 @@
       lastFocused = null;
     }
 
-    // ---- Turbo queue ----
+    // ---- Zen speed-run queue ----
     let turbo = { active: false, queue: [], idx: 0 };
 
     function turboPresetQueue(key) {
@@ -1576,10 +1810,9 @@
       turboFocused = document.activeElement;
       document.getElementById("turbo-start").disabled = true;
       document.getElementById("turbo-start").classList.add("opacity-40", "cursor-not-allowed");
-      renderLeads();
-      syncTurboBar();
-      document.getElementById("turbo-bar").classList.add("open");
-      flash("Turbo queue armed · " + queue.length + " leads");
+      syncZen();
+      document.getElementById("zen-overlay").classList.add("open");
+      flash("Zen queue armed · " + queue.length + " leads");
     }
 
     document.querySelectorAll("[data-preset]").forEach(btn => {
@@ -1596,7 +1829,7 @@
       turboFocused = null;
       document.getElementById("turbo-start").disabled = false;
       document.getElementById("turbo-start").classList.remove("opacity-40", "cursor-not-allowed");
-      document.getElementById("turbo-bar").classList.remove("open");
+      document.getElementById("zen-overlay").classList.remove("open");
       renderLeads();
     }
 
@@ -1608,12 +1841,20 @@
       if (next < 0) { flash("Already at queue start"); return; }
       if (next >= turbo.queue.length) { flash("Queue complete"); return; }
       turbo.idx = next;
-      syncTurboBar();
+      syncZen();
       renderLeads();
       scrollToTurboCard();
     }
 
     function turboSkip() { turboMove(1); }
+    function turboSetAngle(key) {
+      if (!turbo.active) return;
+      const lead = currentTurboLead();
+      if (!lead) return;
+      cardAngles[lead.phone] = key;
+      syncZen();
+      renderLeads();
+    }
 
     function turboAct() {
       if (!turbo.active) return;
@@ -1639,7 +1880,7 @@
         return;
       }
       turbo.idx = next;
-      syncTurboBar();
+      syncZen();
       renderLeads();
       scrollToTurboCard();
       renderPipeline();
@@ -1666,23 +1907,38 @@
       advanceAfterSend();
     }
 
-    function syncTurboBar() {
+    function setText(id, t) { const el = document.getElementById(id); if (el) el.textContent = t; }
+
+    function syncZen() {
       const lead = currentTurboLead();
-      const posEl = document.getElementById("turbo-pos");
-      const nameEl = document.getElementById("turbo-name");
-      const subEl = document.getElementById("turbo-sub");
-      const dots = document.getElementById("turbo-queue-dots");
       if (!lead) return;
-      posEl.textContent = (turbo.idx + 1) + " / " + turbo.queue.length;
-      const fill = document.getElementById("turbo-progress-fill");
+      const angle = angleFor(lead.phone);
+      const ts = tierStyles[lead.tier] || tierStyles["Tier 4"];
+      setText("zen-pos", (turbo.idx + 1) + " / " + turbo.queue.length);
+      const fill = document.getElementById("zen-progress-fill");
       if (fill) fill.style.width = Math.round(((turbo.idx + 1) / turbo.queue.length) * 100) + "%";
-      nameEl.textContent = lead.name;
-      subEl.textContent = "+" + lead.phone + " · " + lead.niche + " · " + labelFor(angleFor(lead.phone)) +
-        (isContacted(lead.phone) ? " · ⚡ already contacted" : "");
-      dots.innerHTML = turbo.queue.map((p, i) =>
-        `<span class="dot-queue h-1.5 ${i === turbo.idx ? "w-3.5 bg-amber-300" : (isContacted(p) ? "w-1.5 bg-amber-500/60" : "w-1.5 bg-white/15")} rounded-full ${i === turbo.idx ? "" : "opacity-70"}"></span>`
-      ).join("");
+      setText("zen-name", lead.name);
+      setText("zen-avatar", initials(lead.name));
+      setText("zen-tier", lead.tier);
+      const tierChip = document.getElementById("zen-tier");
+      if (tierChip) { tierChip.textContent = lead.tier; tierChip.className = "font-mono text-[10px] px-2 py-0.5 rounded-full border hidden sm:inline-flex " + ts.badge; }
+      setText("zen-sub", "+" + lead.phone + " · " + lead.niche + " · " + labelFor(angle) +
+        (isContacted(lead.phone) ? " · ⚡ already contacted" : ""));
+      setText("zen-challenge", lead.challenge || "offer gap unknown");
+      setText("zen-msg-label", (ANGLES.find(a => a.key === angle) || ANGLES[0]).icon + " " + labelFor(angle));
+      setText("zen-msg", msgFor(lead, angle));
+      const angles = document.getElementById("zen-angles");
+      if (angles) angles.innerHTML = ANGLES.map((a, i) => `
+        <button type="button" data-zen-angle="${a.key}" class="zen-angle ${a.key === angle ? "active" : ""}" aria-pressed="${a.key === angle}">
+          <kbd>${i + 1}</kbd> ${a.icon} ${a.short}
+        </button>`).join("");
     }
+
+    document.getElementById("zen-angles").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-zen-angle]");
+      if (!btn) return;
+      turboSetAngle(btn.dataset.zenAngle);
+    });
 
     function scrollToTurboCard() {
       const card = document.querySelector(`[data-card][data-phone="${turbo.queue[turbo.idx]}"]`);
@@ -1692,11 +1948,6 @@
     // ---- Keyboard ----
     function returnFocus(node) {
       if (node && document.contains(node)) { try { node.focus(); } catch (e) {} }
-    }
-    function anyOverlayOpen() {
-      return document.getElementById("confirm-modal").classList.contains("open") ||
-        document.getElementById("dossier-panel").classList.contains("open") ||
-        document.getElementById("arsenal-panel").classList.contains("open");
     }
     function reducedMotion() {
       return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1708,11 +1959,23 @@
         if (turbo.active) { stopTurbo(); return; }
         if (document.getElementById("dossier-panel").classList.contains("open")) { closeModal(); return; }
         if (document.getElementById("arsenal-panel").classList.contains("open")) { toggleArsenal(); return; }
+        if (document.getElementById("filters-popover").classList.contains("open")) { closeFilters(); return; }
+        if (document.getElementById("actions-popover").classList.contains("open")) { closeActions(); return; }
       }
       if (typing) return;
+      if (/^[1-6]$/.test(e.key)) {
+        const a = ANGLES[parseInt(e.key, 10) - 1];
+        if (a && turbo.active && !document.getElementById("confirm-modal").classList.contains("open")) {
+          e.preventDefault();
+          turboSetAngle(a.key);
+          return;
+        }
+      }
       if (e.key === "Enter" || e.key === " " || e.key.toLowerCase() === "w" || e.key.toLowerCase() === "e" || e.key.toLowerCase() === "s" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
-        if (anyOverlayOpen()) return;
-        if (!turbo.active) return;
+        const modalBlocking = document.getElementById("confirm-modal").classList.contains("open") ||
+          document.getElementById("dossier-panel").classList.contains("open") ||
+          document.getElementById("arsenal-panel").classList.contains("open");
+        if (modalBlocking || !turbo.active) return;
         e.preventDefault();
         const k = e.key.toLowerCase();
         if (k === "w") turboAct();
@@ -1770,7 +2033,7 @@
       const nicheRows = Object.keys(NICHE_REASSURANCE).map(n =>
         `<button class="arsenal-item glass-deep rounded-xl px-3.5 py-3" onclick="copyArsenal('${n.replace(/'/g, "\\'")}')">
           <span class="txt flex-1">
-            <span class="block font-mono text-[11px] text-gray-200 truncate">“Will this work for ${n}?”</span>
+            <span class="block font-mono text-[11px] text-gray-200 truncate">"Will this work for ${n}?"</span>
             <span class="block text-[10px] text-slate-400 font-mono mt-0.5 truncate">1-click reassurance · ${n.split(" ")[0]}</span>
           </span>
           <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
@@ -1783,10 +2046,10 @@
         </div>
         <div class="glass-deep rounded-xl p-3.5 mb-5">
           <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] font-mono">
-            <span class="text-slate-400">Bank</span><span class="text-gray-300 truncate">${c.bank}</span>
-            <span class="text-slate-400">Acct</span><span class="text-gray-300 tracking-widest">${c.account}</span>
-            <span class="text-slate-400">Name</span><span class="text-gray-300 truncate">${c.accountName}</span>
-            <span class="text-slate-400">Ref</span><span class="text-gray-300">${c.ref}</span>
+            <span class="text-slate-400">Bank</span><span class="text-gray-200 truncate">${c.bank}</span>
+            <span class="text-slate-400">Acct</span><span class="text-gray-200 tracking-widest">${c.account}</span>
+            <span class="text-slate-400">Name</span><span class="text-gray-200 truncate">${c.accountName}</span>
+            <span class="text-slate-400">Ref</span><span class="text-gray-200">${c.ref}</span>
             <span class="text-slate-400">Amount</span><span class="text-amber-300">${c.amount}</span>
           </div>
           <button onclick="copyArsenal('PMT_BANK')"
@@ -1794,7 +2057,7 @@
           <p class="text-[10px] text-slate-400 font-mono mt-2 leading-relaxed">Drops the full details, your reference and the proof instruction into one WhatsApp message.</p>
         </div>
 
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 mb-2">“Will this work for my niche?”</div>
+        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 mb-2">"Will this work for my niche?"</div>
         <div class="flex flex-col gap-2 mb-5">${nicheRows}</div>
 
         <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-300 mb-2">Objection Reframes</div>
@@ -1802,7 +2065,7 @@
           ${OBJECTION_META.map(o => `
           <button class="arsenal-item glass-deep rounded-xl px-3.5 py-3" onclick="copyArsenal('${o.key}')">
             <span class="txt flex-1">
-              <span class="block font-mono text-[11px] text-gray-200 truncate">${o.icon} “${escapeHTML(o.label)}”</span>
+              <span class="block font-mono text-[11px] text-gray-200 truncate">${o.icon} "${escapeHTML(o.label)}"</span>
               <span class="block text-[10px] text-slate-400 font-mono mt-0.5 truncate">1-click reframe · ${o.key.replace("PMT_", "")}</span>
             </span>
             <span class="font-mono text-[10px] text-royal-light shrink-0">copy</span>
@@ -1866,7 +2129,7 @@
         </div>
         <div class="flex gap-3">
           <button onclick="saveArsenal()" class="btn-royal flex-1 py-2.5 rounded-lg text-xs font-mono text-white transition-colors">Save details</button>
-          <button onclick="renderArsenal()" class="btn-ghost glass flex-1 py-2.5 rounded-lg text-xs font-mono text-gray-300 hover:text-white transition-colors">Cancel</button>
+          <button onclick="renderArsenal()" class="btn-ghost glass flex-1 py-2.5 rounded-lg text-xs font-mono text-gray-200 hover:text-white transition-colors">Cancel</button>
         </div>`;
       const g = document.getElementById("arsenal-glyph");
       if (g) g.textContent = "✏️";
@@ -1896,6 +2159,7 @@
       backdrop.classList.toggle("open", open);
       if (open) {
         arsenalFocused = document.activeElement;
+        closeActions();
         renderArsenal();
       } else {
         returnFocus(arsenalFocused);
@@ -1994,7 +2258,8 @@
       renderPipeline();
       renderStats();
       syncAngleSwitcher();
-      applyFilters();
+      syncQuickPills();
+      setViewMode(viewMode);
     }
 
     if (sessionStorage.getItem(GATE_SESSION) === "1") {

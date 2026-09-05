@@ -73,6 +73,7 @@ try {
   await page.goto(DASH_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForSelector('#leads-grid [data-card]', { timeout: 60000 });
 
+  // ---- FlowDesk 2.0 shell + HUD ----
   const dom = await page.evaluate(() => {
     const vis = (el) => el && !el.classList.contains('hidden');
     const text = (el) => (el ? (el.textContent || '').trim() : '');
@@ -81,21 +82,32 @@ try {
       gateHidden: !vis(document.getElementById('gate')),
       appShown: vis(document.getElementById('app')),
       cards: document.querySelectorAll('#leads-grid [data-card]').length,
-      pipelineCells: document.querySelectorAll('#pipeline-strip > div').length,
-      statsCells: document.querySelectorAll('#stats-bar > div').length,
-      pulseCells: document.querySelectorAll('#pulse-banner > div').length,
+      hudCells: document.querySelectorAll('#hud .hud-card').length,
+      hudDisplay: getComputedStyle(document.getElementById('hud')).display,
+      hudCols: getComputedStyle(document.getElementById('hud')).gridTemplateColumns.split(' ').filter(Boolean).length,
+      hudRevenue: text(document.getElementById('hud-revenue')),
+      hudGoal: text(document.getElementById('hud-rev-goal')),
+      couponMarker: !!document.getElementById('hud-coupon-marker'),
       alertChips: document.querySelectorAll('#alert-strip [data-alert]').length,
       alertFallback: text(document.getElementById('alert-strip')).length,
-      statusStrip: text(document.getElementById('status-strip')),
+      quickPills: document.querySelectorAll('[data-quick]').length,
+      anglePills: document.querySelectorAll('#angle-switcher [data-angle]').length,
+      anglePreview: text(document.getElementById('angle-preview')).length,
+      cohortPulse: text(document.getElementById('cohort-pulse')),
       favicon: (document.querySelector('link[rel="icon"]') || {}).href || '',
-      pulseDisplay: getComputedStyle(document.getElementById('pulse-banner')).display,
-      cellRadius: (() => { const el = document.querySelector('#pulse-banner > div'); return el ? getComputedStyle(el).borderRadius : ''; })(),
     };
   });
 
-  assert('pulse banner has 3 cells', dom.pulseCells === 3, 'cells=' + dom.pulseCells);
+  assert('HUD has 3 executive metric cards', dom.hudCells === 3, 'cells=' + dom.hudCells);
+  assert('HUD renders as 3-col grid (tailwind applied)', dom.hudDisplay === 'grid' && dom.hudCols === 3, JSON.stringify({ display: dom.hudDisplay, cols: dom.hudCols }));
+  assert('HUD revenue shows naira', dom.hudRevenue.startsWith('₦'), dom.hudRevenue);
+  assert('HUD goal label rendered', dom.hudGoal.includes('goal'), dom.hudGoal);
+  assert('coupon price marker on revenue bar', dom.couponMarker);
   assert('alert strip present', dom.alertFallback > 0, JSON.stringify(dom.alertFallback));
-  assert('tailwind styles applied (grid + radius)', dom.pulseDisplay === 'grid' && dom.cellRadius !== '0px' && dom.cellRadius !== '', JSON.stringify({ pulseDisplay: dom.pulseDisplay, cellRadius: dom.cellRadius }));
+  assert('5 quick pills in dock', dom.quickPills === 5, 'pills=' + dom.quickPills);
+  assert('6 dispatch angle pills', dom.anglePills === 6, 'pills=' + dom.anglePills);
+  assert('angle preview badge populated', dom.anglePreview > 0, 'len=' + dom.anglePreview);
+  assert('cohort pulse label rendered', dom.cohortPulse.length > 0, JSON.stringify(dom.cohortPulse));
 
   if (dom.alertChips > 0) {
     const chip = await page.$('#alert-strip [data-alert]');
@@ -113,16 +125,15 @@ try {
     }
   } else {
     assert('alert chip queues filters', true, 'no alert chips to click (skipped)');
+    assert('alert chip re-renders grid', true, 'no alert chips to click (skipped)');
   }
 
   assert('gate hidden (seed unlock)', dom.gateHidden);
   assert('app visible', dom.appShown);
   assert('lead cards rendered', dom.cards > 0, 'cards=' + dom.cards);
-  assert('pipeline strip has 6 cells', dom.pipelineCells === 6, 'cells=' + dom.pipelineCells);
-  assert('stats bar has 5 cells', dom.statsCells === 5, 'cells=' + dom.statsCells);
-  assert('status strip rendered', dom.statusStrip.length > 0, JSON.stringify(dom.statusStrip.slice(0, 80)));
+  assert('title references FlowDesk', /FlowDesk/i.test(dom.title), dom.title);
 
-  // ---- Task 3: status pill advance + persistence ----
+  // ---- Status pill advance + persistence ----
   const pillInfo = await page.evaluate(() => {
     const pill = document.querySelector('#leads-grid [data-health-advance]');
     if (!pill) return null;
@@ -158,7 +169,7 @@ try {
     assert('status survives reload', true, 'no pill found (skipped)');
   }
 
-  // ---- Task 4: tokenized angles + personal pay links ----
+  // ---- Tokenized angles + personal pay links ----
   const tokenInfo = await page.evaluate(() => {
     const sample = LEADS[0];
     const digits = String(sample.phone || '').replace(/\D/g, '');
@@ -170,6 +181,8 @@ try {
       urgent: composeToken(sample, 'urgent'),
       objection: composeToken(sample, 'objection'),
       perAngle: document.querySelectorAll('#leads-grid [data-card] .angle-pill').length / Math.max(1, document.querySelectorAll('#leads-grid [data-card]').length),
+      cardWa: document.querySelectorAll('#leads-grid [data-card] a[data-wa]').length,
+      cardAvatars: document.querySelectorAll('#leads-grid [data-card] .avatar').length,
       payLinkBtns: document.querySelectorAll('#leads-grid [data-paylink]').length,
       expectedRef: 'SOC-' + digits.slice(-5),
     };
@@ -179,10 +192,11 @@ try {
   assert('pay link shape', tokenInfo.payLink.startsWith(tokenInfo.origin + '/step-2.html?ref=SOC-'), tokenInfo.payLink);
   assert('urgent token composed', tokenInfo.urgent.includes('SELLOUT25') && tokenInfo.urgent.includes(tokenInfo.expectedRef) && tokenInfo.urgent.includes('10,000'), 'len=' + tokenInfo.urgent.length);
   assert('objection token composed', tokenInfo.objection.includes('SELLOUT25') && tokenInfo.objection.includes('7,500'), 'len=' + tokenInfo.objection.length);
-  assert('card shows 6 angle pills', Math.abs(tokenInfo.perAngle - 6) < 0.01, 'per card=' + tokenInfo.perAngle.toFixed(2));
-  assert('pay link copy button on cards', tokenInfo.payLinkBtns > 0, 'btns=' + tokenInfo.payLinkBtns);
+  assert('cards decluttered (no per-card angle pills)', Math.abs(tokenInfo.perAngle - 0) < 0.01, 'per card=' + tokenInfo.perAngle.toFixed(2));
+  assert('cards carry WhatsApp + avatar', tokenInfo.cardWa > 0 && tokenInfo.cardAvatars > 0, JSON.stringify({ wa: tokenInfo.cardWa, avatars: tokenInfo.cardAvatars }));
+  assert('pay link now lives only in dossier', tokenInfo.payLinkBtns === 0, 'btns=' + tokenInfo.payLinkBtns);
 
-  // ---- Task 5: step-2 personal reference from ?ref= ----
+  // ---- step-2 personal reference from ?ref= ----
   async function step2Ref(query) {
     const pg = await browser.newPage();
     await pg.setViewport({ width: 1280, height: 800 });
@@ -215,7 +229,7 @@ try {
   const refWithout = await step2Ref('');
   assert('step-2 no-ref unchanged (fresh SOC-XXXXX)', refWithout.ok && refWithout.info.bankRef !== 'SOC-ENIOLA' && refWithout.info.bankRef.length === 9, JSON.stringify(refWithout.info));
 
-  // ---- Task 6: dossier drawer ----
+  // ---- Dossier drawer ----
   await page.evaluate(() => {
     const card = document.querySelector('#leads-grid [data-card]');
     if (card) card.click();
@@ -271,6 +285,87 @@ try {
   assert('note survives reload', noteAfterReload.stored.includes('Follow up re: N1') && noteAfterReload.list.includes('Follow up re: N1'), JSON.stringify(noteAfterReload));
   await page.keyboard.press('Escape');
 
+  // ---- FlowDesk 2.0: view toggle, popovers, quick pills, angle switcher ----
+  await page.setViewport({ width: 1280, height: 800 });
+
+  await page.evaluate(() => document.querySelector('[data-view="table"]').click());
+  await sleep(300);
+  const tableState = await page.evaluate(() => ({
+    gridHidden: document.getElementById('leads-grid').classList.contains('hidden'),
+    wrapVisible: !document.getElementById('leads-table-wrap').classList.contains('hidden'),
+    rows: document.querySelectorAll('#leads-table tr[data-card]').length,
+    ths: document.querySelectorAll('#leads-table-wrap th').length,
+    viewActive: document.querySelector('[data-view="table"]').classList.contains('active'),
+  }));
+  assert('table view hides grid + shows table', tableState.gridHidden && tableState.wrapVisible, JSON.stringify(tableState));
+  assert('table renders lead rows with headers', tableState.rows > 0 && tableState.ths >= 7, JSON.stringify({ rows: tableState.rows, ths: tableState.ths }));
+  assert('table view button active', tableState.viewActive);
+
+  await page.evaluate(() => document.querySelector('[data-view="cards"]').click());
+  await sleep(300);
+  const backToCards = await page.evaluate(() => ({
+    gridVisible: !document.getElementById('leads-grid').classList.contains('hidden'),
+    wrapHidden: document.getElementById('leads-table-wrap').classList.contains('hidden'),
+    cards: document.querySelectorAll('#leads-grid [data-card]').length,
+  }));
+  assert('back to cards restores grid', backToCards.gridVisible && backToCards.wrapHidden && backToCards.cards > 0, JSON.stringify(backToCards));
+
+  await page.click('#filters-toggle');
+  await sleep(250);
+  const pop = await page.evaluate(() => ({
+    open: document.getElementById('filters-popover').classList.contains('open'),
+    controls: ['filter-tier', 'filter-niche', 'filter-status', 'filter-follow', 'sort-select', 'turbo-limit'].every(id => !!document.getElementById(id)),
+    toggleExpanded: document.getElementById('filters-toggle').getAttribute('aria-expanded') === 'true',
+  }));
+  assert('filters popover opens with 6 controls', pop.open && pop.controls && pop.toggleExpanded, JSON.stringify(pop));
+  await page.keyboard.press('Escape');
+  await sleep(250);
+  const popClosed = await page.evaluate(() => !document.getElementById('filters-popover').classList.contains('open'));
+  assert('Esc closes filters popover', popClosed);
+
+  await page.click('#actions-toggle');
+  await sleep(250);
+  const act = await page.evaluate(() => ({
+    open: document.getElementById('actions-popover').classList.contains('open'),
+    items: document.querySelectorAll('#actions-popover [role="menuitem"]').length,
+    hasImport: !!document.getElementById('import-file'),
+  }));
+  assert('actions popover opens with menu items', act.open && act.items >= 4 && act.hasImport, JSON.stringify(act));
+  await page.keyboard.press('Escape');
+  await sleep(250);
+  const actClosed = await page.evaluate(() => !document.getElementById('actions-popover').classList.contains('open'));
+  assert('Esc closes actions popover', actClosed);
+
+  await page.evaluate(() => document.querySelector('[data-quick="vip"]').click());
+  await sleep(300);
+  const quickState = await page.evaluate(() => ({
+    tier: document.getElementById('filter-tier').value,
+    vipActive: document.querySelector('[data-quick="vip"]').classList.contains('active'),
+  }));
+  assert('VIP quick pill queues tier filter', quickState.tier === 'Tier 1' && quickState.vipActive, JSON.stringify(quickState));
+  await page.evaluate(() => document.querySelector('[data-quick="all"]').click());
+  await sleep(300);
+  const quickReset = await page.evaluate(() => ({
+    tier: document.getElementById('filter-tier').value,
+    allActive: document.querySelector('[data-quick="all"]').classList.contains('active'),
+    cards: document.querySelectorAll('#leads-grid [data-card]').length,
+  }));
+  assert('Quick All resets filters', quickReset.tier === '' && quickReset.allActive && quickReset.cards > 0, JSON.stringify(quickReset));
+
+  const anglePreviewBefore = await page.evaluate(() => (document.getElementById('angle-preview').textContent || '').trim());
+  await page.evaluate(() => document.querySelector('#angle-switcher [data-angle="urgent"]').click());
+  await sleep(300);
+  const angleState = await page.evaluate(() => ({
+    globalAngle,
+    active: document.querySelector('#angle-switcher [data-angle="urgent"]').classList.contains('active'),
+    preview: (document.getElementById('angle-preview').textContent || '').trim(),
+  }));
+  assert('angle switcher sets dispatcher angle', angleState.globalAngle === 'urgent' && angleState.active, JSON.stringify(angleState));
+  assert('angle preview updates on switch', angleState.preview.length > 0 && angleState.preview !== anglePreviewBefore, angleState.preview.slice(0, 60));
+  await page.evaluate(() => document.querySelector('#angle-switcher [data-angle="story"]').click());
+  await sleep(300);
+
+  // ---- Mobile drawer fit ----
   await page.setViewport({ width: 375, height: 844 });
   await page.reload({ waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForSelector('#leads-grid [data-card]', { timeout: 60000 });
@@ -285,33 +380,57 @@ try {
 
   await page.evaluate(() => { const c = document.querySelector('#dossier-close'); if (c) c.click(); });
   await sleep(250);
+  await page.setViewport({ width: 1280, height: 800 });
 
-  // ---- Task 7: turbo closing engine ----
+  // ---- Zen turbo closing engine ----
   const presetBtns = await page.evaluate(() => document.querySelectorAll('[data-preset]').length);
   assert('turbo has 3 preset buttons', presetBtns === 3, 'btns=' + presetBtns);
 
   await page.evaluate(() => document.querySelector('[data-preset="vip10"]').click());
-  await sleep(350);
-  const turboState = await page.evaluate(() => ({
-    active: turbo.active,
-    open: document.getElementById('turbo-bar').classList.contains('open'),
-    qLen: turbo.queue.length,
-    fill: (document.getElementById('turbo-progress-fill') || {}).style ? document.getElementById('turbo-progress-fill').style.width : '',
-    enrolledBtn: !!document.querySelector('#turbo-bar [onclick*="turboEnroll"]'),
-  }));
+  await sleep(400);
+  const turboState = await page.evaluate(() => {
+    const text = (el) => (el ? (el.textContent || '').trim() : '');
+    return {
+      active: turbo.active,
+      open: document.getElementById('zen-overlay').classList.contains('open'),
+      qLen: turbo.queue.length,
+      fill: (document.getElementById('zen-progress-fill') || { style: {} }).style.width,
+      enrollBtn: !!document.querySelector('#zen-overlay [onclick*="turboEnroll"]'),
+      zenAngles: document.querySelectorAll('#zen-angles [data-zen-angle]').length,
+      msgLabel: text(document.getElementById('zen-msg-label')),
+      avatar: text(document.getElementById('zen-avatar')),
+    };
+  });
   assert('vip10 preset starts turbo', turboState.active && turboState.open && turboState.qLen > 0, JSON.stringify(turboState));
-  assert('turbo progress visible', turboState.fill !== '' && parseFloat(turboState.fill) > 0, 'fill=' + turboState.fill);
-  assert('turbo bar has Enroll button', turboState.enrolledBtn);
+  assert('zen progress visible', turboState.fill !== '' && parseFloat(turboState.fill) > 0, 'fill=' + turboState.fill);
+  assert('zen overlay has Enroll button', turboState.enrollBtn);
+  assert('zen renders 6 angle chips', turboState.zenAngles === 6, 'chips=' + turboState.zenAngles);
+  assert('zen message label rendered', turboState.msgLabel.length > 0, JSON.stringify(turboState.msgLabel));
+  assert('zen avatar initials rendered', turboState.avatar.length > 0, JSON.stringify(turboState.avatar));
+
+  await page.keyboard.press('2');
+  await sleep(250);
+  const angleHotkey = await page.evaluate(() => ({
+    stored: cardAngles[turbo.queue[turbo.idx]],
+    active: !!document.querySelector('#zen-angles [data-zen-angle="future"].active'),
+  }));
+  assert('digit hotkey 2 sets Future angle for current lead', angleHotkey.stored === 'future' && angleHotkey.active, JSON.stringify(angleHotkey));
+  await page.keyboard.press('1');
+  await sleep(200);
+  const angleReset = await page.evaluate(() => cardAngles[turbo.queue[turbo.idx]]);
+  assert('digit hotkey 1 restores Story angle', angleReset === 'story', JSON.stringify(angleReset));
 
   const firstPhone = await page.evaluate(() => turbo.queue[0]);
   await page.keyboard.press('e');
-  await sleep(350);
+  await sleep(400);
   const enrolledState = await page.evaluate((phone) => {
     let p = {};
     try { p = JSON.parse(localStorage.getItem('soc_progress_v1') || '{}'); } catch (e) {}
     return { stored: (p[phone] || {}).status || '' };
   }, firstPhone);
   assert('E key enrolls current lead', enrolledState.stored === 'Enrolled', JSON.stringify(enrolledState));
+  const hudAfterEnroll = await page.evaluate(() => (document.getElementById('hud-revenue') || {}).textContent || '');
+  assert('HUD revenue updates on enroll', hudAfterEnroll === '₦10,000', hudAfterEnroll);
 
   const idxBefore = await page.evaluate(() => turbo.idx);
   await page.keyboard.press('s');
@@ -322,7 +441,7 @@ try {
   await page.evaluate(() => { window.open = function () { return { focus() {}, close() {} }; }; });
   const wTarget = await page.evaluate(() => turbo.queue[turbo.idx]);
   await page.keyboard.press('w');
-  await sleep(350);
+  await sleep(400);
   const wState = await page.evaluate((phone) => {
     let p = {};
     try { p = JSON.parse(localStorage.getItem('soc_progress_v1') || '{}'); } catch (e) {}
@@ -332,10 +451,12 @@ try {
 
   await page.keyboard.press('Escape');
   await sleep(300);
-  const turboStopped = await page.evaluate(() => ({ active: turbo.active, open: document.getElementById('turbo-bar').classList.contains('open') }));
+  const turboStopped = await page.evaluate(() => ({ active: turbo.active, open: document.getElementById('zen-overlay').classList.contains('open') }));
   assert('Esc stops turbo', !turboStopped.active && !turboStopped.open, JSON.stringify(turboStopped));
 
-  // ---- Task 8: keyboard/focus/a11y + reduced motion + contrast ----
+  // ---- Keyboard/focus/a11y + reduced motion + contrast ----
+  await page.evaluate(() => { const card = document.querySelector('#leads-grid [data-card]'); if (card) card.click(); });
+  await sleep(400);
   const contrast = await page.evaluate(() => ({
     stale: document.querySelectorAll('.text-gray-500, .text-gray-600').length,
     titleColor: getComputedStyle(document.querySelector('.dossier-section-title')).color,
@@ -346,13 +467,15 @@ try {
   assert('no stale low-contrast gray classes in DOM', contrast.stale === 0, 'stale=' + contrast.stale);
   assert('dossier section title meets contrast (slate-400)', contrast.titleColor === 'rgb(148, 163, 184)', contrast.titleColor);
   assert('focus-visible rule present', contrast.hasFocusRule);
+  await page.keyboard.press('Escape');
+  await sleep(250);
 
   await page.evaluate(() => {
     const btn = document.querySelector('[data-preset="uncontacted"]');
     btn.focus();
     btn.click();
   });
-  await sleep(300);
+  await sleep(350);
   await page.keyboard.press('Escape');
   await sleep(300);
   const focusRestore = await page.evaluate(() => {
@@ -362,7 +485,7 @@ try {
   assert('turbo stop restores focus to trigger', focusRestore.onPreset, focusRestore.tag);
 
   await page.evaluate(() => {
-    const g = document.getElementById('arsenal-toggle');
+    const g = document.getElementById('arsenal-quick');
     g.focus();
     g.click();
   });
@@ -371,7 +494,7 @@ try {
   await sleep(300);
   const arsenalFocus = await page.evaluate(() => {
     const a = document.activeElement;
-    return a && a.id === 'arsenal-toggle';
+    return a && a.id === 'arsenal-quick';
   });
   assert('arsenal close restores focus to trigger', arsenalFocus);
 
@@ -389,7 +512,7 @@ try {
   await page.evaluate(() => { const c = document.querySelector('#dossier-close'); if (c) c.click(); });
   await sleep(300);
 
-  // ---- Task 9: funnel non-regression (reachability only) ----
+  // ---- Funnel non-regression (reachability only) ----
   for (const p of ['/', '/step-2.html', '/step-3.html', '/leads/leads-dashboard.html']) {
     let st = -1;
     try {
