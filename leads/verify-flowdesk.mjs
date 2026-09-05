@@ -37,14 +37,24 @@ function assert(name, cond, detail = '') {
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+const profileDir = path.join(
+  os.tmpdir(),
+  'puppeteer-v-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8)
+);
+fs.mkdirSync(profileDir, { recursive: true });
+
 const browser = await puppeteer.launch({
-  headless: true,
+  headless: 'new',
   executablePath: findSystemBrowser() || undefined,
-  userDataDir: path.join(
-    CACHE_DIR,
-    'verify-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8)
-  ),
-  args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+  userDataDir: profileDir,
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--no-first-run',
+    '--no-default-browser-check',
+    '--disable-extensions',
+  ],
 });
 
 try {
@@ -525,6 +535,7 @@ try {
   assert('no console/page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 } finally {
   await browser.close();
+  try { fs.rmSync(profileDir, { recursive: true, force: true }); } catch (e) {}
 }
 
 let failed = 0;
