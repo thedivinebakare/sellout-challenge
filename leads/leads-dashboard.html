@@ -1067,8 +1067,8 @@
           <button type="button" data-view="table" class="px-2.5 py-1.5 rounded-lg text-[11px] font-mono bg-royal text-white shadow-sm transition-colors">☰ Table</button>
         </div>
         <button id="actions-toggle" aria-haspopup="menu" aria-expanded="false" aria-label="More actions"
-          class="btn-ghost surface rounded-xl w-10 h-10 text-sub hover:text-ink flex items-center justify-center transition-colors">
-          <svg class="ic s16 icw" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></svg>
+          class="btn-ghost surface rounded-xl w-10 h-10 text-sub hover:text-ink flex items-center justify-center transition-colors cursor-pointer">
+          <svg class="ic s16 icw pointer-events-none" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></svg>
         </button>
       </div>
     </header>
@@ -1851,10 +1851,13 @@
       document.getElementById("actions-backdrop").classList.remove("open");
       document.getElementById("actions-toggle").setAttribute("aria-expanded", "false");
     }
-    document.getElementById("actions-toggle").addEventListener("click", () => {
-      const open = !document.getElementById("actions-popover").classList.contains("open");
+    function toggleActions(e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      const pop = document.getElementById("actions-popover");
+      const open = !pop.classList.contains("open");
       if (open) openActions(); else closeActions();
-    });
+    }
+    document.getElementById("actions-toggle").addEventListener("click", toggleActions);
     document.getElementById("actions-backdrop").addEventListener("click", closeActions);
 
     // ---- Sidebar / nav ----

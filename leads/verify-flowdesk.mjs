@@ -332,8 +332,8 @@ try {
 
   // 6. Actions popover
   step('section 5: dossier ok')
-  await page.click('#actions-toggle');
-  await sleep(200);
+  await page.evaluate(() => document.getElementById('actions-toggle').click());
+  await sleep(250);
   const actions = await page.evaluate(() => ({
     open: document.getElementById('actions-popover').classList.contains('open'),
     expanded: document.getElementById('actions-toggle').getAttribute('aria-expanded'),
