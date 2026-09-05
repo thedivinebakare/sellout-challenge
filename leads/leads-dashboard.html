@@ -332,27 +332,34 @@
 
     /* ---- Table ---- */
     #leads-table-wrap { border-collapse: separate; border-spacing: 0; }
-    #leads-table tr {
+    #leads-table-wrap tbody tr {
       transition: background 0.15s ease;
       cursor: pointer;
       border-bottom: 1px solid #F1F5F9;
     }
-    #leads-table tbody tr:hover { background: #FAFCFF; }
-    #leads-table th {
+    #leads-table-wrap tbody tr:hover { background: #FAFCFF; }
+    #leads-table-wrap table { border-collapse: collapse; table-layout: fixed; }
+    .col-lead { width: 28%; }
+    .col-niche { width: 18%; }
+    .col-obstacle { width: 28%; }
+    .col-score { width: 8%; }
+    .col-status { width: 10%; }
+    .col-wa { width: 8%; }
+    #leads-table-wrap th {
       font-family: 'Inter', sans-serif;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
+      letter-spacing: 0.08em;
+      color: #94A3B8;
       padding: 12px 14px;
       border-bottom: 1px solid var(--hairline);
       background: #FBFCFE;
       white-space: nowrap;
     }
-    #leads-table th.th-score { text-align: right; padding-left: 28px; }
-    #leads-table td { padding: 12px 14px; vertical-align: middle; }
-    #leads-table tbody tr:last-child td { border-bottom: 0; }
+    #leads-table-wrap th.th-score { text-align: center; }
+    #leads-table-wrap td { padding: 12px 14px; vertical-align: middle; }
+    #leads-table-wrap tbody tr:last-child td { border-bottom: 0; }
 
     .avatar {
       display: inline-flex;
@@ -675,6 +682,243 @@
     @keyframes fadeUp { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
     .animate-in { animation: fadeUp 0.45s var(--halo) forwards; }
 
+    /* ---- Access gate (3.1) ---- */
+    .gate-glow {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.55;
+    }
+    .gate-glow-royal {
+      width: 460px; height: 460px;
+      left: -120px; top: -140px;
+      background: radial-gradient(circle, rgba(38, 84, 182, 0.55), transparent 68%);
+    }
+    .gate-glow-wa {
+      width: 420px; height: 420px;
+      right: -120px; bottom: -140px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.45), transparent 68%);
+    }
+    .gate-glow-flame {
+      width: 300px; height: 300px;
+      right: 12%; top: -120px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.28), transparent 70%);
+      opacity: 0.4;
+    }
+    .gate-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(20px) saturate(1.4);
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      box-shadow:
+        0 1px 2px rgba(15, 23, 42, 0.05),
+        0 24px 60px -24px rgba(37, 99, 235, 0.3),
+        0 40px 90px -40px rgba(15, 23, 42, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+    .gate-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: radial-gradient(85% 60% at 50% -8%, rgba(38, 84, 182, 0.08), transparent 62%);
+    }
+    .fd-badge { position: relative; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; }
+    .fd-badge .brand-mark { width: 60px; height: 60px; border-radius: 20px; }
+    .fd-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      border: 1.5px solid rgba(38, 84, 182, 0.28);
+      animation: fdRing 3.2s var(--halo) infinite;
+    }
+    .fd-ring-b { animation-delay: 1.6s; border-color: rgba(16, 185, 129, 0.3); }
+    @keyframes fdRing {
+      0% { transform: scale(0.92); opacity: 0; }
+      35% { opacity: 1; }
+      100% { transform: scale(1.42); opacity: 0; }
+    }
+    .gate-input { border-radius: 14px; }
+    .gate-input-field {
+      border: 1px solid var(--hairline);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.05);
+      transition: border-color 0.2s ease, box-shadow 0.25s var(--halo), background 0.2s ease;
+    }
+    .gate-input-field:focus {
+      background: #FFFFFF;
+      border-color: var(--royal);
+      box-shadow: 0 0 0 3px rgba(38, 84, 182, 0.16), 0 8px 24px -10px rgba(38, 84, 182, 0.5);
+    }
+    .gate-lock {
+      position: absolute;
+      left: 16px; top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      transition: stroke 0.2s ease;
+    }
+    .gate-input-field:focus ~ .gate-lock { stroke: var(--royal); }
+    .gate-input:focus-within .gate-lock { stroke: var(--royal); }
+    .gate-secure {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ---- WhatsApp grid button (table) ---- */
+    .wa-grid-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: linear-gradient(180deg, #1CD497, #10B981);
+      color: #04231A;
+      box-shadow: 0 6px 14px -6px rgba(16, 185, 129, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      transition: transform 0.22s var(--halo), box-shadow 0.25s ease, background 0.2s ease;
+    }
+    .wa-grid-btn:hover { background: linear-gradient(180deg, #2CE0A3, #12C68D); box-shadow: 0 8px 18px -6px rgba(16, 185, 129, 0.66), inset 0 1px 0 rgba(255, 255, 255, 0.4); }
+    .wa-grid-btn:active { transform: translateY(1px) scale(0.96); }
+    .wa-grid-btn svg { width: 15px; height: 15px; }
+
+    /* ---- Dossier (3.1) ---- */
+    .squircle { border-radius: 26px; }
+    .avatar-strong {
+      background: linear-gradient(165deg, #3A6FE0, #1D4ED8);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 10px 24px -10px rgba(38, 84, 182, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    .pay-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: #92400E;
+      background: linear-gradient(180deg, #FFF7E8, var(--flame-soft));
+      border: 1px solid var(--flame-line);
+      padding: 7px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px -3px rgba(245, 158, 11, 0.5);
+      transition: transform 0.22s var(--halo), background 0.2s ease, border-color 0.2s ease;
+    }
+    .pay-chip:hover { background: #FFF3DA; border-color: #F3B766; }
+    .pay-chip:active { transform: translateY(1px) scale(0.97); }
+    .ctx-pill {
+      background: var(--paper);
+      border: 1px solid var(--hairline);
+      border-radius: 16px;
+      padding: 12px 14px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    .ctx-pill span {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .ctx-pill p {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+    .pitch-seg {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+    .pitch-seg .pitch-tab {
+      justify-content: center;
+      width: 100%;
+      padding: 10px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+    }
+    .pitch-seg .pitch-tab.active {
+      background: var(--paper);
+      color: var(--royal);
+      border-color: var(--royal-line);
+      box-shadow: 0 2px 10px -4px rgba(38, 84, 182, 0.5);
+      font-weight: 600;
+    }
+    .tok-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #047857;
+      background: var(--wa-soft);
+      border: 1px solid #B7EBD9;
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.2s var(--halo), background 0.2s ease, color 0.2s ease;
+    }
+    .tok-copy:hover { background: #DCF5EA; color: #065F46; }
+    .tok-copy:active { transform: translateY(1px) scale(0.97); }
+    .dossier-actionbar {
+      position: sticky;
+      bottom: 0;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 10px;
+      margin: 4px -20px -20px;
+      padding: 18px 20px 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 34%);
+    }
+    .dossier-actionbar .btn-wa { min-height: 48px; }
+    .dossier-actionbar .wa-open-btn { flex: 1 1 200px; }
+    .dossier-actionbar .copy-btn {
+      flex: none;
+      width: 48px;
+      min-height: 48px;
+      border-radius: 12px;
+    }
+    .dossier-actionbar .status-wrap {
+      flex: 1 1 130px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dossier-actionbar #dossier-status {
+      min-height: 48px;
+      width: 100%;
+      border-radius: 12px;
+      font-size: 12px;
+      padding: 0 32px 0 14px;
+    }
+
+    @media (min-width: 640px) {
+      .pitch-seg { grid-template-columns: repeat(4, 1fr); }
+      .dossier-actionbar { margin: 4px -24px -24px; padding: 18px 24px 24px; }
+    }
+
+    @media (max-width: 414px) {
+      #dossier-panel { width: 100vw; border-radius: 20px 20px 0 0; }
+      .nav-item { min-height: 44px; }
+      .tab-pill, .pitch-tab, .follow-seg, .zen-angle { min-height: 44px; }
+      .status-chip { min-height: 44px; padding: 0 12px; }
+      #mobile-nav { padding-top: 6px; padding-bottom: 6px; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
       .lift:hover, .turbo-card-active { transform: none; }
@@ -686,18 +930,39 @@
 
   <!-- Access gate -->
   <div id="gate" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-pearl">
-    <form id="gate-form" class="surface relative rounded-2xl max-w-sm w-full p-8 animate-in" autocomplete="off">
-      <div class="w-11 h-11 rounded-xl bg-royal-soft flex items-center justify-center mb-5">
-        <svg class="ic s20 icw text-royal" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2654B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <div class="gate-glow gate-glow-royal" aria-hidden="true"></div>
+    <div class="gate-glow gate-glow-wa" aria-hidden="true"></div>
+    <div class="gate-glow gate-glow-flame" aria-hidden="true"></div>
+    <form id="gate-form" class="gate-card relative rounded-3xl max-w-sm w-full p-8 sm:p-9 text-center animate-in" autocomplete="off">
+      <div class="fd-badge mx-auto mb-6" aria-hidden="true">
+        <span class="fd-ring fd-ring-a"></span>
+        <span class="fd-ring fd-ring-b"></span>
+        <span class="brand-mark"><span class="font-mono text-[15px] font-semibold tracking-tight text-white">FD</span></span>
       </div>
-      <p class="font-display text-[10px] uppercase tracking-[0.2em] text-royal font-semibold mb-1">FlowDesk</p>
+      <p class="font-display text-[10px] uppercase tracking-[0.24em] text-royal font-semibold mb-1.5">FlowDesk</p>
       <h2 class="font-display text-[26px] text-ink font-bold mb-1.5 tracking-tight">Private command center</h2>
-      <p class="text-sm text-sub font-body mb-6 leading-relaxed">This desk holds participant data and live closing scripts. Enter the access code to continue.</p>
+      <p class="text-sm text-sub font-body mb-7 leading-relaxed">Participant data and live closing scripts live here. Enter the access code to continue.</p>
+
       <label for="gate-pass" class="sr-only">Access code</label>
-      <input id="gate-pass" type="password" placeholder="Access code"
-        class="w-full surface rounded-lg px-4 py-3 text-sm font-mono text-ink placeholder-slate-400 bg-white outline-none focus:ring-2 focus:ring-royal">
-      <p id="gate-error" class="hidden text-red-600 text-xs font-mono mt-2"></p>
-      <button type="submit" class="btn-royal w-full mt-4 text-white text-sm font-mono py-3 rounded-lg transition-colors">Unlock command center</button>
+      <div class="gate-input relative mb-1.5">
+        <svg class="gate-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input id="gate-pass" type="password" placeholder="Access code" autocomplete="off"
+          class="w-full gate-input-field rounded-xl pl-11 pr-4 py-3.5 text-sm font-mono text-ink placeholder-slate-400 outline-none">
+      </div>
+      <p id="gate-error" class="hidden text-red-600 text-xs font-mono mt-1.5 text-left"></p>
+
+      <button type="submit"
+        class="btn-royal w-full mt-5 text-white text-sm font-mono py-3.5 rounded-xl flex items-center justify-center gap-2">
+        <svg class="ic s14 icw" viewBox="0 0 24 24"><path d="M12 22s8-3 8-10V5l-8-3-8 3v7c0 7 8 10 8 10z"/></svg>
+        Unlock command center
+      </button>
+
+      <div class="gate-secure mt-6 flex items-center justify-center gap-1.5">
+        <svg class="ic s11 icw" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>256-bit encrypted session</span>
+        <span class="mx-1 opacity-40">·</span>
+        <span>AES</span>
+      </div>
     </form>
   </div>
 
@@ -868,14 +1133,17 @@
       <!-- Lead list -->
       <section id="leads-section" class="animate-in">
         <div id="leads-table-wrap" class="surface rounded-2xl overflow-hidden">
-          <table class="w-full">
+          <table class="w-full table-fixed border-collapse">
+            <colgroup>
+              <col class="col-lead"><col class="col-niche"><col class="col-obstacle"><col class="col-score"><col class="col-status"><col class="col-wa">
+            </colgroup>
             <thead>
               <tr>
                 <th class="text-left">Lead</th>
                 <th class="text-left hidden md:table-cell">Niche</th>
                 <th class="text-left hidden sm:table-cell">Obstacle</th>
                 <th class="th-score hidden lg:table-cell">Score</th>
-                <th class="text-left">Status</th>
+                <th class="text-center">Status</th>
                 <th class="text-right">WhatsApp</th>
               </tr>
             </thead>
@@ -1414,10 +1682,10 @@
             <span class="niche-chip" title="${escapeHTML(l.niche)}">${escapeHTML(l.niche)}</span>
           </td>
           <td class="hidden sm:table-cell text-xs text-sub line-clamp-1 max-w-[280px]">${escapeHTML(obstacle)}</td>
-          <td class="hidden lg:table-cell text-right">
+          <td class="hidden lg:table-cell text-center">
             <span class="score-badge">${l.leadScore}</span>
           </td>
-          <td>
+          <td class="text-center">
             <button type="button" data-health-advance data-phone="${l.phone}"
               title="Advance status to ${statusNext(l.status)}" aria-label="Advance status"
               class="status-chip bg-slate-100 text-slate-600 border-slate-200">
@@ -1426,7 +1694,7 @@
           </td>
           <td class="text-right">
             <a href="${waURL(l, angleFor(l.phone))}" data-wa data-phone="${l.phone}" target="_blank" rel="noopener" aria-label="Open WhatsApp for ${escapeHTML(l.name)}"
-              class="btn-wa inline-flex items-center gap-1.5 text-[11px] font-mono font-semibold text-center px-3.5 py-2 rounded-lg transition-transform active:scale-[0.98]">${IC_WA}WhatsApp</a>
+              class="wa-grid-btn" title="Open WhatsApp">${IC_WA}</a>
           </td>
         </tr>`;
     }
@@ -1690,84 +1958,70 @@
       const rec = progress[l.phone];
 
       document.getElementById("modal-content").innerHTML = `
-        <div class="flex items-center gap-4 mb-4">
-          <span class="avatar w-14 h-14 text-lg text-royal shrink-0 !rounded-2xl">${initials(l.name)}</span>
+        <div class="flex items-start gap-3 mb-5">
+          <button data-dossier-back class="btn-ghost surface w-9 h-9 rounded-lg text-sub hover:text-ink transition-colors flex items-center justify-center shrink-0 mt-1" aria-label="Close dossier">
+            <svg class="ic s15 icw" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+          </button>
+          <span class="avatar avatar-strong squircle w-14 h-14 text-lg shrink-0">${initials(l.name)}</span>
           <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2">
-              <button data-dossier-back class="btn-ghost surface w-9 h-9 rounded-lg text-sub hover:text-ink transition-colors flex items-center justify-center" aria-label="Close dossier">
-                <svg class="ic s15 icw" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
-              </button>
-              ${hp ? '<span class="inline-flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-full border border-flame-soft bg-flame-soft text-flame">' + IC_FLAME + ' High Priority</span>' : ""}
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="font-display text-2xl sm:text-[28px] text-ink font-bold leading-tight tracking-tight">${escapeHTML(l.name)}</h2>
+              ${hp ? '<span class="inline-flex items-center gap-1 font-mono text-[10px] px-2.5 py-1 rounded-full border border-flame-soft bg-flame-soft text-flame shrink-0">' + IC_FLAME + ' High Priority</span>' : ""}
             </div>
-            <h2 class="font-display text-3xl text-ink font-bold mt-2 leading-tight">${escapeHTML(l.name)}</h2>
-            <p class="text-[10px] font-mono text-royal mt-1">Score ${l.leadScore} · ${escapeHTML(l.niche)}</p>
-            <p class="font-mono text-[11px] text-sub mt-1 leading-relaxed">${formatPhone(l.phone)}${l.email ? " · " + escapeHTML(l.email) : ""}</p>
-            <p class="text-[11px] text-slate-400 font-mono mt-0.5">${escapeHTML(l.role || "—")} · ${escapeHTML(agendaLine(l))}</p>
+            <p class="font-mono text-[11px] text-royal mt-1">Score ${l.leadScore} · ${escapeHTML(l.niche)}</p>
+            <p class="font-mono text-[11px] text-sub mt-0.5">${formatPhone(l.phone)}${l.email ? " · " + escapeHTML(l.email) : ""}</p>
+            <div class="mt-2.5">
+              <a class="pay-chip" href="${payLinkFor(l)}" data-dossier-paylink data-phone="${l.phone}" target="_blank" rel="noopener" title="Copy personal checkout link">${payRef(l)} · copy ↗</a>
+            </div>
           </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-2 mb-4">
-          <div class="surface-soft rounded-xl px-2.5 py-2 flex-1 min-w-0">
-            <span class="text-[9px] text-slate-400 font-mono block uppercase tracking-wider">Sells</span>
-            <span class="text-ink text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.whatSells || "Nothing yet")}</span>
+        <div class="grid grid-cols-3 gap-2 mb-5">
+          <div class="ctx-pill">
+            <span>Sells</span>
+            <p class="line-clamp-2">${escapeHTML(l.whatSells || "Nothing yet")}</p>
           </div>
-          <div class="surface-soft rounded-xl px-2.5 py-2 flex-1 min-w-0">
-            <span class="text-[9px] text-slate-400 font-mono block uppercase tracking-wider">Budget</span>
-            <span class="text-ink text-[11px] leading-relaxed">${escapeHTML(l.investment || "N/A")}</span>
+          <div class="ctx-pill">
+            <span>Budget</span>
+            <p>${escapeHTML(l.investment || "N/A")}</p>
           </div>
-          <div class="surface-soft rounded-xl px-2.5 py-2 flex-1 min-w-0">
-            <span class="text-[9px] text-slate-400 font-mono block uppercase tracking-wider">Goal</span>
-            <span class="text-ink text-[11px] line-clamp-2 leading-relaxed">${escapeHTML(l.goal || "N/A")}</span>
+          <div class="ctx-pill">
+            <span>Goal</span>
+            <p class="line-clamp-2">${escapeHTML(l.goal || "N/A")}</p>
           </div>
         </div>
 
         <div class="flex items-center gap-2 mb-5">
           <div class="flex-1 min-w-0">
             <div class="font-mono text-[9px] text-slate-400 uppercase tracking-wider mb-1">Challenge · ${escapeHTML(l.niche)}</div>
-            <div class="surface-soft rounded-xl px-2.5 py-1.5 text-[11px] text-sub truncate">${escapeHTML(l.challenge || "offer gap unknown")}</div>
+            <div class="surface-soft rounded-xl px-3 py-2 text-[12px] text-sub line-clamp-1">${escapeHTML(l.challenge || "offer gap unknown")}</div>
           </div>
-          <a class="btn-amber2 flex-none text-[#7A4A00] bg-flame-soft text-xs font-mono rounded-xl px-3.5 py-2.5 transition-colors flex items-center gap-1.5 border border-flame-line" href="${payLinkFor(l)}"
-            data-dossier-paylink data-phone="${l.phone}" target="_blank" rel="noopener">${payRef(l)} · copy ↗</a>
         </div>
 
-        <div class="dossier-section-title mb-2">Pitch</div>
-        <div class="flex flex-wrap gap-1 mb-3" role="tablist" aria-label="Copy angles">
+        <div class="dossier-section-title mb-2">Dispatch angle</div>
+        <div class="pitch-seg mb-4" role="tablist" aria-label="Copy angles">
           ${ANGLES.map(a => `
           <button type="button" data-pitch="${a.key}" role="tab" aria-selected="${!isFollow && a.key === angle}"
-            class="pitch-tab ${!isFollow && a.key === angle ? "active" : ""}">${a.icon} ${a.label}</button>`).join("")}
+            class="pitch-tab ${!isFollow && a.key === angle ? "active" : ""}"><span class="ic-pitch">${a.icon}</span>${a.label}</button>`).join("")}
         </div>
 
         <div class="dossier-section-title mb-2">
           <span>Follow-up cadence</span>
         </div>
-        <div class="follow-rail mb-4" role="tablist" aria-label="Follow-up touch">
+        <div class="follow-rail mb-5" role="tablist" aria-label="Follow-up touch">
           ${FOLLOWUPS.map(f => `
           <button type="button" data-tab="${f.key}" data-kind="follow" role="tab" aria-selected="${isFollow && f.key === modalFollow}"
             class="follow-seg ${isFollow && f.key === modalFollow ? "active" : ""}">${IC_CLOCK}<span class="seg-tick">${f.rail}</span><span>${f.short}</span></button>`).join("")}
         </div>
 
-        <div class="wa-card mb-4">
+        <div class="wa-card mb-5">
           <div class="wa-head">
             <span class="pulse-dot"></span>
             <span class="text-[10px] font-mono uppercase tracking-wider text-ink" id="dossier-msg-kind">${isFollow ? "Follow-up · " + followTouchName(modalFollow) : "WhatsApp message"}</span>
             <span class="ml-auto tok-badge">${isFollow ? "Touch" : label}</span>
-            <span class="tok-badge hidden sm:inline-flex"><svg class="ic s10 icw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3 8-10V5l-8-3-8 3v7c0 7 8 10 8 10z"/></svg> Script</span>
+            <button type="button" data-card-copy class="tok-copy" aria-label="Copy message to clipboard">${IC_COPY}Copy</button>
           </div>
           <p class="wa-bubble">${decorateMsg(msg, payRef(l))}</p>
-        </div>
-
-        <div class="flex gap-3 mb-5">
-          <a href="${waURLText(l.phone, msg)}" target="_blank" rel="noopener"
-            class="btn-wa flex-1 text-[#04231A] text-sm font-mono text-center py-3 rounded-xl transition-transform active:scale-[0.98] inline-flex items-center justify-center gap-2">${IC_WA}Open WhatsApp · ${label}</a>
-          <button onclick="copyModal()"
-            class="btn-ghost surface px-5 py-3 rounded-xl text-sm font-mono text-ink transition-colors flex items-center gap-2">${IC_COPY}Copy</button>
-        </div>
-
-        <div class="flex items-center gap-2 mb-5">
-          <label for="dossier-status" class="font-mono text-[10px] lowercase tracking-wider text-slate-400">Status</label>
-          <select id="dossier-status" data-phone="${l.phone}" class="status-select filter-select surface rounded-lg text-[11px] font-mono text-ink bg-white px-2 py-2 cursor-pointer hover:border-royal/40 transition-colors">
-            ${statusSelect(l)}
-          </select>
         </div>
 
         <div class="dossier-section-title mb-2">
@@ -1782,10 +2036,23 @@
           <span>Notes & audit</span>
         </div>
         <div id="note-list" class="flex flex-col gap-2 mb-3"></div>
-        <div class="flex gap-2 mb-1">
+        <div class="flex gap-2 mb-4">
           <input id="note-input" type="text" placeholder="Log a note…"
-            class="flex-1 surface rounded-lg px-3 py-2.5 text-sm font-mono text-ink placeholder-slate-400 bg-white outline-none focus:ring-2 focus:ring-royal">
-          <button type="button" data-note class="btn-royal px-4 py-2.5 rounded-lg text-xs font-mono text-white transition-colors flex items-center gap-1.5">Add</button>
+            class="flex-1 surface rounded-xl px-3.5 py-3 text-sm font-mono text-ink placeholder-slate-400 bg-white outline-none focus:ring-2 focus:ring-royal">
+          <button type="button" data-note class="btn-royal px-5 rounded-xl text-xs font-mono text-white flex items-center gap-1.5">Add</button>
+        </div>
+
+        <div class="dossier-actionbar">
+          <a href="${waURLText(l.phone, msg)}" target="_blank" rel="noopener"
+            class="wa-open-btn btn-wa text-[#04231A] text-sm font-mono text-center rounded-xl inline-flex items-center justify-center gap-2">${IC_WA}Open WhatsApp · ${label}</a>
+          <button onclick="copyModal()" aria-label="Copy message to clipboard"
+            class="copy-btn btn-ghost surface text-ink rounded-xl flex items-center justify-center">${IC_COPY}</button>
+          <div class="status-wrap">
+            <label for="dossier-status" class="sr-only">Status</label>
+            <select id="dossier-status" data-phone="${l.phone}" class="status-select filter-select surface bg-white text-ink font-mono cursor-pointer">
+              ${statusSelect(l)}
+            </select>
+          </div>
         </div>
       `;
       renderAudit(rec);
@@ -1826,6 +2093,14 @@
       if (back) { e.stopPropagation(); closeModal(); return; }
       const pay = e.target.closest("[data-dossier-paylink]");
       if (pay) { e.stopPropagation(); const l = findLead(modalPhone); if (l) copyText(payLinkFor(l), "Seat link"); return; }
+      const cardCopy = e.target.closest("[data-card-copy]");
+      if (cardCopy) {
+        e.stopPropagation();
+        const l = findLead(modalPhone);
+        if (!l) return;
+        copyText(modalMessage(l, modalAngle, modalFollow), modalLabel(modalAngle, modalFollow));
+        return;
+      }
       const pitch = e.target.closest("[data-pitch]");
       if (pitch) {
         e.stopPropagation();
